@@ -1,0 +1,19 @@
+{
+    "name": "RA_MeSiAs MV Tools",
+    "version": "1.0.0",
+    "description": "Herramientas adicionales para www.mediavida.com",
+    "manifest_version": 3,
+    "author": "RA_MeSiAs",
+    "action": {
+        "default_popup": "index.html",
+        "default_title": "RA_MeSiAs MV Tools"
+    },
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self';",
+        "sandbox": "sandbox allow-scripts allow-forms allow-popups allow-modals; script-src 'self' 'unsafe-inline' 'unsafe-eval'; child-src 'self';"
+      },
+      "content_scripts": [{
+        "js": ["content.js"],
+        "matches": ["https://www.mediavida.com/*"]
+      }]
+}
