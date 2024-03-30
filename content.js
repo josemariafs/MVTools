@@ -20,7 +20,7 @@ if (window.location.href.startsWith("https://www.mediavida.com/configuracion")) 
 
     var newFieldset = document.createElement('fieldset');
     newFieldset.style = "border: 1px #ccc solid;padding-bottom: 40px;margin-bottom: 20px;width: 80%;margin-left: 10%;";
-    newFieldset.innerHTML = `<h2 class="align" style="margin-top:30px;">RA_MeSiAs MV Tools</h2>
+    newFieldset.innerHTML = `<h2 class="align" style="margin-top:30px;"><img src="https://i.imgur.com/xbirbIk.png" style="max-width:250px;"></h2>
                     <div class="control-label" style="margin-bottom: 20px;">
                     <h4>Ignorar usuario</h4>
                     </div>
@@ -59,7 +59,7 @@ if (highlightedUser){
     console.log("highlightedUse2r", highlightedUser);
 
     for (var i = 0; i < highlightedUser.length; i++){
-        newFieldset.innerHTML += `<div class="control-label"><span>${highlightedUser[i]}</span></div><div class="control-input" style="padding-left:0"><span type="button" class="btn btn-danger" onClick='    let highlightedUser = JSON.parse(window.localStorage.getItem("highlightedUser"));
+        newFieldset.innerHTML += `<div class="control-label" style="margin-bottom: 10px;"><span>${highlightedUser[i]}</span></div><div class="control-input" style="padding-left:0; margin-bottom: 10px;"><span type="button" class="btn btn-danger" onClick='    let highlightedUser = JSON.parse(window.localStorage.getItem("highlightedUser"));
         highlightedUser.splice(${i}, 1);
         window.localStorage.setItem("highlightedUser", JSON.stringify(highlightedUser));
         location.reload();'>Borrar</span></div>`;
