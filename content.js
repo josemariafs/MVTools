@@ -14,6 +14,31 @@ for (var i = 0, l = authors.length; i < l; i++) {
         authors[i].style = 'border-left:10px #de6e17 solid; padding-left: 10px;';
     }
 }
+// Private messages
+if (window.location.href.startsWith("https://www.mediavida.com/mensajes")) {
+    const privateMessageList = document.querySelector("#pms > div.pm-col.c-side-alt > div.wpx > div > ul");
+    var privateMessages = privateMessageList.querySelectorAll('strong');
+    if (ignoredUser) {
+    for (var i = 0, l = privateMessages.length; i < l; i++) {
+        if (ignoredUser && ignoredUser.includes(privateMessages[i].textContent)) {
+            privateMessages[i].parentNode.parentNode.parentNode.parentNode.parentNode.innerHTML = '<div style="padding:20px;">Mensaje ignorado</div>';
+        }
+    }
+}
+}
+// Signature
+if (window.location.href.startsWith("https://www.mediavida.com/id")) {
+    const SignatureList = document.querySelector(".firmas");
+    if (SignatureList) {
+        var signatures = SignatureList.querySelectorAll('.autor');
+        for (var i = 0, l = signatures.length; i < l; i++) {
+            if (ignoredUser && ignoredUser.includes(signatures[i].textContent)) {
+                console.log("ignorando firma", signatures[i]);
+                signatures[i].parentNode.parentNode.parentNode.innerHTML = 'Firma ignorada';
+            }
+        }
+    }
+}
 
 // Configuration page
 if (window.location.href.startsWith("https://www.mediavida.com/configuracion")) {
