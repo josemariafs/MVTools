@@ -1,6 +1,7 @@
 // Global Mediavida
 var authors = document.querySelectorAll('[data-autor]');
 const ignoredUser = JSON.parse(localStorage.getItem("ignoredUser"));
+const notedUser = JSON.parse(localStorage.getItem("notedUser"));
 const highlightedUser = JSON.parse(localStorage.getItem("highlightedUser"));
 
 // MV Premium CSS
@@ -10,9 +11,19 @@ link.type = 'text/css';
 link.href = chrome.runtime.getURL('./css/mvpremium.css');
 if (window.localStorage.getItem("MvPremiumCSS") === 'true') {
     document.querySelector('body').classList.add('mvpremium');
-}else{
+} else {
     document.querySelector('body').classList.remove('mvpremium');
 
+}
+// Add Tooltip to users
+for (var i = 0, l = authors.length; i < l; i++) {
+    if (notedUser && notedUser.some(user => user.nickname === authors[i].getAttribute('data-autor'))) {
+        var userNote = notedUser.find(user => user.nickname === authors[i].getAttribute('data-autor')).note;
+        var postAvatar = authors[i].querySelector('.post-avatar');
+        if (postAvatar) {
+            postAvatar.innerHTML += `<a href="#!" class="tooltipAnchor" data-tooltip="${userNote}"><img src="${chrome.runtime.getURL('img/note2.png')}"/></a>`;
+        }
+    }
 }
 
 // Ignored users in threads
@@ -74,7 +85,7 @@ if (window.location.href.startsWith("https://www.mediavida.com/configuracion")) 
             ${window.localStorage.getItem('MvPremiumCSS') === 'true' ? 'checked' : ''}>
             <div class="slider round"></div>
         </label>
-        <a href="#!" class="tooltipAnchor" data-tooltip="Se recomienda usar el Theme de Mediavida Oscuro cuando se activan los estilos de MV Premium ">?</a>
+        <a href="#!" class="tooltipAnchorConfig" data-tooltip="Se recomienda usar el Theme de Mediavida Oscuro cuando se activan los estilos de MV Premium ">?</a>
         </div>
     `
 
@@ -96,6 +107,28 @@ if (window.location.href.startsWith("https://www.mediavida.com/configuracion")) 
             location.reload();'>Borrar</span></div>`;
         }
     }
+
+    // Note user
+    newFieldset.innerHTML += `<hr style="color:#ccc">
+        <div class="control-label">
+        <h4>Añadir notas a usuario</h4>
+        </div>
+        <div class="control-input" style="margin-bottom: 20px;">
+        <input type="text" name="user" placeholder="Nick usuario" id="notedUserInput">
+        <input type="text" name="note" placeholder="Notas" id="notedTextInput" maxlength="50">
+        <button type="button" class="btn" id="notedUserBtn">Añadir nota</button>
+        </div>
+        `;
+    if (notedUser) {
+        for (var i = 0; i < notedUser.length; i++) {
+            newFieldset.innerHTML += `<div class="control-label" style="margin-bottom: 10px;"><span>${notedUser[i].nickname}</span></div><div class="control-input" style="padding-left:0; margin-bottom: 10px;"><span class="note">${notedUser[i].note}</span><span type="button" class="btn btn-danger" onClick='let notedUsers = JSON.parse(window.localStorage.getItem("notedUser"));
+            notedUsers.splice(${i}, 1);
+            window.localStorage.setItem("notedUser", JSON.stringify(notedUsers));
+            location.reload();'>Borrar</span></div>`;
+        }
+    }
+
+    //Highlight user
     newFieldset.innerHTML += `<hr style="color:#ccc">
     <div class="control-label" style="margin-bottom: 20px;">
     <h4>Destacar usuario</h4>
@@ -131,4 +164,7 @@ document.querySelector('#highlightUserBtn').addEventListener('click', function (
 
 document.querySelector('#ignoreUserBtn').addEventListener('click', function (e) {
     return HandleAddIgnoredUser();
+});
+document.querySelector('#notedUserBtn').addEventListener('click', function (e) {
+    return HandleAddNoteUser();
 });

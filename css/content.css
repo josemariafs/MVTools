@@ -52,7 +52,7 @@ fieldset hr {
   .slider.round:before {
     border-radius: 50%;
   }
-  .tooltipAnchor{
+  .tooltipAnchorConfig{
     margin-left:10px;
     padding:5px 10px;
     background-color: #507ec2;
@@ -60,6 +60,20 @@ fieldset hr {
     border-radius: 5px;
     top: -7px;
   }
+
+  .tooltipAnchor{
+    margin-left:10px;
+    border-radius: 5px;
+    top: 10px;
+    padding: 5px 15px 5px 15px;
+
+  }
+  .tooltipAnchor img{
+    width: 25px;
+    position: absolute;
+    right: 7px;
+    top: 3px;
+}
   [data-tooltip] {
     position: relative;
     z-index: 2;
@@ -80,7 +94,7 @@ fieldset hr {
   /* Position tooltip above the element */
   [data-tooltip]:before {
     position: absolute;
-    bottom: 150%;
+    bottom: 100%;
     left: 50%;
     margin-bottom: 5px;
     margin-left: -80px;
@@ -90,7 +104,7 @@ fieldset hr {
     -moz-border-radius: 3px;
     border-radius: 3px;
     background-color: #000;
-    background-color: hsla(0, 0%, 20%, 0.9);
+    background-color: hsla(0, 0%, 0%, 0.9);
     color: #fff;
     content: attr(data-tooltip);
     text-align: center;
@@ -101,7 +115,7 @@ fieldset hr {
   /* Triangle hack to make tooltip look like a speech bubble */
   [data-tooltip]:after {
     position: absolute;
-    bottom: 150%;
+    bottom: 100%;
     left: 50%;
     margin-left: -5px;
     width: 0;
@@ -122,4 +136,16 @@ fieldset hr {
     filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
     opacity: 1;
   }
-  
+  input{
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px #ccc solid;
+}
+  .note{
+    padding: 5px 10px 8px 10px;
+    background: #00000054;
+    border: 1px black solid;
+    color: white;
+    border-radius: 5px;
+    margin-right: 10px;
+  }

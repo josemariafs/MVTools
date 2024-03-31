@@ -17,3 +17,12 @@ function HandleAddIgnoredUser(){
     window.localStorage.setItem("ignoredUser", JSON.stringify(ignoredUsers));
     location.reload()
 }
+
+function HandleAddNoteUser(){
+    let notedUser = document.getElementById("notedUserInput").value;
+    let note = document.getElementById("notedTextInput").value;
+    let notedUsers = JSON.parse(window.localStorage.getItem("notedUser")) || [];
+    notedUsers.push({"nickname": notedUser, "note": note});
+    window.localStorage.setItem("notedUser", JSON.stringify(notedUsers));
+    location.reload();
+}
