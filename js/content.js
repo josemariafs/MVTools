@@ -27,10 +27,28 @@ for (var i = 0, l = authors.length; i < l; i++) {
 }
 
 // Ignored users in threads
+if (window.localStorage.getItem('ShowIgnoredUsers')==="false"){
 for (var i = 0, l = authors.length; i < l; i++) {
     if (ignoredUser && ignoredUser.includes(authors[i].getAttribute('data-autor'))) {
         authors[i].innerHTML = 'Mensaje ignorado';
     }
+}
+}else{
+    for (var i = 0, l = authors.length; i < l; i++) {
+        if (ignoredUser && ignoredUser.includes(authors[i].getAttribute('data-autor'))) {
+            authors[i].getElementsByClassName("post-avatar")[0].style = 'display:none;';
+            authors[i].getElementsByClassName("post-body")[0].style = 'display:none;';
+            let author = authors[i];
+            author.innerHTML += `<button class="mensajeIgnorado" onClick="
+            this.style.display = 'none';
+            document.querySelectorAll('[data-autor]')['${i}'].getElementsByClassName('post-body')[0].style = 'display:block';
+            document.querySelectorAll('[data-autor]')['${i}'].getElementsByClassName('post-avatar')[0].style = 'display:block';
+            ">Mostrar mensaje ignorado</button>`;
+            //authors[i].style = 'display:none;';
+            //authors[i].innerHTML = '<button>Mostrar mensaje</button>';
+
+        }
+    }    
 }
 
 // Highlighted users in threads
@@ -90,7 +108,26 @@ if (window.location.href.startsWith("https://www.mediavida.com/configuracion")) 
     `
 
     // Ignore user
-    newFieldset.innerHTML += `<hr style="color:#ccc">
+    newFieldset.innerHTML += `<hr style="color:#ccc">`
+
+        // Show ignored users
+        newFieldset.innerHTML += `
+        <div class="control-label" style="margin-bottom: 20px;">
+        <h4>Ver mensajes ignorados</h4>
+        </div>
+        <div class="control-input" style="margin-bottom: 20px;">
+            <label class="switch" for="checkbox-showIgnoredUsers">
+            <input type="checkbox" id="checkbox-showIgnoredUsers"
+            ${window.localStorage.getItem('ShowIgnoredUsers') === 'true' ? 'checked' : ''}>
+            <div class="slider round"></div>
+        </label>
+        <a href="#!" class="tooltipAnchorConfig" data-tooltip="Si esta opción está activada se podrá mostrar mensajes de usuarios ignorados">?</a>
+        </div>
+    `    
+    newFieldset.innerHTML += `<hr style="color:#ccc">`
+
+    newFieldset.innerHTML += `
+
                     <div class="control-label" style="margin-bottom: 20px;">
                     <h4>Ignorar usuario</h4>
                     </div>
@@ -156,6 +193,10 @@ if (window.location.href.startsWith("https://www.mediavida.com/configuracion")) 
 }
 document.querySelector('#checkbox').addEventListener('click', function (e) {
     return HandleOnChangeMvPremium(document.getElementById('checkbox').checked);
+});
+
+document.querySelector('#checkbox-showIgnoredUsers').addEventListener('click', function (e) {
+    return HandleOnChangeShowIgnoredUsers(document.getElementById('checkbox-showIgnoredUsers').checked);
 });
 
 document.querySelector('#highlightUserBtn').addEventListener('click', function (e) {

@@ -2,6 +2,10 @@ function HandleOnChangeMvPremium(checked) {
     checked ? window.localStorage.setItem('MvPremiumCSS', 'true') : window.localStorage.setItem('MvPremiumCSS', 'false'); 
     location.reload();
 }
+function HandleOnChangeShowIgnoredUsers(checked) {
+    checked ? window.localStorage.setItem('ShowIgnoredUsers', 'true') : window.localStorage.setItem('ShowIgnoredUsers', 'false'); 
+        location.reload();
+}
 
 function HandleAddHighlightUser(){
     let highlightUser = document.getElementById("highlightUserInput").value;

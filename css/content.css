@@ -149,3 +149,12 @@ fieldset hr {
     border-radius: 5px;
     margin-right: 10px;
   }
+  .mensajeIgnorado{
+    padding: 5px 10px 8px 10px;
+    background: #00000054;
+    border: 1px black solid;
+    color: white;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor:pointer;
+  }
