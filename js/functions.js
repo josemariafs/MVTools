@@ -30,3 +30,12 @@ function HandleAddNoteUser(){
     window.localStorage.setItem("notedUser", JSON.stringify(notedUsers));
     location.reload();
 }
+function HandleOnChangeShowIpsWithoutClons(checked) {
+    window.localStorage.setItem('showIpsWithoutClons', checked) 
+    location.reload();
+}
+
+function HandleHideVpns(checked) {
+    window.localStorage.setItem('hideVpns', checked) 
+    location.reload();
+}

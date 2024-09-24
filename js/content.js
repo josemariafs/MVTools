@@ -1,132 +1,324 @@
 // Global Mediavida
-var authors = document.querySelectorAll('[data-autor]');
+var authors = document.querySelectorAll("[data-autor]");
 const ignoredUser = JSON.parse(localStorage.getItem("ignoredUser"));
 const notedUser = JSON.parse(localStorage.getItem("notedUser"));
 const highlightedUser = JSON.parse(localStorage.getItem("highlightedUser"));
 
 // MV Premium CSS
-var link = document.createElement('link');
-link.rel = 'stylesheet';
-link.type = 'text/css';
-link.href = chrome.runtime.getURL('./css/mvpremium.css');
-if (window.localStorage.getItem("MvPremiumCSS") === 'true') {
-    document.querySelector('body').classList.add('mvpremium');
+var link = document.createElement("link");
+link.rel = "stylesheet";
+link.type = "text/css";
+link.href = chrome.runtime.getURL("./css/mvpremium.css");
+if (window.localStorage.getItem("MvPremiumCSS") === "true") {
+  document.querySelector("body").classList.add("mvpremium");
 } else {
-    document.querySelector('body').classList.remove('mvpremium');
-
+  document.querySelector("body").classList.remove("mvpremium");
 }
+
 // Add Tooltip to users
 for (var i = 0, l = authors.length; i < l; i++) {
-    if (notedUser && notedUser.some(user => user.nickname === authors[i].getAttribute('data-autor'))) {
-        var userNote = notedUser.find(user => user.nickname === authors[i].getAttribute('data-autor')).note;
-        var postAvatar = authors[i].querySelector('.post-avatar');
-        if (postAvatar) {
-            postAvatar.innerHTML += `<a href="#!" class="tooltipAnchor" data-tooltip="${userNote}"><img src="${chrome.runtime.getURL('img/note2.png')}"/></a>`;
-        }
+  if (
+    notedUser &&
+    notedUser.some(
+      (user) => user.nickname === authors[i].getAttribute("data-autor")
+    )
+  ) {
+    var userNote = notedUser.find(
+      (user) => user.nickname === authors[i].getAttribute("data-autor")
+    ).note;
+    var postAvatar = authors[i].querySelector(".post-avatar");
+    if (postAvatar) {
+      postAvatar.innerHTML += `<a href="#!" class="tooltipAnchor" data-tooltip="${userNote}"><img src="${chrome.runtime.getURL(
+        "img/note2.png"
+      )}"/></a>`;
     }
+  }
 }
 
 // Ignored users in threads
-if (window.localStorage.getItem('ShowIgnoredUsers')==="false"){
-for (var i = 0, l = authors.length; i < l; i++) {
-    if (ignoredUser && ignoredUser.includes(authors[i].getAttribute('data-autor'))) {
-        authors[i].innerHTML = 'Mensaje ignorado';
+if (window.localStorage.getItem("ShowIgnoredUsers") === "false") {
+  for (var i = 0, l = authors.length; i < l; i++) {
+    if (
+      ignoredUser &&
+      ignoredUser.includes(authors[i].getAttribute("data-autor"))
+    ) {
+      authors[i].innerHTML = "Mensaje ignorado";
     }
-}
-}else{
-    for (var i = 0, l = authors.length; i < l; i++) {
-        if (ignoredUser && ignoredUser.includes(authors[i].getAttribute('data-autor'))) {
-            authors[i].getElementsByClassName("post-avatar")[0].style = 'display:none;';
-            authors[i].getElementsByClassName("post-body")[0].style = 'display:none;';
-            let author = authors[i];
-            author.innerHTML += `<button class="mensajeIgnorado" onClick="
+  }
+} else {
+  for (var i = 0, l = authors.length; i < l; i++) {
+    if (
+      ignoredUser &&
+      ignoredUser.includes(authors[i].getAttribute("data-autor"))
+    ) {
+      authors[i].getElementsByClassName("post-avatar")[0].style =
+        "display:none;";
+      authors[i].getElementsByClassName("post-body")[0].style = "display:none;";
+      let author = authors[i];
+      author.innerHTML += `<button class="mensajeIgnorado" onClick="
             this.style.display = 'none';
             document.querySelectorAll('[data-autor]')['${i}'].getElementsByClassName('post-body')[0].style = 'display:block';
             document.querySelectorAll('[data-autor]')['${i}'].getElementsByClassName('post-avatar')[0].style = 'display:block';
             ">Mostrar mensaje ignorado</button>`;
-            //authors[i].style = 'display:none;';
-            //authors[i].innerHTML = '<button>Mostrar mensaje</button>';
-
-        }
-    }    
+    }
+  }
 }
 
 // Highlighted users in threads
 
 for (var i = 0, l = authors.length; i < l; i++) {
-    if (highlightedUser && highlightedUser.includes(authors[i].getAttribute('data-autor'))) {
-        authors[i].style = 'border-left:10px #de6e17 solid; padding-left: 10px;';
-    }
+  if (
+    highlightedUser &&
+    highlightedUser.includes(authors[i].getAttribute("data-autor"))
+  ) {
+    authors[i].style = "border-left:10px #de6e17 solid; padding-left: 10px;";
+  }
 }
 // Private messages
 if (window.location.href.startsWith("https://www.mediavida.com/mensajes")) {
-    const privateMessageList = document.querySelector("#pms > div.pm-col.c-side-alt > div.wpx > div > ul");
-    var privateMessages = privateMessageList.querySelectorAll('strong');
-    if (ignoredUser) {
-        for (var i = 0, l = privateMessages.length; i < l; i++) {
-            if (ignoredUser && ignoredUser.includes(privateMessages[i].textContent)) {
-                privateMessages[i].parentNode.parentNode.parentNode.parentNode.parentNode.innerHTML = '<div style="padding:20px;">Mensaje ignorado</div>';
-            }
-        }
+  const privateMessageList = document.querySelector(
+    "#pms > div.pm-col.c-side-alt > div.wpx > div > ul"
+  );
+  var privateMessages = privateMessageList.querySelectorAll("strong");
+  if (ignoredUser) {
+    for (var i = 0, l = privateMessages.length; i < l; i++) {
+      if (ignoredUser && ignoredUser.includes(privateMessages[i].textContent)) {
+        privateMessages[
+          i
+        ].parentNode.parentNode.parentNode.parentNode.parentNode.innerHTML =
+          '<div style="padding:20px;">Mensaje ignorado</div>';
+      }
     }
+  }
 }
 // Signature
 if (window.location.href.startsWith("https://www.mediavida.com/id")) {
-    const SignatureList = document.querySelector(".firmas");
-    if (SignatureList) {
-        var signatures = SignatureList.querySelectorAll('.autor');
-        for (var i = 0, l = signatures.length; i < l; i++) {
-            if (ignoredUser && ignoredUser.includes(signatures[i].textContent)) {
-                signatures[i].parentNode.parentNode.parentNode.innerHTML = 'Firma ignorada';
-            }
-        }
+  const SignatureList = document.querySelector(".firmas");
+  if (SignatureList) {
+    var signatures = SignatureList.querySelectorAll(".autor");
+    for (var i = 0, l = signatures.length; i < l; i++) {
+      if (ignoredUser && ignoredUser.includes(signatures[i].textContent)) {
+        signatures[i].parentNode.parentNode.parentNode.innerHTML =
+          "Firma ignorada";
+      }
     }
+  }
 }
 
+// Admin tools
 
+if (
+  window.location.href.startsWith("https://www.mediavida.com/usuarios/admin")
+) {
+  document.querySelector("body").classList.add("mvAdminTools");
+  const checkElements = document.getElementsByClassName("pairs");
+  for (var i = 0; i < checkElements.length; i++) {
+    if (checkElements[i].childNodes[1].checked === true) {
+      checkElements[i].classList.add("checked");
+    } else {
+      checkElements[i].classList.add("unchecked");
+    }
+  }
+}
+
+if (window.location.href.startsWith("https://www.mediavida.com/id")) {
+  document.querySelectorAll("div").forEach((div) => {
+    const leftElement = div.querySelector(".left");
+    if (leftElement && leftElement.tagName.toLowerCase() === "div") {
+      leftElement.style =
+        "width: 77%; background: #3e3e3ecf; padding: 15px; border-radius: 5px; margin-bottom: 10px; border: 1px #656565 solid; float:left";
+    }
+  });
+  document.querySelector(".left").nextElementSibling.style =
+    "width:20%;float:left;";
+  document
+    .querySelector(".left")
+    .nextElementSibling.querySelectorAll("li")[0].style =
+    "margin: 10px; background: #3e3e3ecf; border-radius: 3px; border: 1px #656565 solid; padding: 5px; text-align: center; color:white !important";
+  document
+    .querySelector(".left")
+    .nextElementSibling.querySelectorAll("li")[1].style =
+    "margin: 10px; background: #3e3e3ecf; border-radius: 3px; border: 1px #656565 solid; padding: 5px; text-align: center; color:white !important";
+  document
+    .querySelector(".left")
+    .nextElementSibling.querySelectorAll("li")[2].style =
+    "margin: 10px; background: #3e3e3ecf; border-radius: 3px; border: 1px #656565 solid; padding: 5px; text-align: center; color:white !important";
+}
+
+if (window.location.href.startsWith("https://www.mediavida.com/foro/admin")) {
+  const images = document.querySelectorAll("img");
+  images.forEach((img) => {
+    if (img.src.includes("/style")) {
+      img.src = img.src.replace("/style", "/");
+    }
+  });
+}
+
+if (
+  window.location.href.startsWith("https://www.mediavida.com/usuarios/clones")
+) {
+  document.querySelector("body").classList.add("mvAdminTools");
+
+  const eqcolElements = document.querySelectorAll(".eqcol");
+  eqcolElements.forEach((element) => {
+    if (element.classList.length === 1) {
+      element.classList.add("busted");
+    }
+  });
+
+  if (window.localStorage.getItem("showIpsWithoutClons") === "false") {
+    for (
+      var i = 0;
+      i <
+      document.getElementsByClassName("box")[0].getElementsByTagName("div")
+        .length;
+      i++
+    ) {
+      if (
+        document.getElementsByClassName("box")[0].getElementsByTagName("div")[i]
+      ) {
+        if (
+          document
+            .getElementsByClassName("box")[0]
+            .getElementsByTagName("div")
+            [i].textContent.includes("ninguno")
+        ) {
+          document.getElementsByClassName("box")[0].getElementsByTagName("div")[
+            i
+          ].style.display = "none";
+        }
+      }
+    }
+  }
+
+  if (window.localStorage.getItem("hideVpns") === "true") {
+    if (document.getElementsByClassName("box")[0]) {
+      for (
+        var i = 0;
+        i <
+        document.getElementsByClassName("box")[0].getElementsByTagName("div")
+          .length;
+        i++
+      ) {
+        if (
+          document.getElementsByClassName("box")[0].getElementsByTagName("div")[
+            i
+          ]
+        ) {
+          if (
+            document
+              .getElementsByClassName("box")[0]
+              .getElementsByTagName("div")
+              [i].textContent.includes("0.0.0.0")
+          ) {
+            document
+              .getElementsByClassName("box")[0]
+              .getElementsByTagName("div")[i].style.display = "none";
+          }
+        }
+      }
+    }
+  }
+
+  var newFieldset = document.createElement("fieldset");
+
+  newFieldset.innerHTML += `
+        <div style=" background: rgba(0, 0, 0, 0.5) !important; width: max-content; width: max-content; padding: 0px 25px; border-radius: 0px 0px 0px 10px; height: 40px; float:left">
+        <div class="control-label" style="margin-bottom: 20px;">
+        <h4>Mostrar IPs sin clones <br> <a href="https://www.mediavida.com/foro/mediavida/estilos-mv7-581940#8" target="_blank">MV Premium</a></h4>
+        </div>
+        <div class="control-input" >
+            <label class="switch" for="show-all-ips">
+            <input type="checkbox"  id="show-all-ips"
+            ${
+              window.localStorage.getItem("showIpsWithoutClons") === "true"
+                ? "checked"
+                : ""
+            }>
+            <div class="slider round"></div>
+        </label>
+        <a href="#!" class="tooltipAnchorConfig" data-tooltip="[SOLO ADMINS] Muestra todas las ips del usuario aunque no tengan clones coincidentes. ">?</a>
+        </div>
+        </div>
+                <div style=" background: rgba(0, 0, 0, 0.5) !important; width: max-content; width: max-content; padding: 0px 25px; border-radius: 0px 0px 10px 0px; height: 40px; float:left">
+        <div class="control-label" style="margin-bottom: 20px;">
+        <h4>Ocultar posibles VPNs <br> <a href="https://www.mediavida.com/foro/mediavida/estilos-mv7-581940#8" target="_blank">MV Premium</a></h4>
+        </div>
+        <div class="control-input" >
+            <label class="switch" for="hideVpns">
+            <input type="checkbox"  id="hideVpns"
+            ${
+              window.localStorage.getItem("hideVpns") === "true"
+                ? "checked"
+                : ""
+            }>
+            <div class="slider round"></div>
+        </label>
+        <a href="#!" class="tooltipAnchorConfig" data-tooltip="Oculta coincidencias con posibles VPNs. ">?</a>
+        </div>
+        </div>
+    `;
+  var secondFieldset = document.getElementsByTagName("form")[1];
+  if (secondFieldset) {
+    secondFieldset.parentNode.insertBefore(
+      newFieldset,
+      secondFieldset.nextSibling
+    );
+  }
+}
 // Configuration page
-if (window.location.href.startsWith("https://www.mediavida.com/configuracion")) {
+if (
+  window.location.href.startsWith("https://www.mediavida.com/configuracion")
+) {
+  var newFieldset = document.createElement("fieldset");
+  newFieldset.style =
+    "border: 1px #ccc solid;padding-bottom: 40px;margin-bottom: 20px;width: 80%;margin-left: 10%;";
+  // Header logo
+  newFieldset.innerHTML += `<h2 class="align" style="margin-top:30px;"><img src="https://i.imgur.com/xbirbIk.png" style="max-width:250px;"></h2>`;
 
-    var newFieldset = document.createElement('fieldset');
-    newFieldset.style = "border: 1px #ccc solid;padding-bottom: 40px;margin-bottom: 20px;width: 80%;margin-left: 10%;";
-    // Header logo
-    newFieldset.innerHTML += `<h2 class="align" style="margin-top:30px;"><img src="https://i.imgur.com/xbirbIk.png" style="max-width:250px;"></h2>`;
-
-    // Add MV Premium CSS
-    newFieldset.innerHTML += `
+  // Add MV Premium CSS
+  newFieldset.innerHTML += `
         <div class="control-label" style="margin-bottom: 20px;">
         <h4>Activar estilos <br> <a href="https://www.mediavida.com/foro/mediavida/estilos-mv7-581940#8" target="_blank">MV Premium</a></h4>
         </div>
         <div class="control-input" style="margin-bottom: 20px;">
             <label class="switch" for="checkbox">
             <input type="checkbox" id="checkbox"
-            ${window.localStorage.getItem('MvPremiumCSS') === 'true' ? 'checked' : ''}>
+            ${
+              window.localStorage.getItem("MvPremiumCSS") === "true"
+                ? "checked"
+                : ""
+            }>
             <div class="slider round"></div>
         </label>
         <a href="#!" class="tooltipAnchorConfig" data-tooltip="Se recomienda usar el Theme de Mediavida Oscuro cuando se activan los estilos de MV Premium ">?</a>
         </div>
-    `
+    `;
 
-    // Ignore user
-    newFieldset.innerHTML += `<hr style="color:#ccc">`
+  // Ignore user
+  newFieldset.innerHTML += `<hr style="color:#ccc">`;
 
-        // Show ignored users
-        newFieldset.innerHTML += `
+  // Show ignored users
+  newFieldset.innerHTML += `
         <div class="control-label" style="margin-bottom: 20px;">
         <h4>Ver mensajes ignorados</h4>
         </div>
         <div class="control-input" style="margin-bottom: 20px;">
             <label class="switch" for="checkbox-showIgnoredUsers">
             <input type="checkbox" id="checkbox-showIgnoredUsers"
-            ${window.localStorage.getItem('ShowIgnoredUsers') === 'true' ? 'checked' : ''}>
+            ${
+              window.localStorage.getItem("ShowIgnoredUsers") === "true"
+                ? "checked"
+                : ""
+            }>
             <div class="slider round"></div>
         </label>
         <a href="#!" class="tooltipAnchorConfig" data-tooltip="Si esta opción está activada se podrá mostrar mensajes de usuarios ignorados">?</a>
         </div>
-    `    
-    newFieldset.innerHTML += `<hr style="color:#ccc">`
+    `;
+  newFieldset.innerHTML += `<hr style="color:#ccc">`;
 
-    newFieldset.innerHTML += `
+  newFieldset.innerHTML += `
 
                     <div class="control-label" style="margin-bottom: 20px;">
                     <h4>Ignorar usuario</h4>
@@ -136,17 +328,17 @@ if (window.location.href.startsWith("https://www.mediavida.com/configuracion")) 
                     <button type="button" class="btn" id="ignoreUserBtn">Ignorar</button>
                     </div>
                     `;
-    if (ignoredUser) {
-        for (var i = 0; i < ignoredUser.length; i++) {
-            newFieldset.innerHTML += `<div class="control-label" style="margin-bottom: 10px;"><span>${ignoredUser[i]}</span></div><div class="control-input" style="padding-left:0; margin-bottom: 10px;"><span type="button" class="btn btn-danger" onClick='let ignoredUsers = JSON.parse(window.localStorage.getItem("ignoredUser"));
+  if (ignoredUser) {
+    for (var i = 0; i < ignoredUser.length; i++) {
+      newFieldset.innerHTML += `<div class="control-label" style="margin-bottom: 10px;"><span>${ignoredUser[i]}</span></div><div class="control-input" style="padding-left:0; margin-bottom: 10px;"><span type="button" class="btn btn-danger" onClick='let ignoredUsers = JSON.parse(window.localStorage.getItem("ignoredUser"));
             ignoredUsers.splice(${i}, 1);
             window.localStorage.setItem("ignoredUser", JSON.stringify(ignoredUsers));
             location.reload();'>Borrar</span></div>`;
-        }
     }
+  }
 
-    // Note user
-    newFieldset.innerHTML += `<hr style="color:#ccc">
+  // Note user
+  newFieldset.innerHTML += `<hr style="color:#ccc">
         <div class="control-label">
         <h4>Añadir notas a usuario</h4>
         </div>
@@ -156,17 +348,17 @@ if (window.location.href.startsWith("https://www.mediavida.com/configuracion")) 
         <button type="button" class="btn" id="notedUserBtn">Añadir nota</button>
         </div>
         `;
-    if (notedUser) {
-        for (var i = 0; i < notedUser.length; i++) {
-            newFieldset.innerHTML += `<div class="control-label" style="margin-bottom: 10px;"><span>${notedUser[i].nickname}</span></div><div class="control-input" style="padding-left:0; margin-bottom: 10px;"><span class="note">${notedUser[i].note}</span><span type="button" class="btn btn-danger" onClick='let notedUsers = JSON.parse(window.localStorage.getItem("notedUser"));
+  if (notedUser) {
+    for (var i = 0; i < notedUser.length; i++) {
+      newFieldset.innerHTML += `<div class="control-label" style="margin-bottom: 10px;"><span>${notedUser[i].nickname}</span></div><div class="control-input" style="padding-left:0; margin-bottom: 10px;"><span class="note">${notedUser[i].note}</span><span type="button" class="btn btn-danger" onClick='let notedUsers = JSON.parse(window.localStorage.getItem("notedUser"));
             notedUsers.splice(${i}, 1);
             window.localStorage.setItem("notedUser", JSON.stringify(notedUsers));
             location.reload();'>Borrar</span></div>`;
-        }
     }
+  }
 
-    //Highlight user
-    newFieldset.innerHTML += `<hr style="color:#ccc">
+  //Highlight user
+  newFieldset.innerHTML += `<hr style="color:#ccc">
     <div class="control-label" style="margin-bottom: 20px;">
     <h4>Destacar usuario</h4>
     </div>
@@ -174,38 +366,80 @@ if (window.location.href.startsWith("https://www.mediavida.com/configuracion")) 
     <input type="text" name="url" placeholder="Nick usuario" id="highlightUserInput">
     <span type="button" class="btn" id="highlightUserBtn">Destacar</span>
     </div>
-`
-    if (highlightedUser) {
-        for (var i = 0; i < highlightedUser.length; i++) {
-            newFieldset.innerHTML += `<div class="control-label" style="margin-bottom: 10px;"><span>${highlightedUser[i]}</span></div>
+`;
+  if (highlightedUser) {
+    for (var i = 0; i < highlightedUser.length; i++) {
+      newFieldset.innerHTML += `<div class="control-label" style="margin-bottom: 10px;"><span>${highlightedUser[i]}</span></div>
         <div class="control-input" style="padding-left:0; margin-bottom: 10px;"><span type="button" class="btn btn-danger" onClick='
         let highlightedUsers = JSON.parse(window.localStorage.getItem("highlightedUser"));
         highlightedUsers.splice(${i}, 1);
         window.localStorage.setItem("highlightedUser", JSON.stringify(highlightedUsers));
         location.reload();'
         >Borrar</span></div>`;
-        }
     }
-    var secondFieldset = document.getElementsByTagName('fieldset')[1];
-    if (secondFieldset) {
-        secondFieldset.parentNode.insertBefore(newFieldset, secondFieldset.nextSibling);
-    }
+  }
+  var secondFieldset = document.getElementsByTagName("fieldset")[1];
+  if (secondFieldset) {
+    secondFieldset.parentNode.insertBefore(
+      newFieldset,
+      secondFieldset.nextSibling
+    );
+  }
 }
-document.querySelector('#checkbox').addEventListener('click', function (e) {
-    return HandleOnChangeMvPremium(document.getElementById('checkbox').checked);
-});
+if (
+  window.location.href.startsWith("https://www.mediavida.com/usuarios/clones")
+) {
+  document
+    .querySelector("#show-all-ips")
+    .addEventListener("click", function (e) {
+      return HandleOnChangeShowIpsWithoutClons(
+        document.getElementById("show-all-ips").checked
+      );
+    });
 
-document.querySelector('#checkbox-showIgnoredUsers').addEventListener('click', function (e) {
-    return HandleOnChangeShowIgnoredUsers(document.getElementById('checkbox-showIgnoredUsers').checked);
-});
+  if (
+    window.location.href.startsWith("https://www.mediavida.com/usuarios/clones")
+  ) {
+    document.querySelector("#hideVpns").addEventListener("click", function (e) {
+      return HandleHideVpns(document.getElementById("hideVpns").checked);
+    });
+  }
+}
+if (
+  window.location.href.startsWith("https://www.mediavida.com/configuracion")
+) {
+  document.querySelector("#checkbox").addEventListener("click", function (e) {
+    return HandleOnChangeMvPremium(document.getElementById("checkbox").checked);
+  });
 
-document.querySelector('#highlightUserBtn').addEventListener('click', function (e) {
-    return HandleAddHighlightUser();
-});
+  document
+    .querySelector("#checkbox-showIgnoredUsers")
+    .addEventListener("click", function (e) {
+      return HandleOnChangeShowIgnoredUsers(
+        document.getElementById("checkbox-showIgnoredUsers").checked
+      );
+    });
 
-document.querySelector('#ignoreUserBtn').addEventListener('click', function (e) {
-    return HandleAddIgnoredUser();
-});
-document.querySelector('#notedUserBtn').addEventListener('click', function (e) {
-    return HandleAddNoteUser();
-});
+  document
+    .querySelector("#highlightUserBtn")
+    .addEventListener("click", function (e) {
+      return HandleAddHighlightUser();
+    });
+
+  document
+    .querySelector("#ignoreUserBtn")
+    .addEventListener("click", function (e) {
+      return HandleAddIgnoredUser();
+    });
+  document
+    .querySelector("#notedUserBtn")
+    .addEventListener("click", function (e) {
+      return HandleAddNoteUser();
+    });
+
+  if (document.querySelector("#ptabs")) {
+    document.querySelector("#ptabs").addEventListener("click", function (e) {
+      return HandleTabChangeAdmin();
+    });
+  }
+}

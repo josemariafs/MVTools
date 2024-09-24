@@ -45,6 +45,7 @@
 a.side {
     color: #ccc;
 }
+
 .b-side h3 {
     border-top: 1px solid #343f48;
     color: white;
@@ -151,3 +152,126 @@ a.side {
     right:0 !important
 }
 }
+.c-side .b-side{
+margin-top:40px !important;
+}
+img:before { 
+    content: "";
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  img:after { 
+    content: "";
+    display: block;
+    font-size: 12px;
+  }
+
+.mvAdminTools #main form{
+    padding: 20px !important;
+    background: #00000077 !important;
+}
+.mvAdminTools #main .box{
+    padding-top: 20px;
+}
+.mvAdminTools #main .eqcol {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px !important;
+}
+.mvAdminTools #main .eqcol ul {
+    padding: 20px !important;
+}
+.mvAdminTools #main .sp .box h3{
+    margin-top: 0;
+    float: right !important;
+    padding: 20px;
+    padding-top: 21px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: transparent !important;
+    padding-top: 35px;
+}
+.mvAdminTools #main .box div{
+    background: rgba(0, 0, 0, 0.5) !important;
+    float:left; 
+    display: flex;
+    padding:7px;
+    border-radius: 5px;
+    width: 47%;
+    margin-right: 1.6%;
+    margin-bottom: 45px !important;
+}
+
+.mvAdminTools #main .box h4{
+    position: absolute;
+    margin-top: -35px;
+    background: rgba(160, 160, 160, 0.5);
+    width: 46.5%;
+    padding: 5px;
+    margin-left: -0.6%;
+}
+.mvAdminTools #main .box h5{
+    color: orange !important;
+    position: relative;
+    left: 78%;
+}
+.eqcol.busted {
+    background: rgba(0, 0, 0, 0.5) !important;
+}
+.mvpremium .c-side .b-side .actions a {
+    background: #00000077;
+    padding: 10px;
+    border: 1px #5b5b5b solid;
+    margin: 5px;
+    border-radius: 5px;
+    display: block;
+}
+
+.mvAdminTools .pairs {
+    background: #00000077;
+    padding: 10px;
+    border: 1px #5b5b5b solid;
+    margin: 5px;
+    border-radius: 5px;
+}
+.mvAdminTools form fieldset legend {
+    font-size: 18px;
+}
+.mvAdminTools .mbuttons {
+    margin-top:20px;
+}
+.checked{
+    border-left:5px green solid !important;
+}
+.unchecked{
+    border-left: 5px solid #c83e3e !important;
+}
+#sourcelist{
+    height: 100% !important;
+    width: 350px !important;
+
+}
+#sourcelist li{
+    background-color: #232323 !important;
+}
+#ptabs{
+    width: 350px !important;
+}
+#ptabs ul li{
+    border-bottom:1px #6f6f6f solid;
+}
+
+ul[role="tablist"] li {
+    background: #111; 
+    padding: 5px; 
+    border-radius: 5px; 
+    width: min-content; 
+    float: left;
+    width: 70px;
+    margin-right: 5px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
