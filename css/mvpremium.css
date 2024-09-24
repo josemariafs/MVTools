@@ -129,7 +129,7 @@ a.side {
     color: #bfc6cc
 }
 #content {
-    background: url('chrome-extension://__MSG_@@extension_id__/img/bg.jpg') 100% no-repeat;
+    /*background: url('chrome-extension://__MSG_@@extension_id__/img/bg.jpg') 100% no-repeat;*/
     background-position-y: 0;
     background-attachment: fixed;
     background-size: cover;
@@ -199,7 +199,7 @@ img:before {
     display: flex;
     padding:7px;
     border-radius: 5px;
-    width: 47%;
+    width: 45%;
     margin-right: 1.6%;
     margin-bottom: 45px !important;
 }
@@ -223,7 +223,7 @@ img:before {
 .mvpremium .c-side .b-side .actions a {
     background: #00000077;
     padding: 10px;
-    border: 1px #5b5b5b solid;
+    border: 1px #2c2c2c solid;
     margin: 5px;
     border-radius: 5px;
     display: block;
@@ -274,4 +274,28 @@ ul[role="tablist"] li {
     text-align: center;
     margin-bottom: 20px;
 }
-
+.mvAdminTools #linkpanel{
+    display:flex;
+}
+.mvAdminTools #linkpanel li{
+    background: #111; 
+    padding: 5px; 
+    border-radius: 5px; 
+    width: min-content; 
+    float: left;
+    width: 70px;
+    margin-right: 5px;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-bottom:30px;
+}
+.mvAdminTools #p1, #p2{ 
+    float: left;
+}
+.mvAdminTools #p0 ul{ 
+    margin-left:30px
+}
+.mvAdminTools #p0 div{ 
+    border: 1px #454545 solid;
+    padding:15px !important;
+}

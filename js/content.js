@@ -108,19 +108,43 @@ if (window.location.href.startsWith("https://www.mediavida.com/id")) {
 // Admin tools
 
 if (
-  window.location.href.startsWith("https://www.mediavida.com/usuarios/admin")
-) {
-  document.querySelector("body").classList.add("mvAdminTools");
-  const checkElements = document.getElementsByClassName("pairs");
-  for (var i = 0; i < checkElements.length; i++) {
-    if (checkElements[i].childNodes[1].checked === true) {
-      checkElements[i].classList.add("checked");
-    } else {
-      checkElements[i].classList.add("unchecked");
+    window.location.href.startsWith("https://www.mediavida.com/usuarios/admin")
+  ) {
+    document.querySelector("body").classList.add("mvAdminTools");
+    const checkElements = document.getElementsByClassName("pairs");
+    for (var i = 0; i < checkElements.length; i++) {
+      if (checkElements[i].childNodes[1].checked === true) {
+        checkElements[i].classList.add("checked");
+      } else {
+        checkElements[i].classList.add("unchecked");
+      }
     }
   }
-}
 
+  
+  if (
+    window.location.href.startsWith("https://www.mediavida.com/foro/staff.php")
+  ) {
+    document.querySelector("body").classList.add("mvAdminTools");
+    const h3Elements = document.querySelectorAll("#p0 h3");
+    h3Elements.forEach((h3, index) => {
+        const div = document.createElement("div");
+        div.setAttribute("data-index", index);
+        const ulElements = document.querySelectorAll("#p0 ul");
+        const ul = ulElements[index];
+        h3.parentNode.insertBefore(div, h3);
+        ul.parentNode.insertBefore(div, ul);
+        div.appendChild(h3);
+        div.appendChild(ul);
+    });
+    const images = document.querySelectorAll("img");
+    images.forEach((img) => {
+      if (img.src.includes("/style")) {
+        img.src = img.src.replace("/style", "/");
+      }
+    });
+  }
+  
 if (window.location.href.startsWith("https://www.mediavida.com/id")) {
   document.querySelectorAll("div").forEach((div) => {
     const leftElement = div.querySelector(".left");
