@@ -108,20 +108,56 @@ if (window.location.href.startsWith("https://www.mediavida.com/id")) {
 // Admin tools
 
 if (
-    window.location.href.startsWith("https://www.mediavida.com/usuarios/admin")
+  window.location.href.startsWith("https://www.mediavida.com/usuarios/admin")
+) {
+  document.querySelector("body").classList.add("mvAdminTools");
+  const checkElements = document.getElementsByClassName("pairs");
+  for (var i = 0; i < checkElements.length; i++) {
+    if (checkElements[i].childNodes[1].checked === true) {
+      checkElements[i].classList.add("checked");
+    } else {
+      checkElements[i].classList.add("unchecked");
+    }
+  }
+}
+if (
+  window.location.href.startsWith("https://www.mediavida.com/foro/admin")
+) {
+  document.querySelector("body").classList.add("mvAdminTools");
+}
+
+  
+  if (
+    window.location.href.startsWith("https://www.mediavida.com/foro/admin_edit.php")
   ) {
     document.querySelector("body").classList.add("mvAdminTools");
-    const checkElements = document.getElementsByClassName("pairs");
-    for (var i = 0; i < checkElements.length; i++) {
-      if (checkElements[i].childNodes[1].checked === true) {
-        checkElements[i].classList.add("checked");
-      } else {
-        checkElements[i].classList.add("unchecked");
-      }
-    }
+
+    let labels = document.querySelectorAll("#foro label");
+    labels.forEach(label => {
+      label.classList.add("col1");
+    });
+
+    let inputs = document.querySelectorAll("#foro input");
+    inputs.forEach(input => {
+      input.classList.add("col2");
+    });
+
+    labels = document.querySelectorAll("#mods label");
+    labels.forEach(label => {
+      label.classList.add("col1");
+    });
+
+    inputs = document.querySelectorAll("#mods input");
+    inputs.forEach(input => {
+      input.classList.add("col2");
+    });
+
   }
 
   
+
+
+
   if (
     window.location.href.startsWith("https://www.mediavida.com/foro/staff.php")
   ) {
@@ -143,6 +179,163 @@ if (
         img.src = img.src.replace("/style", "/");
       }
     });
+
+    const p1Element = document.getElementById("p1");
+    if (p1Element) {
+      const liElements = p1Element.querySelectorAll("li");
+      liElements.forEach((li) => {
+        const div = document.createElement("div");
+        div.innerHTML = li.innerHTML;
+        li.parentNode.replaceChild(div, li);
+      });
+    }
+
+    let newLi = document.createElement("li");
+    let newA = document.createElement("a");
+    let linkPanel = document.getElementById("linkpanel");
+
+    newA.href = "#";
+    newA.textContent = "Administradores";
+    newLi.appendChild(newA);
+    linkPanel.appendChild(newLi);
+
+    newLi = document.createElement("li");
+    newA = document.createElement("a");
+    newA.href = "#";
+    newA.textContent = "MODS sin acceso al foro interno";
+    newLi.appendChild(newA);
+    linkPanel.appendChild(newLi);
+
+    newLi = document.createElement("li");
+    newA = document.createElement("a");
+    newA.href = "#";
+    newA.textContent = "Users NO MODS con acceso al foro interno";
+    newLi.appendChild(newA);
+    linkPanel.appendChild(newLi);
+
+    let largecolFirstChild = document.querySelector(".largecol");
+    let p1Divs = document.querySelectorAll("#p1 div");
+    let p3Div = document.createElement("div");
+    p3Div.id = "p3";
+
+    p1Divs.forEach((div) => {
+      if (div.textContent.includes("Administrador")) {
+        p3Div.appendChild(div.cloneNode(true));
+      }
+    });
+    largecolFirstChild.appendChild(p3Div);
+
+    let p4Div = document.createElement("div");
+    p4Div.id = "p4";
+
+    p1Divs.forEach((div) => {
+      if (div.textContent.includes("Moderador") && !div.textContent.includes("Foro Interno")) {
+        p4Div.appendChild(div.cloneNode(true));
+      }
+    });
+    largecolFirstChild.appendChild(p4Div);
+
+    let p5Div = document.createElement("div");
+    p5Div.id = "p5";
+
+    p1Divs.forEach((div) => {
+      if (!div.textContent.includes("Moderador") && div.textContent.includes("Foro Interno")) {
+        p5Div.appendChild(div.cloneNode(true));
+      }
+    });
+    largecolFirstChild.appendChild(p5Div);    
+
+    if (linkPanel) {
+      const liElements = linkPanel.getElementsByTagName("li");
+      if (liElements.length > 1) {
+        liElements[0].addEventListener("click", function () {
+          document.getElementById("p0").style.display = "block";
+          document.getElementById("p1").style.display = "none";
+          document.getElementById("p2").style.display = "none";
+          document.getElementById("p3").style.display = "none";
+          document.getElementById("p4").style.display = "none";
+          document.getElementById("p5").style.display = "none";
+          liElements[0].classList.add("selected");
+          liElements[1].classList.remove("selected");
+          liElements[2].classList.remove("selected");
+          liElements[3].classList.remove("selected");
+          liElements[4].classList.remove("selected");
+          liElements[5].classList.remove("selected");
+        });
+        liElements[1].addEventListener("click", function () {
+          document.getElementById("p0").style.display = "none";
+          document.getElementById("p1").style.display = "block";
+          document.getElementById("p2").style.display = "none";
+          document.getElementById("p3").style.display = "none";
+          document.getElementById("p4").style.display = "none";
+          document.getElementById("p5").style.display = "none";
+          liElements[0].classList.remove("selected");
+          liElements[1].classList.add("selected");
+          liElements[2].classList.remove("selected");
+          liElements[3].classList.remove("selected");
+          liElements[4].classList.remove("selected");
+          liElements[5].classList.remove("selected");
+        });
+        liElements[2].addEventListener("click", function () {
+          document.getElementById("p0").style.display = "none";
+          document.getElementById("p1").style.display = "none";
+          document.getElementById("p2").style.display = "block";
+          document.getElementById("p3").style.display = "none";
+          document.getElementById("p4").style.display = "none";
+          document.getElementById("p5").style.display = "none";
+          liElements[0].classList.remove("selected");
+          liElements[1].classList.remove("selected");
+          liElements[2].classList.add("selected");
+          liElements[3].classList.remove("selected");
+          liElements[4].classList.remove("selected");
+          liElements[5].classList.remove("selected");
+        });        
+        liElements[3].addEventListener("click", function () {
+          document.getElementById("p0").style.display = "none";
+          document.getElementById("p1").style.display = "none";
+          document.getElementById("p2").style.display = "none";
+          document.getElementById("p3").style.display = "block";
+          document.getElementById("p4").style.display = "none";
+          document.getElementById("p5").style.display = "none";
+          liElements[0].classList.remove("selected");
+          liElements[1].classList.remove("selected");
+          liElements[2].classList.remove("selected");
+          liElements[3].classList.add("selected");
+          liElements[4].classList.remove("selected");
+          liElements[5].classList.remove("selected");
+
+        });
+        liElements[4].addEventListener("click", function () {
+          document.getElementById("p0").style.display = "none";
+          document.getElementById("p1").style.display = "none";
+          document.getElementById("p2").style.display = "none";
+          document.getElementById("p3").style.display = "none";
+          document.getElementById("p4").style.display = "block";
+          document.getElementById("p5").style.display = "none";
+          liElements[0].classList.remove("selected");
+          liElements[1].classList.remove("selected");
+          liElements[2].classList.remove("selected");
+          liElements[3].classList.remove("selected");
+          liElements[4].classList.add("selected");
+          liElements[5].classList.remove("selected");
+        });  
+        liElements[5].addEventListener("click", function () {
+          document.getElementById("p0").style.display = "none";
+          document.getElementById("p1").style.display = "none";
+          document.getElementById("p2").style.display = "none";
+          document.getElementById("p3").style.display = "none";
+          document.getElementById("p4").style.display = "none";
+          document.getElementById("p5").style.display = "block";
+          liElements[0].classList.remove("selected");
+          liElements[1].classList.remove("selected");
+          liElements[2].classList.remove("selected");
+          liElements[3].classList.remove("selected");
+          liElements[4].classList.remove("selected");
+          liElements[5].classList.add("selected");
+        });                
+      }
+    }
+
   }
   
 if (window.location.href.startsWith("https://www.mediavida.com/id")) {

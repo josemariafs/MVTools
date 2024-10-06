@@ -129,13 +129,12 @@ a.side {
     color: #bfc6cc
 }
 #content {
-    /*background: url('chrome-extension://__MSG_@@extension_id__/img/bg.jpg') 100% no-repeat;*/
+    background: url('chrome-extension://__MSG_@@extension_id__/img/bg.jpg') 100% no-repeat;
     background-position-y: 0;
     background-attachment: fixed;
     background-size: cover;
 }
 
-/* i really want this to be global */
 #main table.mv td{
     padding:14px 0px
 }
@@ -167,6 +166,20 @@ img:before {
     font-size: 12px;
   }
 
+  /* Admin pages views */
+  
+  button {
+    background: #fb8500;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #a35700 !important;
+  }
+  
 .mvAdminTools #main form{
     padding: 20px !important;
     background: #00000077 !important;
@@ -199,18 +212,26 @@ img:before {
     display: flex;
     padding:7px;
     border-radius: 5px;
-    width: 45%;
+    width: 500px;
+    margin-top: 30px;
     margin-right: 1.6%;
-    margin-bottom: 45px !important;
+    margin-bottom: 15px !important;
+    border-radius: 0px 0px 10px 10px;
+    -webkit-border-radius: 0px 0px 10px 10px;
+    -moz-border-radius: 0px 0px 10px 10px;
 }
 
 .mvAdminTools #main .box h4{
     position: absolute;
     margin-top: -35px;
     background: rgba(160, 160, 160, 0.5);
-    width: 46.5%;
+    width: 500px;
     padding: 5px;
+    padding-left: 10px;
     margin-left: -0.6%;
+    border-radius: 10px 10px 0px 0px;
+    -webkit-border-radius: 10px 10px 0px 0px;
+    -moz-border-radius: 10px 10px 0px 0px;
 }
 .mvAdminTools #main .box h5{
     color: orange !important;
@@ -283,11 +304,20 @@ ul[role="tablist"] li {
     border-radius: 5px; 
     width: min-content; 
     float: left;
-    width: 70px;
+    width: 200px;
     margin-right: 5px;
     text-align: center;
     margin-bottom: 20px;
     margin-bottom:30px;
+    border-bottom: 1px #ccc solid;
+    cursor:pointer;
+}
+.mvAdminTools #linkpanel li:hover{
+    background: #404040; 
+    transition:1px ease all
+}
+.mvAdminTools #linkpanel .selected{
+    background: #404040;
 }
 .mvAdminTools #p1, #p2{ 
     float: left;
@@ -298,4 +328,101 @@ ul[role="tablist"] li {
 .mvAdminTools #p0 div{ 
     border: 1px #454545 solid;
     padding:15px !important;
+}
+.mvAdminTools #p1 li,.mvAdminTools #p3 li,.mvAdminTools #p4 li,.mvAdminTools #p5 li{ 
+    background: #111; 
+    padding: 5px; 
+    border-radius: 5px; 
+    width: min-content; 
+    float: left;
+    width: 100%;
+    margin-right: 5px;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-bottom:30px;
+}
+.mvAdminTools #p1 div, .mvAdminTools #p3 div,.mvAdminTools #p4 div,.mvAdminTools #p5 div{ 
+    margin-bottom: 10px;
+    display: block !important;
+    float: left;
+    border-radius: 5px; 
+    border: 1px #454545 solid;
+    width: 44%;
+    margin-right: 1%;
+    padding: 1%;
+}
+.mvAdminTools #p1 a,.mvAdminTools #p3 a,.mvAdminTools #p4 a,.mvAdminTools #p5 a{ 
+    font-size: 18px;
+}
+.mvAdminTools #p1 img,.mvAdminTools #p3 img,.mvAdminTools #p4 img,.mvAdminTools #p5 img{ 
+    margin-right:20px;
+    margin-top:10px;
+}
+.mvAdminTools #p2 li{ 
+    background: #111; 
+    padding: 5px; 
+    border-radius: 5px; 
+    width: min-content; 
+    float: left;
+    margin-right: 5px;
+    border: 1px #454545 solid;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-bottom:10px;
+    width: 140px !important;
+}
+
+/* https://www.mediavida.com/foro/admin_edit.php */
+
+.mvAdminTools #foro .col1,.mvAdminTools #mods .col1{ 
+    margin-top:10px;
+    width: 150px;
+}
+
+.mvAdminTools #foro .col2,
+.mvAdminTools #foro select,.mvAdminTools #mods .col2,
+.mvAdminTools #mods select{ 
+    margin-top:10px;
+    width: 55%;
+    height: 30px !important;
+    padding: 0px;
+    padding-left: 10px;
+}
+
+.mvAdminTools #foro input[type="checkbox"] ,.mvAdminTools #mods input[type="checkbox"] {
+    width: 15px !important;
+    height: 15px !important;
+}
+.mvAdminTools #moderadores li{
+    padding:10px;
+    background: #111;
+    border: 1px #454545 solid;
+    border-radius: 5px; 
+    margin-top:5px;
+    height:20px;
+    margin-left:-50px;
+    margin-right: 50px;
+}
+.mvAdminTools #moderadores li a:not([role="button"]) {
+    width: 100px !important;
+    display: inline-block;
+}
+.mvAdminTools #tags li{
+    display: block;
+    float: left;
+    margin: 2px;
+    padding: 4px;
+    background: #454545;
+    border: 1px #111 solid;
+    border-radius: 5px;
+    }
+.mvAdminTools #tags li a{
+    padding-left:4px;
+    padding-right:4px;
+    }
+
+    /* https://www.mediavida.com/foro/admin --Categorias */
+    .mvAdminTools #cats button,.mvAdminTools #social button{        
+    margin-left:0px !important;
+    margin-bottom:20px;
 }
