@@ -3,6 +3,7 @@ var authors = document.querySelectorAll("[data-autor]");
 const ignoredUser = JSON.parse(localStorage.getItem("ignoredUser"));
 const notedUser = JSON.parse(localStorage.getItem("notedUser"));
 const highlightedUser = JSON.parse(localStorage.getItem("highlightedUser"));
+const replies = document.querySelectorAll(".replies");
 
 // MV Premium CSS
 var link = document.createElement("link");
@@ -47,6 +48,7 @@ if (window.localStorage.getItem("ShowIgnoredUsers") === "false") {
   }
 } else {
   for (var i = 0, l = authors.length; i < l; i++) {
+
     if (
       ignoredUser &&
       ignoredUser.includes(authors[i].getAttribute("data-autor"))
@@ -64,6 +66,22 @@ if (window.localStorage.getItem("ShowIgnoredUsers") === "false") {
   }
 }
 
+// Ignored users in replies
+document.querySelectorAll(".btnrep").forEach((btn) => {
+  btn.addEventListener("click", function () {
+    setTimeout(() => {
+      document.querySelectorAll(".replies").forEach((reply) => {
+        reply.querySelectorAll(".rep").forEach((rep) => {
+          console.log(ignoredUser)
+        if (rep && ignoredUser && ignoredUser.includes(rep.querySelector('.autor').textContent)) {
+          rep.innerHTML = "Mensaje ignorado";
+        }
+      });
+    });
+  }, 500);
+
+  });
+});
 // Highlighted users in threads
 
 for (var i = 0, l = authors.length; i < l; i++) {
