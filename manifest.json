@@ -1,6 +1,6 @@
 {
     "name": "RA_MeSiAs MV Tools",
-    "version": "1.4.2",
+    "version": "1.5.0",
     "description": "Herramientas adicionales para www.mediavida.com",
     "manifest_version": 3,
     "author": "RA_MeSiAs",
@@ -9,13 +9,13 @@
         "default_title": "RA_MeSiAs MV Tools"
     },
     "content_scripts": [{
-      "js": ["js/content.js","js/functions.js"],
+      "js": ["js/content.js","js/functions.js","js/deals.js","modules/turndown.js"],
       "css": ["css/content.css", "css/mvpremium.css"],
-      "matches": ["https://www.mediavida.com/*"]
+      "matches": ["https://www.mediavida.com/*","https://www.chollometro.com/*"]
     }],
     "web_accessible_resources": [ 
       { 
-        "resources": ["img/bg.jpg","img/note2.png"], 
+        "resources": ["img/bg.jpg","img/note2.png","img/mvlogo.png"], 
         "matches": ["*://*/*"]
       }
     ]
