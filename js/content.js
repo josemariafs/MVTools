@@ -16,6 +16,22 @@ if (window.localStorage.getItem("MvPremiumCSS") === "true") {
   document.querySelector("body").classList.remove("mvpremium");
 }
 
+// Bans options
+if (window.location.href.startsWith("https://www.mediavida.com/usuarios/ban.php")) {
+  const element =  document.getElementsByClassName("control-group")[2]
+  if (element) {
+      let div = document.createElement("div");
+      div.innerHTML = `<div class="control-group" style="text-align: center;">
+      <span id="multicuenta" onClick='document.querySelector("textarea").value = "Multicuenta";' style="margin-right:10px; padding:8px;background: #434343;border-radius: 40px; cursor:pointer">Multicuenta</span>
+      
+      <span id="Spamtroll" onClick='document.querySelector("textarea").value = "Span / Troll";'  style="margin-right:10px; padding:8px;background: #434343;border-radius: 40px; cursor:pointer">Span / Troll</span>
+      <span id="odio" onClick='document.querySelector("textarea").value = "Mensajes de odio, acoso y/o discriminación";' style="margin-right:10px; padding:8px;background: #434343;border-radius: 40px; cursor:pointer">Mensajes de odio, acoso y/o discriminación</span>
+      <span id="insultos" onClick='document.querySelector("textarea").value = "Insultos en MD, Firmas o publico";' style="margin-right:10px; padding:8px;background: #434343;border-radius: 40px; cursor:pointer">Insultos en MD, Firmas o publico</span>
+       </div>`
+      element.parentNode.insertBefore(div, element);
+  }
+  }
+
 // Add Tooltip to users
 for (var i = 0, l = authors.length; i < l; i++) {
   if (
@@ -476,21 +492,6 @@ if (
         </div>
         </div>
                 <div style=" background: rgba(0, 0, 0, 0.5) !important; width: max-content; width: max-content; padding: 0px 25px; border-radius: 0px 0px 10px 0px; height: 40px; float:left">
-        <div class="control-label" style="margin-bottom: 20px;">
-        <h4>Ocultar posibles VPNs <br> <a href="https://www.mediavida.com/foro/mediavida/estilos-mv7-581940#8" target="_blank">MV Premium</a></h4>
-        </div>
-        <div class="control-input" >
-            <label class="switch" for="hideVpns">
-            <input type="checkbox"  id="hideVpns"
-            ${
-              window.localStorage.getItem("hideVpns") === "true"
-                ? "checked"
-                : ""
-            }>
-            <div class="slider round"></div>
-        </label>
-        <a href="#!" class="tooltipAnchorConfig" data-tooltip="Oculta coincidencias con posibles VPNs. ">?</a>
-        </div>
         </div>
     `;
   var secondFieldset = document.getElementsByTagName("form")[1];
@@ -631,14 +632,6 @@ if (
         document.getElementById("show-all-ips").checked
       );
     });
-
-  if (
-    window.location.href.startsWith("https://www.mediavida.com/usuarios/clones")
-  ) {
-    document.querySelector("#hideVpns").addEventListener("click", function (e) {
-      return HandleHideVpns(document.getElementById("hideVpns").checked);
-    });
-  }
 }
 if (
   window.location.href.startsWith("https://www.mediavida.com/configuracion")

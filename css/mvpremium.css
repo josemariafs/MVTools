@@ -168,7 +168,7 @@ img:before {
 
   /* Admin pages views */
   
-  button {
+  .mvAdminTools button {
     background: #fb8500;
     color: white;
     border: none;
@@ -176,7 +176,7 @@ img:before {
     border-radius: 5px;
     cursor: pointer;
   }
-  button:hover {
+  .mvAdminTools button:hover {
     background: #a35700 !important;
   }
   
