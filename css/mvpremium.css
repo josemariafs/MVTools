@@ -426,3 +426,6 @@ ul[role="tablist"] li {
     margin-left:0px !important;
     margin-bottom:20px;
 }
+.MvPremiumCSSWithoutBG #content{
+    background: #101213 !important;
+}

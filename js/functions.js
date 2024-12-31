@@ -21,6 +21,10 @@ function HandleAddIgnoredUser(){
     window.localStorage.setItem("ignoredUser", JSON.stringify(ignoredUsers));
     location.reload()
 }
+function HandleOnChangeHideBg(checked){
+    checked ? window.localStorage.setItem('MvPremiumCSSWithoutBG', 'true') : window.localStorage.setItem('MvPremiumCSSWithoutBG', 'false'); 
+    location.reload();
+}
 
 function HandleAddNoteUser(){
     let notedUser = document.getElementById("notedUserInput").value;

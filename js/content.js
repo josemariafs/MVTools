@@ -15,19 +15,25 @@ if (window.localStorage.getItem("MvPremiumCSS") === "true") {
 } else {
   document.querySelector("body").classList.remove("mvpremium");
 }
+if (window.localStorage.getItem("MvPremiumCSSWithoutBG") === "true") {
+  document.querySelector("body").classList.add("MvPremiumCSSWithoutBG");
+}
 
 // Bans options
 if (window.location.href.startsWith("https://www.mediavida.com/usuarios/ban.php")) {
   const element =  document.getElementsByClassName("control-group")[2]
   if (element) {
       let div = document.createElement("div");
-      div.innerHTML = `<div class="control-group" style="text-align: center;">
-      <span id="multicuenta" onClick='document.querySelector("textarea").value = "Multicuenta";' style="margin-right:10px; padding:8px;background: #434343;border-radius: 40px; cursor:pointer">Multicuenta</span>
-      
-      <span id="Spamtroll" onClick='document.querySelector("textarea").value = "Span / Troll";'  style="margin-right:10px; padding:8px;background: #434343;border-radius: 40px; cursor:pointer">Span / Troll</span>
-      <span id="odio" onClick='document.querySelector("textarea").value = "Mensajes de odio, acoso y/o discriminación";' style="margin-right:10px; padding:8px;background: #434343;border-radius: 40px; cursor:pointer">Mensajes de odio, acoso y/o discriminación</span>
-      <span id="insultos" onClick='document.querySelector("textarea").value = "Insultos en MD, Firmas o publico";' style="margin-right:10px; padding:8px;background: #434343;border-radius: 40px; cursor:pointer">Insultos en MD, Firmas o publico</span>
-       </div>`
+      div.className = "control-group";
+      div.style = " overflow:visible";
+      div.innerHTML = `<label for="motivo" class="control-label">Selector Motivo</label>
+      <div class="control-input">
+      <span onClick='document.querySelector("textarea").value = "Multicuenta";' style="margin-right:10px; padding:8px;background: #434343;border-radius: 5px; cursor:pointer;    BORDER: 1px #7d7d7d solid;">Multicuenta</span>
+      <span onClick='document.querySelector("textarea").value = "Spam / Troll";'  style="margin-right:10px; padding:8px;background: #434343;border-radius: 5px; cursor:pointer;    BORDER: 1px #7d7d7d solid;">Spam / Troll</span>
+      <span onClick='document.querySelector("textarea").value = "Mensajes de odio, acoso y/o discriminación";' style="margin-right:10px; padding:8px;background: #434343;border-radius: 5px; cursor:pointer;    BORDER: 1px #7d7d7d solid;">Mensajes de odio, acoso y/o discriminación</span>
+      <span onClick='document.querySelector("textarea").value = "Insultos en MD, firmas o público";' style="margin-right:10px; padding:8px;background: #434343;border-radius: 5px; cursor:pointer;    BORDER: 1px #7d7d7d solid;">Insultos en MD, firmas o público</span>
+      <span onClick='document.querySelector("textarea").value = "A petición del usuario";' style="margin-right:10px; padding:8px;background: #434343;border-radius: 5px; cursor:pointer;    BORDER: 1px #7d7d7d solid;">A petición del usuario</span>      
+      </div>`
       element.parentNode.insertBefore(div, element);
   }
   }
@@ -531,6 +537,28 @@ if (
         </div>
     `;
 
+    // Quitar fondo de MV Premium
+if (window.localStorage.getItem("MvPremiumCSS") === "true"){
+    newFieldset.innerHTML += `
+    <hr>
+    <div class="control-label" style="margin-bottom: 20px;">
+    <h4>Quitar fondo MV Premium <br> </h4>
+    </div>
+    <div class="control-input" style="margin-bottom: 20px;">
+        <label class="switch" for="checkbox-without-bg">
+        <input type="checkbox" id="checkbox-without-bg"
+        ${
+          window.localStorage.getItem("MvPremiumCSSWithoutBG") === "true"
+            ? "checked"
+            : ""
+        }>
+        <div class="slider round"></div>
+    </label>
+    <a href="#!" class="tooltipAnchorConfig" data-tooltip="Se recomienda usar el Theme de Mediavida Oscuro cuando se activan los estilos de MV Premium ">?</a>
+    </div>
+`;
+}
+
   // Ignore user
   newFieldset.innerHTML += `<hr style="color:#ccc">`;
 
@@ -641,6 +669,15 @@ if (
   });
 
   document
+    .querySelector("#checkbox-without-bg")
+    .addEventListener("click", function (e) {
+      return HandleOnChangeHideBg(
+        document.getElementById("checkbox-without-bg").checked
+      );
+    });
+
+
+    document
     .querySelector("#checkbox-showIgnoredUsers")
     .addEventListener("click", function (e) {
       return HandleOnChangeShowIgnoredUsers(
