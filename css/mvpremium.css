@@ -429,3 +429,6 @@ ul[role="tablist"] li {
 .MvPremiumCSSWithoutBG #content{
     background: #101213 !important;
 }
+#notes{
+    overflow: auto;
+}

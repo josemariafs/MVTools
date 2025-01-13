@@ -143,6 +143,25 @@ if (window.location.href.startsWith("https://www.mediavida.com/id")) {
       }
     }
   }
+
+  const notesContent = document.querySelectorAll("#notes .ncontent li");
+  const currentDate = new Date();
+
+  notesContent.forEach((li) => {
+    const datePattern = /hasta\s(\d{1,2})\/(\d{1,2})\/(\d{2})/;
+    const match = li.textContent.match(datePattern);
+
+    if (match) {
+      const [_, day, month, year] = match;
+      const noteDate = new Date(`20${year}`, month - 1, day);
+      console.log("noteDate, currentDate");
+      console.log(noteDate, currentDate);
+      if (noteDate > currentDate) {
+        li.style.color = "red";
+      }
+    }
+  });
+
 }
 
 // Admin tools
@@ -423,6 +442,28 @@ if (
     }
   });
 
+  const bustedElements = document.querySelectorAll("ul li");
+  bustedElements.forEach((li) => {
+    if (li.innerHTML.includes("<strong>b</strong>")) {
+      li.innerHTML = li.innerHTML.replace(
+        "<strong>b</strong>",
+        "<span style='background: #af2727;padding: 1px 5px;border-radius: 5px;'>BANNED</span>"
+      );
+    }
+      if (li.innerHTML.includes("<strong>p</strong>")) {
+        li.innerHTML = li.innerHTML.replace(
+          "<strong>p</strong>",
+          "<span style='background:rgb(52 88 143);padding: 1px 5px;border-radius: 5px;'>Sanción activa</span>"
+        );      
+    }
+    if (li.innerHTML.includes("<strong>d</strong>")) {
+      li.innerHTML = li.innerHTML.replace(
+        "<strong>d</strong>",
+        "<span style='background:rgb(45, 45, 45);padding: 1px 5px;border-radius: 5px;'>Cuenta desactivada</span>"
+      );      
+  }
+  });
+
   if (window.localStorage.getItem("showIpsWithoutClons") === "false") {
     for (
       var i = 0;
@@ -448,34 +489,7 @@ if (
     }
   }
 
-  if (window.localStorage.getItem("hideVpns") === "true") {
-    if (document.getElementsByClassName("box")[0]) {
-      for (
-        var i = 0;
-        i <
-        document.getElementsByClassName("box")[0].getElementsByTagName("div")
-          .length;
-        i++
-      ) {
-        if (
-          document.getElementsByClassName("box")[0].getElementsByTagName("div")[
-            i
-          ]
-        ) {
-          if (
-            document
-              .getElementsByClassName("box")[0]
-              .getElementsByTagName("div")
-              [i].textContent.includes("0.0.0.0")
-          ) {
-            document
-              .getElementsByClassName("box")[0]
-              .getElementsByTagName("div")[i].style.display = "none";
-          }
-        }
-      }
-    }
-  }
+
 
   var newFieldset = document.createElement("fieldset");
 
