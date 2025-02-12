@@ -19,6 +19,10 @@ if (window.localStorage.getItem("MvPremiumCSSWithoutBG") === "true") {
   document.querySelector("body").classList.add("MvPremiumCSSWithoutBG");
 }
 
+if (window.localStorage.getItem("mvultrawide") === "true") {
+  document.querySelector("body").classList.add("mvultrawide");
+}
+
 // Bans options
 if (window.location.href.startsWith("https://www.mediavida.com/usuarios/ban.php")) {
   const element =  document.getElementsByClassName("control-group")[2]
@@ -552,17 +556,38 @@ if (
     `;
 
     // Quitar fondo de MV Premium
-if (window.localStorage.getItem("MvPremiumCSS") === "true"){
+    if (window.localStorage.getItem("MvPremiumCSS") === "true"){
+      newFieldset.innerHTML += `
+      <hr>
+      <div class="control-label" style="margin-bottom: 20px;">
+      <h4>Quitar fondo MV Premium <br> </h4>
+      </div>
+      <div class="control-input" style="margin-bottom: 20px;">
+          <label class="switch" for="checkbox-without-bg">
+          <input type="checkbox" id="checkbox-without-bg"
+          ${
+            window.localStorage.getItem("MvPremiumCSSWithoutBG") === "true"
+              ? "checked"
+              : ""
+          }>
+          <div class="slider round"></div>
+      </label>
+      <a href="#!" class="tooltipAnchorConfig" data-tooltip="Se recomienda usar el Theme de Mediavida Oscuro cuando se activan los estilos de MV Premium ">?</a>
+      </div>
+  `;
+  }
+
+  if (window.localStorage.getItem("MvPremiumCSS") === "true"){
     newFieldset.innerHTML += `
     <hr>
     <div class="control-label" style="margin-bottom: 20px;">
-    <h4>Quitar fondo MV Premium <br> </h4>
+    <h4>Modo Ultrawide <br> </h4>
     </div>
     <div class="control-input" style="margin-bottom: 20px;">
-        <label class="switch" for="checkbox-without-bg">
-        <input type="checkbox" id="checkbox-without-bg"
+        <label class="switch" for="checkbox-ultrawide">
+        <input type="checkbox" id="checkbox-ultrawide"
         ${
-          window.localStorage.getItem("MvPremiumCSSWithoutBG") === "true"
+          window.localStorage.getItem("mvultrawide") === "true"
             ? "checked"
             : ""
         }>
@@ -656,6 +681,18 @@ if (window.localStorage.getItem("MvPremiumCSS") === "true"){
         >Borrar</span></div>`;
     }
   }
+  newFieldset.innerHTML +=`
+  <hr style="color:#ccc">
+    <div class="control-label" style="margin-bottom: 20px;">
+    <h4>Exportar/Importar configuración</h4>
+    </div>  
+    <div class="control-input" style="margin-bottom: 20px;">
+      <button type="button" class="btn" id="export-config">Exportar Configuración</button>
+      <button type="button" class="btn"id="import-config">Importar Configuración</button>
+    </div>    `;
+
+
+
   var secondFieldset = document.getElementsByTagName("fieldset")[1];
   if (secondFieldset) {
     secondFieldset.parentNode.insertBefore(
@@ -678,6 +715,17 @@ if (
 if (
   window.location.href.startsWith("https://www.mediavida.com/configuracion")
 ) {
+  document
+  .querySelector("#export-config")
+  .addEventListener("click", function (e) {
+    return exportConfig();
+  });  
+  document
+  .querySelector("#import-config")
+  .addEventListener("click", function (e) {
+    return importConfig();
+  });     
+
   document.querySelector("#checkbox").addEventListener("click", function (e) {
     return HandleOnChangeMvPremium(document.getElementById("checkbox").checked);
   });
@@ -687,6 +735,15 @@ if (
     .addEventListener("click", function (e) {
       return HandleOnChangeHideBg(
         document.getElementById("checkbox-without-bg").checked
+      );
+    });
+
+
+    document
+    .querySelector("#checkbox-ultrawide")
+    .addEventListener("click", function (e) {
+      return HandleOnChangeUltrawide(
+        document.getElementById("checkbox-ultrawide").checked
       );
     });
 
@@ -710,11 +767,11 @@ if (
     .addEventListener("click", function (e) {
       return HandleAddIgnoredUser();
     });
-  document
+    document
     .querySelector("#notedUserBtn")
     .addEventListener("click", function (e) {
       return HandleAddNoteUser();
-    });
+    });   
 
   if (document.querySelector("#ptabs")) {
     document.querySelector("#ptabs").addEventListener("click", function (e) {

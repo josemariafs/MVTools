@@ -432,3 +432,9 @@ ul[role="tablist"] li {
 #notes{
     overflow: auto;
 }
+
+@media only screen and (min-width: 1200px) {
+    .mvultrawide #main {
+        max-width: 1680px;
+    }
+}
