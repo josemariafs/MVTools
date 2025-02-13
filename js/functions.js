@@ -9,18 +9,58 @@ function HandleOnChangeShowIgnoredUsers(checked) {
 
 function HandleAddHighlightUser(){
     let highlightUser = document.getElementById("highlightUserInput").value;
-    let highlightedUsers = JSON.parse(window.localStorage.getItem("highlightedUser")) || [];
-    highlightedUsers.push(highlightUser);
-    window.localStorage.setItem("highlightedUser", JSON.stringify(highlightedUsers));
-    location.reload();
+    fetch('https://www.mediavida.com/usuarios/action/joincheck.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: `do=username&q=${highlightUser}`
+    })
+    .then(response => response.text())
+    .then(data => {
+        if (data.trim() === "1") {  
+            let highlightedUsers = JSON.parse(window.localStorage.getItem("highlightedUser")) || [];
+            highlightedUsers.push(highlightUser);
+            window.localStorage.setItem("highlightedUser", JSON.stringify(highlightedUsers));
+            location.reload(); 
+        } else {
+            alert("El usuario no existe.");
+        }
+    })
+    .catch(error => {
+        console.error('Error al verificar el usuario:', error);
+        alert("Ocurrió un error al verificar el usuario.");
+    });
 }
+
 function HandleAddIgnoredUser(){
     let ignoreUser = document.getElementById("ignoreUserInput").value;
-    let ignoredUsers = JSON.parse(window.localStorage.getItem("ignoredUser")) || [];
-    ignoredUsers.push(ignoreUser);
-    window.localStorage.setItem("ignoredUser", JSON.stringify(ignoredUsers));
-    location.reload()
+    fetch('https://www.mediavida.com/usuarios/action/joincheck.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: `do=username&q=${ignoreUser}`
+    })
+    .then(response => response.text())
+    .then(data => {
+        if (data.trim() === "1") {  
+            let ignoredUsers = JSON.parse(window.localStorage.getItem("ignoredUser")) || [];
+            ignoredUsers.push(ignoreUser);
+            window.localStorage.setItem("ignoredUser", JSON.stringify(ignoredUsers));
+            location.reload();  
+        } else {
+            alert("El usuario no existe.");
+        }
+    })
+    .catch(error => {
+        console.error('Error al verificar el usuario:', error);
+        alert("Ocurrió un error al verificar el usuario.");
+    });
 }
+
 function HandleOnChangeHideBg(checked){
     checked ? window.localStorage.setItem('MvPremiumCSSWithoutBG', 'true') : window.localStorage.setItem('MvPremiumCSSWithoutBG', 'false'); 
     location.reload();
@@ -29,15 +69,31 @@ function HandleOnChangeHideBg(checked){
 function HandleAddNoteUser(){
     let notedUser = document.getElementById("notedUserInput").value;
     let note = document.getElementById("notedTextInput").value;
-    let notedUsers = JSON.parse(window.localStorage.getItem("notedUser")) || [];
-    notedUsers.push({"nickname": notedUser, "note": note});
-    window.localStorage.setItem("notedUser", JSON.stringify(notedUsers));
-    location.reload();
+    fetch('https://www.mediavida.com/usuarios/action/joincheck.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: `do=username&q=${notedUser}`
+    })
+    .then(response => response.text())
+    .then(data => {
+        if (data.trim() === "1") { 
+            let notedUsers = JSON.parse(window.localStorage.getItem("notedUser")) || [];
+            notedUsers.push({"nickname": notedUser, "note": note});
+            window.localStorage.setItem("notedUser", JSON.stringify(notedUsers));
+            location.reload(); 
+        } else {
+            alert("El usuario no existe.");
+        }
+    })
+    .catch(error => {
+        console.error('Error al verificar el usuario:', error);
+        alert("Ocurrió un error al verificar el usuario.");
+    });
 }
-function HandleOnChangeShowIpsWithoutClons(checked) {
-    window.localStorage.setItem('showIpsWithoutClons', checked) 
-    location.reload();
-}
+
 
 
 function HandleOnChangeUltrawide(checked){
