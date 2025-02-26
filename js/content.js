@@ -1,3 +1,5 @@
+
+
 // Global Mediavida
 var authors = document.querySelectorAll("[data-autor]");
 const ignoredUser = JSON.parse(localStorage.getItem("ignoredUser"));
@@ -41,9 +43,12 @@ if (window.location.href.startsWith("https://www.mediavida.com/usuarios/ban.php"
       element.parentNode.insertBefore(div, element);
   }
   }
+  let moreActionsElem = document.querySelector("#more-actions");
 
 // Add Tooltip to users
 for (var i = 0, l = authors.length; i < l; i++) {
+  let postAvatar = authors[i].querySelector(".post-avatar");
+
   if (
     notedUser &&
     notedUser.some(
@@ -53,15 +58,42 @@ for (var i = 0, l = authors.length; i < l; i++) {
     var userNote = notedUser.find(
       (user) => user.nickname === authors[i].getAttribute("data-autor")
     ).note;
-    var postAvatar = authors[i].querySelector(".post-avatar");
     if (postAvatar) {
-      postAvatar.innerHTML += `<a href="#!" class="tooltipAnchor" data-tooltip="${userNote}"><img src="${chrome.runtime.getURL(
-        "img/note2.png"
-      )}"/></a>`;
+      postAvatar.innerHTML += `<a href="#!" class="tooltipAnchor" data-tooltip="${userNote}"><img src="${chrome.runtime.getURL("img/note2.png")}"/></a>`;
     }
   }
 }
 
+// Add AI to post
+if (window.localStorage.getItem("apiKey")!== '' && window.localStorage.getItem("apiKey")!== undefined){
+  for (var i = 0, l = authors.length; i < l; i++) {
+    if (authors[i].querySelector(".post-contents").innerText.length > 350){
+  
+    let buttonsElement = authors[i].querySelector(".buttons");
+    if (buttonsElement) {
+      let newElement = document.createElement("li");
+      let newLink = document.createElement("a");
+      newLink.id = `ia-${authors[i].id}`;
+      newLink.className = "post-btn ia";
+      newLink.title = "Resumir post";
+      newLink.textContent = "IA";
+      newElement.appendChild(newLink);
+      newLink.addEventListener("click", async function(e) {
+        let fullPost = e.target.parentNode.parentNode.parentNode.parentNode.parentNode;
+        let comentario = fullPost.querySelector(".post-contents").innerText;
+        let divResumen = document.createElement("div");
+        divResumen.innerHTML = '<div class="response-ia" id="resumen-'+fullPost.id+'">Cargando...</div>';
+        fullPost.querySelector(".post-contents").appendChild(divResumen);
+        await analizarComentarioIA(comentario, "resumen","resumen-"+fullPost.id);
+      });
+      buttonsElement.insertBefore(newElement, buttonsElement.firstChild);
+      }
+  }
+  }
+  }  
+
+
+ 
 // Ignored users in threads
 if (window.localStorage.getItem("ShowIgnoredUsers") === "false") {
   for (var i = 0, l = authors.length; i < l; i++) {
@@ -91,6 +123,7 @@ if (window.localStorage.getItem("ShowIgnoredUsers") === "false") {
     }
   }
 }
+
 
 // Ignored users in replies
 document.querySelectorAll(".btnrep").forEach((btn) => {
@@ -409,20 +442,10 @@ if (window.location.href.startsWith("https://www.mediavida.com/id")) {
         "width: 77%; background: #3e3e3ecf; padding: 15px; border-radius: 5px; margin-bottom: 10px; border: 1px #656565 solid; float:left";
     }
   });
-  document.querySelector(".left").nextElementSibling.style =
-    "width:20%;float:left;";
-  document
-    .querySelector(".left")
-    .nextElementSibling.querySelectorAll("li")[0].style =
-    "margin: 10px; background: #3e3e3ecf; border-radius: 3px; border: 1px #656565 solid; padding: 5px; text-align: center; color:white !important";
-  document
-    .querySelector(".left")
-    .nextElementSibling.querySelectorAll("li")[1].style =
-    "margin: 10px; background: #3e3e3ecf; border-radius: 3px; border: 1px #656565 solid; padding: 5px; text-align: center; color:white !important";
-  document
-    .querySelector(".left")
-    .nextElementSibling.querySelectorAll("li")[2].style =
-    "margin: 10px; background: #3e3e3ecf; border-radius: 3px; border: 1px #656565 solid; padding: 5px; text-align: center; color:white !important";
+  document.querySelector(".left").nextElementSibling.style = "width:20%;float:left;";
+  document.querySelector(".left").nextElementSibling.querySelectorAll("li")[0].style = "margin: 10px; background: #3e3e3ecf; border-radius: 3px; border: 1px #656565 solid; padding: 5px; text-align: center; color:white !important";
+  document.querySelector(".left").nextElementSibling.querySelectorAll("li")[1].style = "margin: 10px; background: #3e3e3ecf; border-radius: 3px; border: 1px #656565 solid; padding: 5px; text-align: center; color:white !important";
+  document.querySelector(".left").nextElementSibling.querySelectorAll("li")[2].style = "margin: 10px; background: #3e3e3ecf; border-radius: 3px; border: 1px #656565 solid; padding: 5px; text-align: center; color:white !important";
 }
 
 if (window.location.href.startsWith("https://www.mediavida.com/foro/admin")) {
@@ -598,6 +621,18 @@ if (
 `;
 }
 
+  // GEMINI API Keys
+  newFieldset.innerHTML += `<hr style="color:#ccc">
+        <div class="control-label">
+        <h4>Gemini API Key</h4>
+        </div>
+        <div class="control-input" style="margin-bottom: 20px;">
+        <input type="text" name="apiKey" placeholder="Gemini API Key" id="apiKeyInput" value="${window.localStorage.getItem("apiKey") || ""}">
+        <button type="button" class="btn" id="apiKeyBtn">Guardar</button>
+        <div><a href="https://aistudio.google.com/app/apikey?hl=es-419" target="_blank">Clicka aquí para generar una API Key</a></div>
+        </div>
+        `;
+
   // Ignore user
   newFieldset.innerHTML += `<hr style="color:#ccc">`;
 
@@ -712,6 +747,46 @@ if (
       );
     });
 }
+// Define the analizarComentarioIA function
+    console.log("ready");
+
+// Add AI to thread page
+if (window.location.href.startsWith("https://www.mediavida.com/foro/reportes")) {
+  let titleElement = document.getElementById("title");
+  let brandElement = titleElement ? titleElement.querySelector(".brand h1") : null;
+  if (brandElement) {
+    let analyzeButton = document.createElement("button");
+    analyzeButton.id = "analizarReportes";
+    analyzeButton.className = "btn";
+    analyzeButton.style = "margin-left:20px;margin-bottom: 10px;";
+    analyzeButton.textContent = "Analizar Reportes";
+    brandElement.appendChild(analyzeButton);
+  }
+  document
+  .querySelector("#analizarReportes")
+  .addEventListener("click", function (e) {
+    let entry = document.querySelectorAll(".entry .alt3 .c-main .post .msg");
+
+    for (var i = 0, l = entry.length; i < l; i++) {
+      setTimeout((index) => {
+        let existingDiv = document.getElementById("normas-" + index);
+        if (!existingDiv) {
+          let newDiv = document.createElement("div");
+          newDiv.style = "background: #000; color: #fff; padding: 10px; margin: 10px;";
+          newDiv.id = "normas-" + index;
+          newDiv.innerHTML = "Cargando...";
+          entry[index].parentNode.insertBefore(newDiv, entry[index].nextSibling);
+        }else{
+          existingDiv.innerHTML = "Cargando...";
+        }
+
+        analizarComentarioIA(entry[index].innerText,"normas","normas-"+index);
+            }, i * 2000, i);
+    }
+  });      
+} 
+
+
 if (
   window.location.href.startsWith("https://www.mediavida.com/configuracion")
 ) {
@@ -724,21 +799,29 @@ if (
   .querySelector("#import-config")
   .addEventListener("click", function (e) {
     return importConfig();
+  });   
+  
+  
+  document
+  .querySelector("#apiKeyBtn")
+  .addEventListener("click", function (e) {
+    return handleApiKey(document.getElementById("apiKeyInput").value);
   });     
+
 
   document.querySelector("#checkbox").addEventListener("click", function (e) {
     return HandleOnChangeMvPremium(document.getElementById("checkbox").checked);
   });
 
-  document
+  if (document.getElementById("checkbox").checked){
+    document
     .querySelector("#checkbox-without-bg")
     .addEventListener("click", function (e) {
       return HandleOnChangeHideBg(
         document.getElementById("checkbox-without-bg").checked
       );
     });
-
-
+    
     document
     .querySelector("#checkbox-ultrawide")
     .addEventListener("click", function (e) {
@@ -746,7 +829,7 @@ if (
         document.getElementById("checkbox-ultrawide").checked
       );
     });
-
+  }
 
     document
     .querySelector("#checkbox-showIgnoredUsers")
@@ -773,9 +856,9 @@ if (
       return HandleAddNoteUser();
     });   
 
-  if (document.querySelector("#ptabs")) {
-    document.querySelector("#ptabs").addEventListener("click", function (e) {
-      return HandleTabChangeAdmin();
-    });
-  }
+    if (document.querySelector("#ptabs")) {
+      document.querySelector("#ptabs").addEventListener("click", function (e) {
+        return HandleTabChangeAdmin();
+      });
+    }
 }

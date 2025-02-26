@@ -158,3 +158,26 @@ fieldset hr {
     margin-right: 10px;
     cursor:pointer;
   }
+  .response-ia{
+    background: #181818;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .reporte-ia td{
+    background: #181818;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px #ccc solid;
+  }
+  .reporte-ia th{
+    background: #3d3d3d;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px #ccc solid;
+  }
