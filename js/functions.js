@@ -1,6 +1,6 @@
 let GOOGLE_API_KEY = window.localStorage.getItem('apiKey') || '';
 
-let API_REQUEST_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${GOOGLE_API_KEY}`;
+let API_REQUEST_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=${GOOGLE_API_KEY}`;
 let normas =`
 
 - Respeta y no utilices términos despectivos.
@@ -254,7 +254,7 @@ function importConfig(){
                 if (attempts < maxAttempts) {
                     setTimeout(fetchData, 7000);
                 } else {
-                    document.getElementById(target).innerHTML = "Error al analizar el comentario. Prueba de nuevo.";
+                    document.getElementById(target).innerHTML = "Error al analizar el comentario. Prueba de nuevo.<br>"+error;
                     console.error("Error al analizar el comentario:", error);
                 }
             });
