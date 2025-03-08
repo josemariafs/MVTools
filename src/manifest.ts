@@ -26,8 +26,10 @@ const sharedManifest: SharedManifest = {
   content_scripts: [
     {
       js: ['src/entries/contentScript/primary/main.ts'],
+      css: ['src/entries/contentScript/primary/premium-styles.css'],
       matches: allowedUrls,
-      all_frames: true
+      all_frames: true,
+      run_at: 'document_start'
     }
   ],
   icons: {
@@ -40,7 +42,13 @@ const sharedManifest: SharedManifest = {
     default_popup: 'src/entries/popup/index.html'
   },
   host_permissions: allowedUrls,
-  permissions: ['storage']
+  permissions: ['storage'],
+  web_accessible_resources: [
+    {
+      resources: ['images/*'],
+      matches: allowedUrls
+    }
+  ]
 }
 
 const backgroundScript = 'src/entries/background/service-worker.ts'

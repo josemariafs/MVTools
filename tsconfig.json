@@ -41,5 +41,5 @@
     "prettier.config.cjs",
     "postcss.config.cjs"
   ],
-  "exclude": ["node_modules", "enableDevHmr.ts"]
+  "exclude": ["node_modules", "enableDevHmr.ts", "old-code"]
 }

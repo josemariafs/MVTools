@@ -30,6 +30,12 @@ export default defineConfig(({ mode }) => {
         '@': resolve(__dirname, './src')
       }
     },
+    server: {
+      cors: {
+        methods: 'GET',
+        origin: '*'
+      }
+    },
     plugins: [
       react(),
       webExtension({

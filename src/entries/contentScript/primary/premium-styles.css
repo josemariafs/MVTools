@@ -1,0 +1,494 @@
+.mvpremium {
+    .c-side,
+    .c-side-alt,
+    .c-side-s,
+    .c-side-s-alt {
+        background: #39444b;
+    }
+
+    .featured-entry a.title {
+        color: #e9e9e9;
+    }
+
+    .unread-num, .unseen-num {
+        font-size: 14px;
+        padding: 10px 6px;
+        border-radius: 3px;
+        min-width: 18px;
+        max-width: 48px;
+        line-height: 1;
+        margin-left: 8px;
+        position: relative;
+        left: -10px;
+        float: left;
+        height: 100%;
+    }
+
+    #usermenu .unread-num, #usermenu .unseen-num {
+        font-size: 14px;
+        padding: 8px 4px;
+        border-radius: 3px;
+        min-width: 20px;
+        max-width: 48px;
+        line-height: 1;
+        margin-left: 8px;
+        position: relative;
+        left: -10px;
+        float: left;
+        height: 100%;
+    }
+
+    .link-entry {
+        margin-bottom: 3px;
+        border-bottom: 1px #333 solid;
+        padding-bottom: 2px;
+    }
+
+    ._p-ft, ._p-tp {
+        display: none;
+    }
+
+    a.side {
+        color: #ccc;
+    }
+
+    .b-side h3 {
+        border-top: 1px solid #343f48;
+        color: white;
+        font-size: 15px;
+        padding: 2px 0 2px;
+        background: #fb8500;
+        text-align: center;
+        border-radius: 3px;
+        margin-bottom: 10px;
+    }
+
+    #usermenu .unread-num {
+        display: inline-block;
+        font-size: 13px;
+        padding: 6px 6px;
+        border-radius: 3px;
+        min-width: 12px;
+        max-width: 48px;
+        line-height: 1;
+        margin-left: 3px;
+        float: right;
+        margin-right: 9px;
+    }
+
+    #header .bubble {
+        color: white;
+        background-color: #fb8500;
+    }
+
+    .post-meta .autor.su_2,
+    .post-meta-reply .autor.su_2 {
+        color: #ffa300;
+    }
+
+    .post-btn.btnmola i,
+    .post-n.btnmola i {
+        background-color: transparent;
+        font-size: 18px;
+        color: white;
+        width: 18px;
+        height: 18px;
+        padding-top: 3px;
+    }
+
+    .post-btn.btnmola span,
+    .post-n.btnmola span {
+        font-size: 16px;
+        margin-left: 5px;
+        color: #ffffff;
+    }
+
+    .col-av .letter,
+    .col-av img {
+        border-radius: 3px;
+    }
+
+    .btnmola {
+        background-color: #5e666e;
+        color: #b9c8ce;
+        border-radius: 3px;
+    }
+
+    .btnmola:hover {
+        background-color: #8e9296;
+        color: #666666;
+        border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 12px; /* for vertical scrollbars */
+        height: 12px; /* for horizontal scrollbars */
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.1);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+    #forum-select {
+        width: 600px;
+        max-height: 700px;
+    }
+
+    .event-desc a {
+        color: #bfc6cc
+    }
+
+    #content {
+        background: url('chrome-extension://__MSG_@@extension_id__/images/bg.jpg') 100% no-repeat;
+        background-position-y: 0;
+        background-attachment: fixed;
+        background-size: cover;
+    }
+
+    #main table.mv td {
+        padding: 14px 0px
+    }
+
+    .flyout {
+        width: 470px;
+    }
+
+    .flyout .nano {
+        position: relative;
+        height: 600px;
+        width: 100%;
+    }
+
+    .flyout .content {
+        max-height: 600px;
+        right: 0 !important
+    }
+}
+
+.c-side .b-side {
+    margin-top: 40px !important;
+}
+
+img:before {
+    content: "";
+    display: block;
+    margin-bottom: 10px;
+}
+
+img:after {
+    content: "";
+    display: block;
+    font-size: 12px;
+}
+
+/* Admin pages views */
+
+.mvAdminTools button {
+    background: #fb8500;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.mvAdminTools button:hover {
+    background: #a35700 !important;
+}
+
+.mvAdminTools #main form {
+    padding: 20px !important;
+    background: #00000077 !important;
+}
+
+.mvAdminTools #main .box {
+    padding-top: 20px;
+}
+
+.mvAdminTools #main .eqcol {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px !important;
+}
+
+.mvAdminTools #main .eqcol ul {
+    padding: 20px !important;
+}
+
+.mvAdminTools #main .sp .box h3 {
+    margin-top: 0;
+    float: right !important;
+    padding: 20px;
+    padding-top: 21px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: transparent !important;
+    padding-top: 35px;
+}
+
+.mvAdminTools #main .box div {
+    background: rgba(0, 0, 0, 0.5) !important;
+    float: left;
+    display: flex;
+    padding: 7px;
+    border-radius: 5px;
+    width: 500px;
+    margin-top: 30px;
+    margin-right: 1.6%;
+    margin-bottom: 15px !important;
+    border-radius: 0px 0px 10px 10px;
+    -webkit-border-radius: 0px 0px 10px 10px;
+    -moz-border-radius: 0px 0px 10px 10px;
+}
+
+.mvAdminTools #main .box h4 {
+    position: absolute;
+    margin-top: -35px;
+    background: rgba(160, 160, 160, 0.5);
+    width: 500px;
+    padding: 5px;
+    padding-left: 10px;
+    margin-left: -0.6%;
+    border-radius: 10px 10px 0px 0px;
+    -webkit-border-radius: 10px 10px 0px 0px;
+    -moz-border-radius: 10px 10px 0px 0px;
+}
+
+.mvAdminTools #main .box h5 {
+    color: orange !important;
+    position: relative;
+    left: 78%;
+}
+
+.eqcol.busted {
+    background: rgba(0, 0, 0, 0.5) !important;
+}
+
+.mvpremium .c-side .b-side .actions a {
+    background: #00000077;
+    padding: 10px;
+    border: 1px #2c2c2c solid;
+    margin: 5px;
+    border-radius: 5px;
+    display: block;
+}
+
+.mvAdminTools .pairs {
+    background: #00000077;
+    padding: 10px;
+    border: 1px #5b5b5b solid;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+.mvAdminTools form fieldset legend {
+    font-size: 18px;
+}
+
+.mvAdminTools .mbuttons {
+    margin-top: 20px;
+}
+
+.checked {
+    border-left: 5px green solid !important;
+}
+
+.unchecked {
+    border-left: 5px solid #c83e3e !important;
+}
+
+#sourcelist {
+    height: 100% !important;
+    width: 350px !important;
+
+}
+
+#sourcelist li {
+    background-color: #232323 !important;
+}
+
+#ptabs {
+    width: 350px !important;
+}
+
+#ptabs ul li {
+    border-bottom: 1px #6f6f6f solid;
+}
+
+ul[role="tablist"] li {
+    background: #111;
+    padding: 5px;
+    border-radius: 5px;
+    width: min-content;
+    float: left;
+    width: 70px;
+    margin-right: 5px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.mvAdminTools #linkpanel {
+    display: flex;
+}
+
+.mvAdminTools #linkpanel li {
+    background: #111;
+    padding: 5px;
+    border-radius: 5px;
+    width: min-content;
+    float: left;
+    width: 200px;
+    margin-right: 5px;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-bottom: 30px;
+    border-bottom: 1px #ccc solid;
+    cursor: pointer;
+}
+
+.mvAdminTools #linkpanel li:hover {
+    background: #404040;
+    transition: 1px ease all
+}
+
+.mvAdminTools #linkpanel .selected {
+    background: #404040;
+}
+
+.mvAdminTools #p1, #p2 {
+    float: left;
+}
+
+.mvAdminTools #p0 ul {
+    margin-left: 30px
+}
+
+.mvAdminTools #p0 div {
+    border: 1px #454545 solid;
+    padding: 15px !important;
+}
+
+.mvAdminTools #p1 li, .mvAdminTools #p3 li, .mvAdminTools #p4 li, .mvAdminTools #p5 li {
+    background: #111;
+    padding: 5px;
+    border-radius: 5px;
+    width: min-content;
+    float: left;
+    width: 100%;
+    margin-right: 5px;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.mvAdminTools #p1 div, .mvAdminTools #p3 div, .mvAdminTools #p4 div, .mvAdminTools #p5 div {
+    margin-bottom: 10px;
+    display: block !important;
+    float: left;
+    border-radius: 5px;
+    border: 1px #454545 solid;
+    width: 44%;
+    margin-right: 1%;
+    padding: 1%;
+}
+
+.mvAdminTools #p1 a, .mvAdminTools #p3 a, .mvAdminTools #p4 a, .mvAdminTools #p5 a {
+    font-size: 18px;
+}
+
+.mvAdminTools #p1 img, .mvAdminTools #p3 img, .mvAdminTools #p4 img, .mvAdminTools #p5 img {
+    margin-right: 20px;
+    margin-top: 10px;
+}
+
+.mvAdminTools #p2 li {
+    background: #111;
+    padding: 5px;
+    border-radius: 5px;
+    width: min-content;
+    float: left;
+    margin-right: 5px;
+    border: 1px #454545 solid;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-bottom: 10px;
+    width: 140px !important;
+}
+
+/* https://www.mediavida.com/foro/admin_edit.php */
+
+.mvAdminTools #foro .col1, .mvAdminTools #mods .col1 {
+    margin-top: 10px;
+    width: 150px;
+}
+
+.mvAdminTools #foro .col2,
+.mvAdminTools #foro select, .mvAdminTools #mods .col2,
+.mvAdminTools #mods select {
+    margin-top: 10px;
+    width: 55%;
+    height: 30px !important;
+    padding: 0px;
+    padding-left: 10px;
+}
+
+.mvAdminTools #foro input[type="checkbox"], .mvAdminTools #mods input[type="checkbox"] {
+    width: 15px !important;
+    height: 15px !important;
+}
+
+.mvAdminTools #moderadores li {
+    padding: 10px;
+    background: #111;
+    border: 1px #454545 solid;
+    border-radius: 5px;
+    margin-top: 5px;
+    height: 20px;
+    margin-left: -50px;
+    margin-right: 50px;
+}
+
+.mvAdminTools #moderadores li a:not([role="button"]) {
+    width: 100px !important;
+    display: inline-block;
+}
+
+.mvAdminTools #tags li {
+    display: block;
+    float: left;
+    margin: 2px;
+    padding: 4px;
+    background: #454545;
+    border: 1px #111 solid;
+    border-radius: 5px;
+}
+
+.mvAdminTools #tags li a {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+/* https://www.mediavida.com/foro/admin --Categorias */
+.mvAdminTools #cats button, .mvAdminTools #social button {
+    margin-left: 0px !important;
+    margin-bottom: 20px;
+}
+
+.MvPremiumCSSWithoutBG #content {
+    background: #101213 !important;
+}
+
+#notes {
+    overflow: auto;
+}
+
+@media only screen and (min-width: 1200px) {
+    .mvultrawide #main {
+        max-width: 1680px;
+    }
+}

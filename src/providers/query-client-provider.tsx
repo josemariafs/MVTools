@@ -6,7 +6,7 @@ interface Props {
   children: ReactNode
 }
 
-const defaultQueryClient = new QueryClient()
+export const defaultQueryClient = new QueryClient()
 
 export const DefaultQueryClientProvider = ({ children }: Props) => {
   return (
@@ -14,7 +14,7 @@ export const DefaultQueryClientProvider = ({ children }: Props) => {
       {children}
       <ReactQueryDevtools
         initialIsOpen={false}
-        buttonPosition='top-left'
+        buttonPosition='bottom-right'
       />
     </QueryClientProvider>
   )

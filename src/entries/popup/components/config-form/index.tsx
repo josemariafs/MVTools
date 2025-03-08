@@ -8,7 +8,7 @@ export const ConfigForm = () => {
   const form = useConfigForm()
 
   const onSubmit = (values: FormData) => {
-    console.log(values)
+    console.debug(values)
   }
 
   return (

@@ -11,6 +11,7 @@ import tailwind from 'eslint-plugin-tailwindcss'
 import globals from 'globals'
 
 const files = ['**/*.{js,cjs,mjs,mts,ts,jsx,tsx}']
+const ignoreFiles = ['**/old-code/**']
 
 const _filename = fileURLToPath(import.meta.url)
 const _dirname = path.dirname(_filename)
@@ -18,7 +19,7 @@ const gitignorePath = path.resolve(_dirname, '.gitignore')
 
 /** @type {import("eslint").Linter.Config} */
 export default [
-  { ignores: [...includeIgnoreFile(gitignorePath).ignores!] },
+  { ignores: [...ignoreFiles, ...includeIgnoreFile(gitignorePath).ignores!] },
   loveConfig,
   reactPlugin.configs.flat.recommended,
   ...tanstackQuery.configs['flat/recommended'],
