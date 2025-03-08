@@ -17,3 +17,9 @@ export const STORAGE_KEYS = {
 } as const
 
 export type StorageKey = (typeof STORAGE_KEYS)[keyof typeof STORAGE_KEYS]
+
+export const CSS_CLASS_NAMES = {
+  MV_PREMIUM: 'mvpremium',
+  MV_PREMIUM_WITHOUT_BG: 'MvPremiumCSSWithoutBG',
+  MV_ULTRA_WIDE: 'mvultrawide'
+} as const
