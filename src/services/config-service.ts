@@ -9,9 +9,16 @@ export const getConfigService = () => ({
   setPremiumBackgroundDisabled: (value: boolean) => setStoredProperty(STORAGE_KEYS.MV_PREMIUM_BG_DISABLED, value),
   getIsUltraWideEnabled: () => getStoredProperty(STORAGE_KEYS.MV_ULTRA_WIDE_ENABLED, false),
   setUltraWideEnabled: (value: boolean) => setStoredProperty(STORAGE_KEYS.MV_ULTRA_WIDE_ENABLED, value),
-  getAll: async () => ({
-    [STORAGE_KEYS.MV_PREMIUM_ENABLED]: await getStoredProperty(STORAGE_KEYS.MV_PREMIUM_ENABLED, false),
-    [STORAGE_KEYS.MV_PREMIUM_BG_DISABLED]: await getStoredProperty(STORAGE_KEYS.MV_PREMIUM_BG_DISABLED, false),
-    [STORAGE_KEYS.MV_ULTRA_WIDE_ENABLED]: await getStoredProperty(STORAGE_KEYS.MV_ULTRA_WIDE_ENABLED, false)
-  })
+  getAll: () =>
+    Promise.all([
+      getStoredProperty(STORAGE_KEYS.MV_PREMIUM_ENABLED, false),
+      getStoredProperty(STORAGE_KEYS.MV_PREMIUM_BG_DISABLED, false),
+      getStoredProperty(STORAGE_KEYS.MV_ULTRA_WIDE_ENABLED, false)
+    ]).then(([premiumEnabled, premiumBgDisabled, ultraWideEnabled]) => {
+      return {
+        [STORAGE_KEYS.MV_PREMIUM_ENABLED]: premiumEnabled,
+        [STORAGE_KEYS.MV_PREMIUM_BG_DISABLED]: premiumBgDisabled,
+        [STORAGE_KEYS.MV_ULTRA_WIDE_ENABLED]: ultraWideEnabled
+      }
+    })
 })
