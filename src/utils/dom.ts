@@ -1,5 +1,7 @@
 import browser from 'webextension-polyfill'
 
+import type { CssClassName } from '@/constants'
+
 export const renderContent = (cssPaths: string[], render: (appRoot: HTMLDivElement) => void) => {
   const appContainer = document.createElement('div')
 
@@ -15,4 +17,9 @@ export const renderContent = (cssPaths: string[], render: (appRoot: HTMLDivEleme
   document.body.appendChild(appContainer)
 
   render(appContainer)
+}
+
+export const toggleClass = (className: CssClassName, enable: boolean) => {
+  const bodyClassList = document.body.classList
+  enable ? bodyClassList.add(className) : bodyClassList.remove(className)
 }

@@ -23,3 +23,5 @@ export const CSS_CLASS_NAMES = {
   MV_PREMIUM_WITHOUT_BG: 'MvPremiumCSSWithoutBG',
   MV_ULTRA_WIDE: 'mvultrawide'
 } as const
+
+export type CssClassName = (typeof CSS_CLASS_NAMES)[keyof typeof CSS_CLASS_NAMES]

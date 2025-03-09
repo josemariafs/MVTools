@@ -1,5 +1,6 @@
 import { CSS_CLASS_NAMES, STORAGE_KEYS, type StorageKey } from '@/constants'
 import { isBoolean } from '@/utils/asserts'
+import { toggleClass } from '@/utils/dom'
 import { devLog } from '@/utils/logging'
 
 const {
@@ -20,19 +21,19 @@ export const STORAGE_KEY_ACTIONS: Record<StorageKey, (newValue: unknown) => void
     if (!isBoolean(newValue)) return
 
     devLog({ message: `MV Premium styles toggled: ${newValue ? 'ENABLED' : 'DISABLED'}` })
-    newValue ? document.body.classList.add(MV_PREMIUM) : document.body.classList.remove(MV_PREMIUM)
+    toggleClass(MV_PREMIUM, newValue)
   },
   [MV_PREMIUM_BG_DISABLED]: (newValue: unknown) => {
     if (!isBoolean(newValue)) return
 
     devLog({ message: `Disable Premium Background toggled: ${newValue ? 'ENABLED' : 'DISABLED'}` })
-    newValue ? document.body.classList.add(MV_PREMIUM_WITHOUT_BG) : document.body.classList.remove(MV_PREMIUM_WITHOUT_BG)
+    toggleClass(MV_PREMIUM_WITHOUT_BG, newValue)
   },
   [MV_ULTRA_WIDE_ENABLED]: (newValue: unknown) => {
     if (!isBoolean(newValue)) return
 
     devLog({ message: `Premium Ultrawide mode toggled: ${newValue ? 'ENABLED' : 'DISABLED'}` })
-    newValue ? document.body.classList.add(MV_ULTRA_WIDE) : document.body.classList.remove(MV_ULTRA_WIDE)
+    toggleClass(MV_ULTRA_WIDE, newValue)
   },
   [SHOW_IGNORED_USERS]: (newValue: unknown) => {
     if (!isBoolean(newValue)) return
