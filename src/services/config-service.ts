@@ -17,7 +17,7 @@ export const getConfigService = () => ({
   getIsUltraWideEnabled,
   setUltraWideEnabled,
   getAll: () =>
-    Promise.all([getIsPremiumEnabled, getIsPremiumBackgroundDisabled, getIsUltraWideEnabled]).then(
+    Promise.all([getIsPremiumEnabled(), getIsPremiumBackgroundDisabled(), getIsUltraWideEnabled()]).then(
       ([premiumEnabled, premiumBgDisabled, ultraWideEnabled]) => {
         return {
           [STORAGE_KEYS.MV_PREMIUM_ENABLED]: premiumEnabled,
