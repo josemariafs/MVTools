@@ -21,6 +21,15 @@ export const PremiumStylesSection = () => {
   const { mutate: setBackgroundDisabled } = useMutateIsBackgroundDisabled()
   const { mutate: setUltraWideEnabled } = useMutateIsUltraWideEnabled()
 
+  const onPremiumEnabledChange = (checked: boolean) => {
+    setPremiumEnabled(checked)
+
+    if (!checked) {
+      setBackgroundDisabled(false)
+      setUltraWideEnabled(false)
+    }
+  }
+
   return (
     <section>
       <header className='flex items-center gap-2.5 pb-2'>
@@ -37,12 +46,12 @@ export const PremiumStylesSection = () => {
           </TooltipContent>
         </Tooltip>
       </header>
-      <div className='items-center justify-between space-y-3 rounded-lg border p-3 shadow-sm'>
+      <main className='items-center justify-between space-y-3 rounded-lg border p-3 shadow-sm'>
         <div className='flex w-full flex-row items-center justify-between'>
           <Label>Activar estilos</Label>
           <Switch
             checked={isPremiumEnabled}
-            onCheckedChange={setPremiumEnabled}
+            onCheckedChange={onPremiumEnabledChange}
           />
         </div>
         <Separator />
@@ -63,7 +72,7 @@ export const PremiumStylesSection = () => {
             disabled={!isPremiumEnabled}
           />
         </div>
-      </div>
+      </main>
     </section>
   )
 }

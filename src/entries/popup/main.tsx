@@ -4,7 +4,9 @@ import '@/global.css'
 import { Suspense } from '@suspensive/react'
 import ReactDOM from 'react-dom/client'
 
+import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { geminiApiKeyQueryOptions } from '@/entries/popup/components/sections/gemini/hooks'
 import {
   backgroundDisabledQueryOptions,
   premiumEnabledQueryOptions,
@@ -18,6 +20,7 @@ import App from './App'
 defaultQueryClient.prefetchQuery(premiumEnabledQueryOptions)
 defaultQueryClient.prefetchQuery(backgroundDisabledQueryOptions)
 defaultQueryClient.prefetchQuery(ultraWideEnabledQueryOptions)
+defaultQueryClient.prefetchQuery(geminiApiKeyQueryOptions)
 
 const root = document.getElementById('app')
 root &&
@@ -26,6 +29,7 @@ root &&
       <ThemeProvider>
         <TooltipProvider>
           <Suspense>
+            <Toaster closeButton />
             <App />
           </Suspense>
         </TooltipProvider>

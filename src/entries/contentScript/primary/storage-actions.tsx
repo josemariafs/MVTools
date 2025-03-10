@@ -1,4 +1,5 @@
 import { CSS_CLASS_NAMES, STORAGE_KEYS, type StorageKey } from '@/constants'
+import { renderPostsAi } from '@/features/posts'
 import { isBoolean } from '@/utils/asserts'
 import { toggleClass } from '@/utils/dom'
 import { devLog } from '@/utils/logging'
@@ -63,6 +64,6 @@ export const STORAGE_KEY_ACTIONS: Record<StorageKey, (newValue: unknown) => void
     if (typeof newValue !== 'string') return
 
     devLog({ message: `Gemini API key updated: ${newValue}` })
-    // Placeholder for future implementation
+    renderPostsAi(newValue)
   }
 } as const

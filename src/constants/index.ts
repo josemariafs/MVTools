@@ -5,6 +5,10 @@
 
 export const FIREFOX_ADDON_ID = '{unkown}' // Replace with the UUID of the extension
 
+export const URLS = {
+  GEMINI_CREATE_API_KEY: 'https://aistudio.google.com/app/apikey?hl=es-419'
+} as const
+
 export const STORAGE_KEYS = {
   IGNORED_USERS: 'ignoredUser',
   USER_NOTES: 'notedUser',
