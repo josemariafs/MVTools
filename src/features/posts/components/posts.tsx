@@ -1,13 +1,11 @@
-import { useMemo } from 'react'
-
 import { Portal } from '@/components/ui/portal'
 import { Button } from '@/features/posts/components/ai/button'
 import { Content } from '@/features/posts/components/ai/content'
 import { PostContextProvider } from '@/features/posts/providers/post-context-provider'
-import { getPostsElements } from '@/services/media-vida'
+import { usePostsContext } from '@/features/posts/providers/posts-context-provider'
 
 export const Posts = () => {
-  const posts = useMemo(getPostsElements, [])
+  const { posts } = usePostsContext()
 
   return posts.map(post => (
     <PostContextProvider

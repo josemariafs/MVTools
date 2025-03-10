@@ -1,6 +1,6 @@
 const MIN_POST_LENGTH = 350
 
-interface PostElements {
+export interface PostElements {
   buttonContainer: HTMLElement
   contentContainer: HTMLElement
   id: string
