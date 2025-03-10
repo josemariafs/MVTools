@@ -2,6 +2,26 @@ import browser from 'webextension-polyfill'
 
 import type { CssClassName } from '@/constants'
 
+const loadedStyles = new Map<string, Promise<string>>()
+
+const loadStyle = async (cssPath: string): Promise<string> => {
+  if (loadedStyles.has(cssPath)) {
+    return await loadedStyles.get(cssPath)!
+  }
+
+  const loadPromise: Promise<string> = fetch(cssPath).then(response => response.text())
+
+  loadedStyles.set(cssPath, loadPromise)
+  return await loadPromise
+}
+
+const applyStyleToShadow = async (cssPath: string, shadowRoot: ShadowRoot): Promise<void> => {
+  const styleText: string = await loadStyle(browser.runtime.getURL(cssPath))
+  const styleSheet: CSSStyleSheet = new CSSStyleSheet()
+  styleSheet.replaceSync(styleText)
+  shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, styleSheet]
+}
+
 export const renderContent = async (cssPaths: string[], where: HTMLElement = document.body, render: (appRoot: HTMLElement) => void) => {
   const appContainer = document.createElement('section')
   const shadowRoot = appContainer.attachShadow({
@@ -13,12 +33,8 @@ export const renderContent = async (cssPaths: string[], where: HTMLElement = doc
     const { addViteStyleTarget } = await import('@samrum/vite-plugin-web-extension/client')
     await addViteStyleTarget(shadowRoot)
   } else {
-    for (const cssPath of cssPaths) {
-      const styleEl = document.createElement('link')
-      styleEl.setAttribute('rel', 'stylesheet')
-      styleEl.setAttribute('href', browser.runtime.getURL(cssPath))
-      appRoot.appendChild(styleEl)
-    }
+    const stylePromises = cssPaths.map(cssPath => applyStyleToShadow(cssPath, shadowRoot))
+    await Promise.all(stylePromises)
   }
 
   shadowRoot.appendChild(appRoot)
