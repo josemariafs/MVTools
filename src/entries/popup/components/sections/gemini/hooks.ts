@@ -18,6 +18,7 @@ export const useGeminiForm = () => {
 
   return useForm<FormData>({
     resolver: zodResolver(formSchema),
+    reValidateMode: 'onSubmit',
     defaultValues: {
       apiKey
     }
