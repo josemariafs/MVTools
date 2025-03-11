@@ -1,23 +1,41 @@
+import { z } from 'zod'
+
 import { getStoredProperty, setStoredProperty } from '@/services/storage'
 
-import { STORAGE_KEYS } from '../constants'
+import { DEFAULT_POSTS_CONFIG, STORAGE_KEYS } from '../constants'
 
-export const getIsPremiumEnabled = () => getStoredProperty(STORAGE_KEYS.MV_PREMIUM_ENABLED, false)
-export const setPremiumEnabled = (value: boolean) => setStoredProperty(STORAGE_KEYS.MV_PREMIUM_ENABLED, value)
-export const getIsPremiumBackgroundDisabled = () => getStoredProperty(STORAGE_KEYS.MV_PREMIUM_BG_DISABLED, false)
-export const setPremiumBackgroundDisabled = (value: boolean) => setStoredProperty(STORAGE_KEYS.MV_PREMIUM_BG_DISABLED, value)
-export const getIsUltraWideEnabled = () => getStoredProperty(STORAGE_KEYS.MV_ULTRA_WIDE_ENABLED, false)
-export const setUltraWideEnabled = (value: boolean) => setStoredProperty(STORAGE_KEYS.MV_ULTRA_WIDE_ENABLED, value)
-export const getGeminiApiKey = () => getStoredProperty(STORAGE_KEYS.GEMINI_APY_KEY, '')
-export const setGeminiApiKey = (value: string) => setStoredProperty(STORAGE_KEYS.GEMINI_APY_KEY, value)
-export const getAll = () =>
-  Promise.all([getIsPremiumEnabled(), getIsPremiumBackgroundDisabled(), getIsUltraWideEnabled(), getGeminiApiKey()]).then(
-    ([premiumEnabled, premiumBgDisabled, ultraWideEnabled, geminiApiKey]) => {
-      return {
-        [STORAGE_KEYS.MV_PREMIUM_ENABLED]: premiumEnabled,
-        [STORAGE_KEYS.MV_PREMIUM_BG_DISABLED]: premiumBgDisabled,
-        [STORAGE_KEYS.MV_ULTRA_WIDE_ENABLED]: ultraWideEnabled,
-        [STORAGE_KEYS.GEMINI_APY_KEY]: geminiApiKey
-      }
-    }
-  )
+export const postsConfigSchema = z.object({
+  geminiApiKey: z.string(),
+  ignoredUsers: z.array(z.string()),
+  showIgnoredUsers: z.boolean(),
+  userNotes: z.array(z.object({ username: z.string(), note: z.string() })),
+  highlightedUsers: z.array(z.string())
+})
+
+export type PostsConfig = z.infer<typeof postsConfigSchema>
+
+export const getPostsConfig = () => getStoredProperty<PostsConfig>(STORAGE_KEYS.POSTS_CONFIG, DEFAULT_POSTS_CONFIG)
+export const setPostsConfig = (value: PostsConfig) => setStoredProperty(STORAGE_KEYS.POSTS_CONFIG, value)
+
+export const stylesConfigSchema = z.object({
+  premiumEnabled: z.boolean(),
+  premiumBgDisabled: z.boolean(),
+  ultraWideEnabled: z.boolean()
+})
+
+export type StylesConfig = z.infer<typeof stylesConfigSchema>
+
+export const getStylesConfig = () =>
+  getStoredProperty<StylesConfig>(STORAGE_KEYS.STYLES_CONFIG, {
+    premiumEnabled: false,
+    premiumBgDisabled: false,
+    ultraWideEnabled: false
+  })
+
+export const setStylesConfig = (value: StylesConfig) => setStoredProperty(STORAGE_KEYS.STYLES_CONFIG, value)
+
+export const getAllStorageConfigs = () =>
+  Promise.all([getStylesConfig(), getPostsConfig()]).then(([stylesConfig, postsConfig]) => ({
+    [STORAGE_KEYS.STYLES_CONFIG]: stylesConfig,
+    [STORAGE_KEYS.POSTS_CONFIG]: postsConfig
+  }))

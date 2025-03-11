@@ -4,15 +4,15 @@ import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { PasswordInput } from '@/components/ui/password-input'
 import { URLS } from '@/constants'
-import { useGeminiForm, useMutateGeminiApiKey } from '@/entries/popup/components/sections/gemini/hooks'
-import type { FormData } from '@/entries/popup/components/sections/gemini/schema'
+import { useMutatePostsConfig, usePostsConfigForm } from '@/entries/popup/components/sections/posts/hooks'
+import type { PostsConfig } from '@/services/config'
 
-export const GeminiSection = () => {
-  const form = useGeminiForm()
-  const { mutate: setApiKey } = useMutateGeminiApiKey()
+export const PostsSection = () => {
+  const form = usePostsConfigForm()
+  const { mutate } = useMutatePostsConfig()
 
-  const onSubmit = ({ apiKey }: FormData) => {
-    setApiKey(apiKey)
+  const onSubmit = (postsConfig: PostsConfig) => {
+    mutate(postsConfig)
   }
 
   return (
@@ -28,7 +28,7 @@ export const GeminiSection = () => {
           >
             <FormField
               control={form.control}
-              name='apiKey'
+              name='geminiApiKey'
               render={({ field }) => (
                 <FormItem className='flex gap-2 space-x-4 space-y-0'>
                   <FormLabel className='pt-2.5'>API Key</FormLabel>

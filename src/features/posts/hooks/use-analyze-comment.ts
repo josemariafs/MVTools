@@ -1,7 +1,6 @@
 import { queryOptions, useQuery } from '@tanstack/react-query'
 
 import { usePostContext } from '@/features/posts/providers/post-context-provider'
-import { usePostsContext } from '@/features/posts/providers/posts-context-provider'
 import { type Action, analyzeComment, type AnalyzeCommentParams } from '@/services/gemini'
 
 interface QueryOptionsParams extends AnalyzeCommentParams {
@@ -18,8 +17,13 @@ const analyzeCommentQueryOptions = <T>({ id, apiKey, action, comment }: QueryOpt
 
 type AnalyzeCommentQueryOptions<T> = Partial<ReturnType<typeof analyzeCommentQueryOptions<T>>>
 
-export const useAnalyzeComment = <T = string>({ action, options }: { action: Action; options?: AnalyzeCommentQueryOptions<T> }) => {
-  const { apiKey } = usePostsContext()
+interface Props<T> {
+  action: Action
+  apiKey: string
+  options?: AnalyzeCommentQueryOptions<T>
+}
+
+export const useAnalyzeComment = <T = string>({ action, apiKey, options }: Props<T>) => {
   const { id, comment } = usePostContext()
   const defaultOptions = analyzeCommentQueryOptions<T>({ apiKey, id, comment, action })
   return useQuery({ ...defaultOptions, ...options })

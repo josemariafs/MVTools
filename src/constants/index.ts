@@ -3,21 +3,17 @@
 // The ID must be unique and in the format of a UUID.
 // More info: https://extensionworkshop.com/documentation/develop/extensions-and-the-add-on-id/
 
-export const FIREFOX_ADDON_ID = '{unkown}' // Replace with the UUID of the extension
+import type { PostsConfig } from '@/services/config'
+
+export const FIREFOX_ADDON_ID = '{unknown}' // Replace with the UUID of the extension
 
 export const URLS = {
   GEMINI_CREATE_API_KEY: 'https://aistudio.google.com/app/apikey?hl=es-419'
 } as const
 
 export const STORAGE_KEYS = {
-  IGNORED_USERS: 'ignoredUser',
-  USER_NOTES: 'notedUser',
-  HIGHLIGHTED_USERS: 'highlightedUser',
-  MV_PREMIUM_ENABLED: 'MvPremiumCSS',
-  MV_PREMIUM_BG_DISABLED: 'MvPremiumCSSWithoutBG',
-  MV_ULTRA_WIDE_ENABLED: 'mvultrawide',
-  GEMINI_APY_KEY: 'apiKey',
-  SHOW_IGNORED_USERS: 'ShowIgnoredUsers'
+  STYLES_CONFIG: 'stylesConfig',
+  POSTS_CONFIG: 'postsConfig'
 } as const
 
 export type StorageKey = (typeof STORAGE_KEYS)[keyof typeof STORAGE_KEYS]
@@ -29,3 +25,11 @@ export const CSS_CLASS_NAMES = {
 } as const
 
 export type CssClassName = (typeof CSS_CLASS_NAMES)[keyof typeof CSS_CLASS_NAMES]
+
+export const DEFAULT_POSTS_CONFIG: PostsConfig = {
+  geminiApiKey: '',
+  ignoredUsers: [],
+  showIgnoredUsers: false,
+  userNotes: [],
+  highlightedUsers: []
+}

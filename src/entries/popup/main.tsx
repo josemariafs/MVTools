@@ -6,21 +6,15 @@ import ReactDOM from 'react-dom/client'
 
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import { geminiApiKeyQueryOptions } from '@/entries/popup/components/sections/gemini/hooks'
-import {
-  backgroundDisabledQueryOptions,
-  premiumEnabledQueryOptions,
-  ultraWideEnabledQueryOptions
-} from '@/entries/popup/components/sections/premium/hooks'
+import { postsConfigQueryOptions } from '@/entries/popup/components/sections/posts/hooks'
+import { stylesConfigQueryOptions } from '@/entries/popup/components/sections/styles/hooks'
 import { defaultQueryClient, DefaultQueryClientProvider } from '@/providers/query-client-provider'
 import { ThemeProvider } from '@/providers/theme-provider'
 
 import App from './App'
 
-defaultQueryClient.prefetchQuery(premiumEnabledQueryOptions)
-defaultQueryClient.prefetchQuery(backgroundDisabledQueryOptions)
-defaultQueryClient.prefetchQuery(ultraWideEnabledQueryOptions)
-defaultQueryClient.prefetchQuery(geminiApiKeyQueryOptions)
+defaultQueryClient.prefetchQuery(stylesConfigQueryOptions)
+defaultQueryClient.prefetchQuery(postsConfigQueryOptions)
 
 const root = document.getElementById('app')
 root &&

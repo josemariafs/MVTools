@@ -1,12 +1,18 @@
-const LOG_LEVELS = {
-  DEBUG: 'debug',
-  LOG: 'log',
-  ERROR: 'error'
-} as const
+const getArray = (dataList: unknown[]) => {
+  return dataList.map(data => (typeof data === 'object' ? JSON.stringify(data, null, 2) : data))
+}
 
-type LogLevel = (typeof LOG_LEVELS)[keyof typeof LOG_LEVELS]
+const isDevMode = import.meta.env.MODE !== 'production'
+const PREFIX = '[MV Tools] '
 
-export function devLog({ message, logLevel = LOG_LEVELS.LOG }: { message: string; logLevel?: LogLevel }): void {
-  if (import.meta.env.MODE === 'production') return
-  console[logLevel]('[MVTools]: ' + message)
+export const devLog = {
+  log: (prefixMessage?: string, ...data: unknown[]) => {
+    if (!isDevMode) return
+    // eslint-disable-next-line no-restricted-syntax -- This is a custom log function
+    console.log(PREFIX + prefixMessage, ...getArray(data))
+  },
+  error: (prefixMessage?: string, ...data: unknown[]) => {
+    if (!isDevMode) return
+    console.error(PREFIX + prefixMessage, ...getArray(data))
+  }
 }

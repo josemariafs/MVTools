@@ -1,8 +1,8 @@
 import browser from 'webextension-polyfill'
 
 import type { StorageKey } from '@/constants'
-import { STORAGE_KEY_ACTIONS } from '@/entries/contentScript/primary/storage-actions'
-import { getAll } from '@/services/config'
+import { STORAGE_ACTIONS } from '@/entries/contentScript/primary/actions'
+import { getAllStorageConfigs } from '@/services/config'
 import { isStorageKey, objectEntries } from '@/utils/asserts'
 
 browser.storage.onChanged.addListener((changes, areaName) => {
@@ -11,11 +11,11 @@ browser.storage.onChanged.addListener((changes, areaName) => {
   objectEntries(changes)
     .filter(([key]) => isStorageKey(key))
     .forEach(([key, { newValue }]) => {
-      STORAGE_KEY_ACTIONS[key as StorageKey](newValue)
+      STORAGE_ACTIONS[key as StorageKey](newValue)
     })
 })
 
-const configValues = await getAll()
-objectEntries(configValues).forEach(([key, value]) => {
-  STORAGE_KEY_ACTIONS[key](value)
+const storageConfigs = await getAllStorageConfigs()
+objectEntries(storageConfigs).forEach(([storageKey, value]) => {
+  STORAGE_ACTIONS[storageKey](value)
 })

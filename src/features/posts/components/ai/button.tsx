@@ -2,14 +2,18 @@ import { Brain } from 'lucide-react'
 
 import { Button as CommonButton } from '@/components/ui/button'
 import { useAnalyzeComment } from '@/features/posts/hooks/use-analyze-comment'
+import { usePostsStore } from '@/features/posts/hooks/use-posts-store'
 import { ACTIONS } from '@/services/gemini'
 
 export const Button = () => {
-  const { refetch, isFetching } = useAnalyzeComment({ action: ACTIONS.SUMMARY })
+  const apiKey = usePostsStore(state => state.geminiApiKey)
+  const { refetch, isFetching } = useAnalyzeComment({ action: ACTIONS.SUMMARY, apiKey })
 
   const handleClick = () => {
     refetch()
   }
+
+  if (!apiKey) return null
 
   return (
     <CommonButton

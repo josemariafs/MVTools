@@ -3,11 +3,13 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { useAnalyzeComment } from '@/features/posts/hooks/use-analyze-comment'
+import { usePostsStore } from '@/features/posts/hooks/use-posts-store'
 import { ACTIONS } from '@/services/gemini'
 
 export const Content = () => {
+  const apiKey = usePostsStore(state => state.geminiApiKey)
+  const { data: analyzedComment, isFetching, isError } = useAnalyzeComment({ action: ACTIONS.SUMMARY, apiKey })
   const [isClosed, setIsClosed] = useState(false)
-  const { data: analyzedComment, isFetching, isError } = useAnalyzeComment({ action: ACTIONS.SUMMARY })
 
   const text = useMemo(() => {
     if (isFetching) return 'Cargando...'
@@ -23,7 +25,7 @@ export const Content = () => {
     setIsClosed(true)
   }
 
-  if (!text || isClosed) return null
+  if (!text || !apiKey || isClosed) return null
 
   return (
     <div className='relative'>

@@ -10,19 +10,16 @@ import { getPostsElements } from '@/services/media-vida'
 let root: Root | null = null
 let appRoot: HTMLElement | null = null
 
-export const renderPostsAi = (apiKey: string) => {
+export const renderPosts = () => {
   unmount()
   const posts = getPostsElements()
-  if (!apiKey || !posts.length) return
+  if (!posts.length) return
 
   appRoot = document.createElement('div')
   root = ReactDOM.createRoot(appRoot)
   root.render(
     <DefaultQueryClientProvider>
-      <PostsContextProvider
-        apiKey={apiKey}
-        posts={posts}
-      >
+      <PostsContextProvider posts={posts}>
         <Posts />
       </PostsContextProvider>
     </DefaultQueryClientProvider>
