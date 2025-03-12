@@ -32,7 +32,7 @@ export const renderPostsAction = (value: unknown) => {
   const validPostsConfig = postsConfigSchema.safeParse(value)
   if (!validPostsConfig.success) return
 
-  devLog.log('Posts config updated:', validPostsConfig.data)
+  devLog.log('Rendering Posts with:', validPostsConfig.data)
   updatePostsConfigStore(validPostsConfig.data)
   renderPosts()
 }
