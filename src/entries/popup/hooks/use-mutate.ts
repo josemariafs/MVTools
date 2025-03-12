@@ -1,4 +1,5 @@
 import { type MutationFunction, type QueryKey, useIsMutating, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useCallback } from 'react'
 import { toast } from 'sonner'
 
 export const useMutate = <T>(queryKey: QueryKey, mutationFn: MutationFunction<void, T>, sendToast = false) => {
@@ -14,8 +15,17 @@ export const useMutate = <T>(queryKey: QueryKey, mutationFn: MutationFunction<vo
     }
   })
 
+  const mutatePartial = useCallback(
+    (partial: Partial<T>) => {
+      const oldData = queryClient.getQueryData<T>(queryKey)!
+      mutation.mutate({ ...oldData, ...partial })
+    },
+    [mutation.mutate, queryClient, queryKey]
+  )
+
   return {
     ...mutation,
+    mutatePartial,
     isMutating
   }
 }
