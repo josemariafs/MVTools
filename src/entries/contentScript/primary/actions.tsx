@@ -1,5 +1,5 @@
 import { CSS_CLASS_NAMES, STORAGE_KEYS, type StorageKey } from '@/constants'
-import { renderPosts } from '@/features/posts'
+import { renderPosts } from '@/features/posts/main'
 import { postsConfigSchema, stylesConfigSchema } from '@/services/config'
 import { updatePostsConfigStore } from '@/store/posts-config-store'
 import { objectEntries } from '@/utils/asserts'

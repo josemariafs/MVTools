@@ -1,32 +1,24 @@
-import '@/entries/enableDevHmr'
+import { Portal } from '@/components/ui/portal'
+import { Button } from '@/features/posts/components/ai/button'
+import { Content } from '@/features/posts/components/ai/content'
+import { PostContextProvider } from '@/features/posts/providers/post-context-provider'
+import { usePostsContext } from '@/features/posts/providers/posts-context-provider'
 
-import ReactDOM, { type Root } from 'react-dom/client'
+export const Posts = () => {
+  const { posts } = usePostsContext()
 
-import { Posts } from '@/features/posts/components/posts'
-import { PostsContextProvider } from '@/features/posts/providers/posts-context-provider'
-import { DefaultQueryClientProvider } from '@/providers/query-client-provider'
-import { getPostsElements } from '@/services/media-vida'
-
-let root: Root | null = null
-let appRoot: HTMLElement | null = null
-
-export const renderPosts = () => {
-  unmount()
-  const posts = getPostsElements()
-  if (!posts.length) return
-
-  appRoot = document.createElement('div')
-  root = ReactDOM.createRoot(appRoot)
-  root.render(
-    <DefaultQueryClientProvider>
-      <PostsContextProvider posts={posts}>
-        <Posts />
-      </PostsContextProvider>
-    </DefaultQueryClientProvider>
-  )
-}
-
-const unmount = () => {
-  root?.unmount()
-  appRoot?.remove()
+  return posts.map(post => (
+    <PostContextProvider
+      key={post.id}
+      id={post.id}
+      comment={post.comment}
+    >
+      <Portal root={post.buttonContainer}>
+        <Button />
+      </Portal>
+      <Portal root={post.contentContainer}>
+        <Content />
+      </Portal>
+    </PostContextProvider>
+  ))
 }
