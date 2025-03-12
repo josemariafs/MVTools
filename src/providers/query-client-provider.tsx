@@ -14,7 +14,7 @@ export const DefaultQueryClientProvider = ({ children }: Props) => {
       {children}
       <ReactQueryDevtools
         initialIsOpen={false}
-        buttonPosition='top-right'
+        buttonPosition='top-left'
       />
     </QueryClientProvider>
   )

@@ -42,7 +42,7 @@ const sharedManifest: SharedManifest = {
     default_popup: 'src/entries/popup/index.html'
   },
   host_permissions: allowedUrls,
-  permissions: ['storage'],
+  permissions: ['storage', 'tabs'],
   web_accessible_resources: [
     {
       resources: ['images/*'],
