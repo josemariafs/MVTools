@@ -20,6 +20,14 @@ export const toggleStylesAction = (value: unknown) => {
   })
 }
 
+export const updatePostsAction = (value: unknown) => {
+  const validPostsConfig = postsConfigSchema.safeParse(value)
+  if (!validPostsConfig.success) return
+
+  devLog.log('Posts config updated:', validPostsConfig.data)
+  updatePostsConfigStore(validPostsConfig.data)
+}
+
 export const renderPostsAction = (value: unknown) => {
   const validPostsConfig = postsConfigSchema.safeParse(value)
   if (!validPostsConfig.success) return
@@ -29,7 +37,12 @@ export const renderPostsAction = (value: unknown) => {
   renderPosts()
 }
 
-export const STORAGE_ACTIONS: Record<StorageKey, (value: unknown) => void> = {
+export const INIT_STORAGE_ACTIONS: Record<StorageKey, (value: unknown) => void> = {
   [STORAGE_KEYS.STYLES_CONFIG]: toggleStylesAction,
   [STORAGE_KEYS.POSTS_CONFIG]: renderPostsAction
 } as const
+
+export const UPDATE_STORAGE_ACTIONS: Record<StorageKey, (value: unknown) => void> = {
+  [STORAGE_KEYS.STYLES_CONFIG]: toggleStylesAction,
+  [STORAGE_KEYS.POSTS_CONFIG]: updatePostsAction
+}
