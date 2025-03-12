@@ -20,7 +20,7 @@ export const NewPopupButton = () => {
       url: 'src/entries/popup/index.html',
       top: self.screenTop + 15,
       left: self.screenLeft + 100,
-      height: self.innerHeight + 20,
+      height: self.innerHeight + 40,
       width: self.innerWidth
     })
     self.close()
