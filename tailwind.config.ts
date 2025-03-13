@@ -6,6 +6,9 @@ export default {
   content: ['./src/entries/popup/index.html', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      spacing: {
+        maxPopupHeight: '600px'
+      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',

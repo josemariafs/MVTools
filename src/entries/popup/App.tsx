@@ -4,7 +4,7 @@ import { StylesSection } from '@/entries/popup/components/sections/styles'
 
 const App = () => {
   return (
-    <main className='relative h-full min-h-[550px] border-x-4 border-x-orange-500 p-7'>
+    <main className='h-maxPopupHeight relative border-x-4 border-x-orange-500 p-7'>
       <NewPopupButton />
       <div className='space-y-5'>
         <StylesSection />

@@ -1,32 +1,34 @@
 import { ExternalLink } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import browser from 'webextension-polyfill'
+import browser, { type Windows } from 'webextension-polyfill'
 
 import { Button } from '@/components/ui/button'
 
 export const NewPopupButton = () => {
-  const [isPopup, setIsPopup] = useState(false)
+  const [window, setWindow] = useState<Windows.Window>()
 
   useEffect(() => {
-    browser.windows.getCurrent().then(window => {
-      setIsPopup(window.type === 'popup')
-    })
+    browser.windows.getCurrent().then(setWindow)
   }, [])
 
   const handleNewWindowClick = () => {
+    if (!window) return
+
+    const width = Math.max(self.outerWidth, document.documentElement.scrollWidth)
+    const height = Math.max(outerHeight + 20, document.documentElement.scrollHeight + 39)
+
     browser.windows.create({
       type: 'popup',
-      focused: !0,
       url: 'src/entries/popup/index.html',
-      top: self.screenTop + 15,
-      left: self.screenLeft + 100,
-      height: self.innerHeight + 40,
-      width: self.innerWidth
+      top: window.top! + 90,
+      left: window.left! + window.width! - width - 15,
+      height,
+      width
     })
-    self.close()
+    close()
   }
 
-  if (isPopup) return null
+  if (window?.type === 'popup') return null
 
   return (
     <Button
