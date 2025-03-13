@@ -35,7 +35,7 @@ export const NewPopupButton = () => {
       variant='ghost'
       size='icon'
       className='absolute right-2 top-2 size-7'
-      title='Abrir en nueva ventana'
+      title='Abrir en una nueva ventana'
       onClick={handleNewWindowClick}
     >
       <ExternalLink />
