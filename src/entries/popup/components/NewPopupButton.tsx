@@ -12,7 +12,7 @@ export const NewPopupButton = () => {
   }, [])
 
   const handleNewWindowClick = () => {
-    const width = Math.max(self.outerWidth, document.documentElement.scrollWidth)
+    const width = Math.max(outerWidth + 20, document.documentElement.scrollWidth + 39)
     const height = Math.max(outerHeight + 20, document.documentElement.scrollHeight + 39)
 
     browser.windows.create({

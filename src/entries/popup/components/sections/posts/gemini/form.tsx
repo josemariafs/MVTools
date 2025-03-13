@@ -27,9 +27,9 @@ export const Form = () => {
           name='geminiApiKey'
           disabled={form.formState.isSubmitting}
           render={({ field }) => (
-            <FormItem className='flex gap-2 space-x-4 space-y-0'>
-              <FormLabel className='pt-2.5'>Gemini API Key</FormLabel>
-              <div>
+            <FormItem className='flex w-full gap-2 space-x-4 space-y-0'>
+              <FormLabel className='min-w-fit pt-2.5'>Gemini API Key</FormLabel>
+              <div className='w-full'>
                 <FormControl>
                   <PasswordInput
                     {...field}
@@ -53,7 +53,7 @@ export const Form = () => {
                     </a>
                   </Button>
                 </FormDescription>
-                <FormMessage className='max-w-52' />
+                <FormMessage />
               </div>
             </FormItem>
           )}
@@ -62,6 +62,7 @@ export const Form = () => {
           size='icon'
           variant='outline'
           type='submit'
+          className='min-w-fit'
           disabled={form.formState.isSubmitting}
         >
           {form.formState.isSubmitting ? <Loader2 className='animate-spin' /> : <Save />}

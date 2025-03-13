@@ -30,9 +30,9 @@ export const Form = () => {
           disabled={form.formState.isSubmitting}
           render={({ field }) => (
             <FormItem className='flex w-full gap-2 space-x-4 space-y-0'>
-              <FormLabel className='pt-2.5'>Ignorar usuario</FormLabel>
-              <div className='space-y-1.5'>
-                <FormControl className='min-w-[14.6rem]'>
+              <FormLabel className='min-w-fit pt-2.5'>Ignorar usuario</FormLabel>
+              <div className='w-full space-y-1.5'>
+                <FormControl className='w-full'>
                   <Input
                     {...field}
                     placeholder='Nick usuario'
