@@ -3,7 +3,7 @@ import { Info } from 'lucide-react'
 import { Form } from '@/components/ui/form'
 import { Separator } from '@/components/ui/separator'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { FormSwitch } from '@/entries/popup/components/sections/styles/FormSwitch'
+import { FormSwitch } from '@/entries/popup/components/sections/styles/form-switch'
 import { useStylesConfigForm } from '@/entries/popup/components/sections/styles/hooks'
 
 export const StylesSection = () => {

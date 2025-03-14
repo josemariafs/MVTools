@@ -1,19 +1,23 @@
 import { Brain } from 'lucide-react'
 
 import { Button as CommonButton } from '@/components/ui/button'
+import { AI_MIN_POST_LENGTH } from '@/constants'
 import { useAnalyzeComment } from '@/features/posts/hooks/use-analyze-comment'
-import { usePostsStore } from '@/features/posts/hooks/use-posts-store'
+import { usePostsConfigStore } from '@/features/posts/hooks/use-posts-config-store'
+import { usePostContext } from '@/features/posts/providers/post-context-provider'
 import { ACTIONS } from '@/services/gemini'
 
 export const Button = () => {
-  const apiKey = usePostsStore(state => state.geminiApiKey)
+  const { comment } = usePostContext()
+  const apiKey = usePostsConfigStore(state => state.geminiApiKey)
   const { refetch, isFetching } = useAnalyzeComment({ action: ACTIONS.SUMMARY, apiKey })
+  const isVisible = !!apiKey && comment.length > AI_MIN_POST_LENGTH
 
   const handleClick = () => {
     refetch()
   }
 
-  if (!apiKey) return null
+  if (!isVisible) return null
 
   return (
     <CommonButton

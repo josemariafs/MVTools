@@ -2,35 +2,36 @@ import { type RefinementCtx, z } from 'zod'
 
 import { getPostsConfig } from '@/services/config'
 
-const MIN_POST_LENGTH = 350
-
 export interface PostElements {
-  buttonContainer: HTMLElement
-  contentContainer: HTMLElement
   id: string
+  author: string
   comment: string
+  postContainer: HTMLElement
+  postAvatarContainer: HTMLElement
+  postBodyContainer: HTMLElement
+  aiButtonContainer: HTMLElement
+  aiContentContainer: HTMLElement
 }
 
 export const getPostsElements = (): PostElements[] => {
   return Array.from<HTMLElement>(document.querySelectorAll('[data-autor]'))
     .map(post => {
-      const commentElement = post.querySelector<HTMLElement>('.post-contents')
-      if (!commentElement || commentElement.innerText.length < MIN_POST_LENGTH) return null
-
-      const contentContainer = document.createElement('div')
-      commentElement.appendChild(contentContainer)
-
-      const buttons = post.querySelector('.buttons')
-      if (!buttons) return null
-
-      const buttonContainer = document.createElement('li')
-      buttons.insertBefore(buttonContainer, buttons.firstChild)
+      const commentElement = post.querySelector<HTMLElement>('.post-contents')!
+      const aiContentContainer = document.createElement('div')
+      commentElement.appendChild(aiContentContainer)
+      const buttons = post.querySelector<HTMLElement>('.buttons')!
+      const aiButtonContainer = document.createElement('li')
+      buttons.insertBefore(aiButtonContainer, buttons.firstChild)
 
       return {
-        buttonContainer,
-        contentContainer,
         id: post.id,
-        comment: commentElement.innerText
+        author: post.getAttribute('data-autor')!,
+        comment: commentElement.innerText,
+        postContainer: post,
+        postAvatarContainer: post.querySelector<HTMLElement>('.post-avatar')!,
+        postBodyContainer: post.querySelector<HTMLElement>('.post-body')!,
+        aiButtonContainer,
+        aiContentContainer
       }
     })
     .filter(Boolean)

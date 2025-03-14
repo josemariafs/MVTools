@@ -1,14 +1,11 @@
 import { createContext, type PropsWithChildren, useContext, useMemo } from 'react'
 
-interface PostData {
-  id: string
-  comment: string
-}
+import type { PostElements } from '@/services/media-vida'
 
-const PostContext = createContext<PostData | null>(null)
+const PostContext = createContext<PostElements | null>(null)
 
-export const PostContextProvider = ({ children, comment, id }: PropsWithChildren<PostData>) => {
-  const config = useMemo(() => ({ comment, id }), [comment, id])
+export const PostContextProvider = ({ children, ...rest }: PropsWithChildren<PostElements>) => {
+  const config = useMemo(() => ({ ...rest }), [rest])
   return <PostContext.Provider value={config}>{children}</PostContext.Provider>
 }
 export const usePostContext = () => {

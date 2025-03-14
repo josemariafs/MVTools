@@ -1,5 +1,6 @@
 import { Form as GeminiForm } from '@/entries/popup/components/sections/posts/gemini/form'
 import { Form as IgnoredUsersForm } from '@/entries/popup/components/sections/posts/ignored-users/form'
+import { ShowIgnoredUsersSwitch } from '@/entries/popup/components/sections/posts/ignored-users/show-ignored-users-switch'
 
 export const PostsSection = () => {
   return (
@@ -10,6 +11,7 @@ export const PostsSection = () => {
       <main className='items-center justify-between space-y-3 rounded-lg border p-3 shadow-sm'>
         <GeminiForm />
         <IgnoredUsersForm />
+        <ShowIgnoredUsersSwitch />
       </main>
     </section>
   )

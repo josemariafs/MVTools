@@ -16,7 +16,7 @@ export const Portal = ({ children, root, theme }: Props) => {
 
   useEffect(() => {
     renderContent(import.meta.PLUGIN_WEB_EXT_CHUNK_CSS_PATHS, root, setShadowRoot)
-  }, [])
+  }, [root])
 
   if (!shadowRoot) return null
 

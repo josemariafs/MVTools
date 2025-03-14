@@ -1,4 +1,4 @@
-import { NewPopupButton } from '@/entries/popup/components/NewPopupButton'
+import { NewPopupButton } from '@/entries/popup/components/new-popup-button'
 import { PostsSection } from '@/entries/popup/components/sections/posts'
 import { StylesSection } from '@/entries/popup/components/sections/styles'
 

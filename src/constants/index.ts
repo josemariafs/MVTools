@@ -7,6 +7,8 @@ import type { PostsConfig } from '@/services/config'
 
 export const FIREFOX_ADDON_ID = '{unknown}' // Replace with the UUID of the extension
 
+export const AI_MIN_POST_LENGTH = 350
+
 export const URLS = {
   GEMINI_CREATE_API_KEY: 'https://aistudio.google.com/app/apikey?hl=es-419'
 } as const

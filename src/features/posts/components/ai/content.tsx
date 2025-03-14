@@ -2,12 +2,15 @@ import { SquareX } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { AI_MIN_POST_LENGTH } from '@/constants'
 import { useAnalyzeComment } from '@/features/posts/hooks/use-analyze-comment'
-import { usePostsStore } from '@/features/posts/hooks/use-posts-store'
+import { usePostsConfigStore } from '@/features/posts/hooks/use-posts-config-store'
+import { usePostContext } from '@/features/posts/providers/post-context-provider'
 import { ACTIONS } from '@/services/gemini'
 
 export const Content = () => {
-  const apiKey = usePostsStore(state => state.geminiApiKey)
+  const { comment } = usePostContext()
+  const apiKey = usePostsConfigStore(state => state.geminiApiKey)
   const { data: analyzedComment, isFetching, isError } = useAnalyzeComment({ action: ACTIONS.SUMMARY, apiKey })
   const [isClosed, setIsClosed] = useState(false)
 
@@ -17,6 +20,8 @@ export const Content = () => {
     return analyzedComment
   }, [analyzedComment, isFetching, isError])
 
+  const isVisible = !!apiKey && comment.length > AI_MIN_POST_LENGTH && !isClosed && !!text
+
   useEffect(() => {
     isClosed && setIsClosed(false)
   }, [isFetching])
@@ -25,7 +30,7 @@ export const Content = () => {
     setIsClosed(true)
   }
 
-  if (!text || !apiKey || isClosed) return null
+  if (!isVisible) return null
 
   return (
     <div className='relative'>
