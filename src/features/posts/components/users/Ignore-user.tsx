@@ -3,12 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { usePostsConfigStore } from '@/features/posts/hooks/use-posts-config-store'
 import { usePostContext } from '@/features/posts/providers/post-context-provider'
-
-const setDisplay = (element: HTMLElement[], display: 'none' | 'block') => {
-  element.forEach(element => {
-    element.style = `display: ${display}`
-  })
-}
+import { setDisplay } from '@/utils/dom'
 
 export const IgnoreUser = () => {
   const [showPost, setShowPost] = useState(false)

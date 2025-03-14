@@ -46,3 +46,9 @@ export const toggleClass = (className: CssClassName, enable: boolean) => {
   const bodyClassList = document.body.classList
   enable ? bodyClassList.add(className) : bodyClassList.remove(className)
 }
+
+export const setDisplay = (element: HTMLElement[], display: 'none' | 'block') => {
+  element.forEach(element => {
+    element.style = `display: ${display}`
+  })
+}
