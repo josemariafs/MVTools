@@ -1,6 +1,7 @@
 import browser from 'webextension-polyfill'
 
 import type { CssClassName } from '@/constants'
+import { isHTMLElement } from '@/utils/asserts'
 
 const loadedStyles = new Map<string, Promise<string>>()
 
@@ -22,8 +23,21 @@ const applyStyleToShadow = async (cssPath: string, shadowRoot: ShadowRoot): Prom
   shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, styleSheet]
 }
 
-export const renderContent = async (cssPaths: string[], where: HTMLElement = document.body, render: (appRoot: HTMLElement) => void) => {
-  const appContainer = document.createElement('section')
+export const renderContent = async ({
+  render,
+  where = 'beforeend',
+  container = document.body,
+  styles,
+  cssPaths
+}: {
+  cssPaths: string[]
+  render: (appRoot: HTMLElement) => void
+  container?: HTMLElement
+  where?: InsertPosition
+  styles?: Partial<CSSStyleDeclaration>
+}) => {
+  const appContainer = document.createElement('div')
+  Object.assign(appContainer.style, styles)
   const shadowRoot = appContainer.attachShadow({
     mode: import.meta.env.MODE === 'development' ? 'open' : 'closed'
   })
@@ -38,7 +52,7 @@ export const renderContent = async (cssPaths: string[], where: HTMLElement = doc
   }
 
   shadowRoot.appendChild(appRoot)
-  where.appendChild(appContainer)
+  container.insertAdjacentElement(where, appContainer)
   render(appRoot)
 }
 
@@ -53,21 +67,30 @@ export const setDisplay = (element: HTMLElement[], display: 'none' | 'block') =>
   })
 }
 
-export const createDOMElementIfNotPresent = ({
-  id,
-  container,
-  where = 'beforeend',
-  tagName = 'div'
-}: {
-  id: string
-  container: HTMLElement | null
-  where?: InsertPosition
-  tagName?: keyof HTMLElementTagNameMap
-}) => {
-  const presentElement = document.getElementById(id)
-  if (presentElement) return presentElement
-  const element = document.createElement(tagName)
-  element.id = id
-  container?.insertAdjacentElement(where, element)
-  return container ? element : undefined
+/**
+ * Searches mutations from MutationObserver for elements matching a query.
+ * Returns an array with found matching elements.
+ *
+ * @param {MutationRecord[]} mutationList List of Mutations as passed to MutationObserver's callback.
+ * @param {string} query Selector query that elements added in the Observed Mutation must match.
+ * @returns {HTMLElement[]} Array of found elements.
+ */
+export function searchMutationListFor(mutationList: MutationRecord[], query: string): HTMLElement[] {
+  const foundNodes: HTMLElement[] = []
+  if (!mutationList.length) return foundNodes
+
+  const findNodes = (addedNode: HTMLElement) => {
+    addedNode.matches(query) && foundNodes.push(addedNode)
+  }
+
+  for (const element of mutationList) {
+    if (!element.addedNodes.length) continue
+    Array.from(element.addedNodes)
+      .filter(({ nodeType }) => nodeType === 1)
+      .forEach(node => {
+        isHTMLElement(node) && findNodes(node)
+      })
+  }
+
+  return foundNodes
 }

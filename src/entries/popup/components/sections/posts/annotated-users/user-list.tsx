@@ -25,7 +25,7 @@ export const UserList = () => {
         >
           <div className='flex items-center justify-between gap-3'>
             <span>{user.username}</span>
-            <span>{user.note}</span>
+            <span className='truncate'>{user.note}</span>
             <Button
               size='icon'
               variant='ghost'

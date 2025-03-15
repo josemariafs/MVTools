@@ -1,51 +1,52 @@
-import { createDOMElementIfNotPresent } from '@/utils/dom'
-
 export interface PostElements {
   id: string
   author: string
   comment: string
   postContainer: HTMLElement
+  commentContainer: HTMLElement
   postAvatarContainer: HTMLElement
   postBodyContainer: HTMLElement
-  userNotesContainer?: HTMLElement
-  aiButtonContainer?: HTMLElement
-  aiContentContainer?: HTMLElement
+  postButtonsContainer: HTMLElement
 }
 
 export const getPostsElements = (): PostElements[] => {
   return Array.from<HTMLElement>(document.querySelectorAll('[data-autor]'))
     .map(post => {
-      const postBodyContainer = post.querySelector<HTMLElement>('.post-body')!
       const commentContainer = post.querySelector<HTMLElement>('.post-contents')!
-      const aiContentContainer = createDOMElementIfNotPresent({
-        id: `${post.id}-summary-content`,
-        container: commentContainer
-      })
-      const aiButtonContainer = createDOMElementIfNotPresent({
-        id: `${post.id}-summary-button`,
-        container: post.querySelector<HTMLElement>('.buttons'),
-        tagName: 'li',
-        where: 'afterbegin'
-      })
-      const postAvatarContainer = post.querySelector<HTMLElement>('.post-avatar')!
-      const userNotesContainer = createDOMElementIfNotPresent({
-        id: `${post.id}-user-notes`,
-        container: postAvatarContainer
-      })
-
       return {
         id: post.id,
         author: post.getAttribute('data-autor')!,
         comment: commentContainer.innerText,
         postContainer: post,
-        postAvatarContainer,
-        postBodyContainer,
-        userNotesContainer,
-        aiButtonContainer,
-        aiContentContainer
+        commentContainer,
+        postAvatarContainer: post.querySelector<HTMLElement>('.post-avatar')!,
+        postBodyContainer: post.querySelector<HTMLElement>('.post-body')!,
+        postButtonsContainer: post.querySelector<HTMLElement>('.buttons')!
       }
     })
     .filter(Boolean)
+}
+
+export interface PostReplyElements {
+  id: string
+  author: string
+  replyContainer: HTMLElement
+  replyAvatarContainer: HTMLElement
+  replyMetaContainer: HTMLElement
+  replyBodyContainer: HTMLElement
+  replyPostControlsContainer: HTMLElement | null
+}
+
+export const getPostRepliesElements = (postRepliesContainers: HTMLElement[]): PostReplyElements[] => {
+  return postRepliesContainers.map(replyContainer => ({
+    id: replyContainer.dataset.num!,
+    author: replyContainer.querySelector('.autor')!.textContent!,
+    replyContainer,
+    replyAvatarContainer: replyContainer.querySelector<HTMLElement>('.post-avatar-reply')!,
+    replyMetaContainer: replyContainer.querySelector<HTMLElement>('.post-meta-reply')!,
+    replyBodyContainer: replyContainer.querySelector<HTMLElement>('.post-contents')!,
+    replyPostControlsContainer: replyContainer.querySelector<HTMLElement>('.post-controls-reply')
+  }))
 }
 
 export const checkUser = async (nick: string) => {

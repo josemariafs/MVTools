@@ -4,7 +4,7 @@ import { Portal } from '@/components/ui/portal'
 import { Button } from '@/features/posts/components/ai/button'
 import { Content } from '@/features/posts/components/ai/content'
 import { HighlightUser } from '@/features/posts/components/users/highlight-user'
-import { IgnoreUser } from '@/features/posts/components/users/Ignore-user'
+import { IgnoreUsers } from '@/features/posts/components/users/ignore'
 import { UserNote } from '@/features/posts/components/users/user-note'
 import { PostContextProvider } from '@/features/posts/providers/post-context-provider'
 import { getPostsElements } from '@/services/media-vida'
@@ -18,16 +18,20 @@ export const Posts = () => {
       {...post}
     >
       <Portal root={post.postContainer}>
-        <IgnoreUser />
+        <IgnoreUsers />
       </Portal>
-      <Portal root={post.userNotesContainer}>
+      <Portal root={post.postAvatarContainer}>
         <UserNote />
       </Portal>
       <HighlightUser />
-      <Portal root={post.aiButtonContainer}>
+      <Portal
+        root={post.postButtonsContainer}
+        where='afterbegin'
+        styles={{ listStyle: 'none', float: 'left', padding: '0', position: 'relative', marginRight: '2px' }}
+      >
         <Button />
       </Portal>
-      <Portal root={post.aiContentContainer}>
+      <Portal root={post.postBodyContainer}>
         <Content />
       </Portal>
     </PostContextProvider>

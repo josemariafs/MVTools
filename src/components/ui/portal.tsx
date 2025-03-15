@@ -10,15 +10,23 @@ import { renderContent } from '@/utils/dom'
 
 interface Props extends PropsWithChildren {
   root?: HTMLElement
+  where?: InsertPosition
+  styles?: Partial<CSSStyleDeclaration>
   theme?: Theme
 }
 
-export const Portal = ({ children, root, theme }: Props) => {
+export const Portal = ({ children, root, where, styles, theme }: Props) => {
   const [shadowRoot, setShadowRoot] = useState<HTMLElement | null>(null)
 
   useEffect(() => {
     if (!root) return
-    renderContent(import.meta.PLUGIN_WEB_EXT_CHUNK_CSS_PATHS, root, setShadowRoot)
+    renderContent({
+      cssPaths: import.meta.PLUGIN_WEB_EXT_CHUNK_CSS_PATHS,
+      render: setShadowRoot,
+      container: root,
+      where,
+      styles
+    })
   }, [root])
 
   if (!shadowRoot) return null
