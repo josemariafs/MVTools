@@ -15,6 +15,7 @@ export interface PostElements {
 export const getPostsElements = (): PostElements[] => {
   return Array.from<HTMLElement>(document.querySelectorAll('[data-autor]'))
     .map(post => {
+      const postBodyContainer = post.querySelector<HTMLElement>('.post-body')!
       const commentContainer = post.querySelector<HTMLElement>('.post-contents')!
       const aiContentContainer = createDOMElementIfNotPresent({
         id: `${post.id}-summary-content`,
@@ -38,7 +39,7 @@ export const getPostsElements = (): PostElements[] => {
         comment: commentContainer.innerText,
         postContainer: post,
         postAvatarContainer,
-        postBodyContainer: post.querySelector<HTMLElement>('.post-body')!,
+        postBodyContainer,
         userNotesContainer,
         aiButtonContainer,
         aiContentContainer

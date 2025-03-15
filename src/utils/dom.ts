@@ -60,11 +60,12 @@ export const createDOMElementIfNotPresent = ({
   tagName = 'div'
 }: {
   id: string
-  container?: HTMLElement | null
+  container: HTMLElement | null
   where?: InsertPosition
   tagName?: keyof HTMLElementTagNameMap
 }) => {
-  if (document.getElementById(id)) return
+  const presentElement = document.getElementById(id)
+  if (presentElement) return presentElement
   const element = document.createElement(tagName)
   element.id = id
   container?.insertAdjacentElement(where, element)
