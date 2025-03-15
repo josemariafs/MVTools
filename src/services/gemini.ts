@@ -1,5 +1,4 @@
 import { GoogleGenerativeAI, GoogleGenerativeAIFetchError } from '@google/generative-ai'
-import { type RefinementCtx, z } from 'zod'
 
 import { RULES } from '@/constants/templates'
 
@@ -32,7 +31,7 @@ export const analyzeComment = async ({ comment, action, apiKey }: { comment: str
 
 export type AnalyzeCommentParams = Parameters<typeof analyzeComment>[0]
 
-const checkApiKey = async (apiKey: string) => {
+export const checkApiKey = async (apiKey: string) => {
   try {
     const genAI = new GoogleGenerativeAI(apiKey)
     const model = genAI.getGenerativeModel({ model: DEFAULT_MODEL })
@@ -43,18 +42,5 @@ const checkApiKey = async (apiKey: string) => {
       errorMessage = error.status === 400 ? 'La API Key no es válida' : errorMessage
     }
     throw new Error(errorMessage)
-  }
-}
-
-export const validApiKeyTransform = async (value: string, ctx: RefinementCtx) => {
-  if (!value) return value
-
-  try {
-    await checkApiKey(value)
-  } catch (error) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: (error as Error).message
-    })
   }
 }

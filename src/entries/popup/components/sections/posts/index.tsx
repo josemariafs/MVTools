@@ -1,3 +1,4 @@
+import { Form as AnnotatedUsersForm } from '@/entries/popup/components/sections/posts/annotated-users/form'
 import { Form as GeminiForm } from '@/entries/popup/components/sections/posts/gemini/form'
 import { Form as HighlightedUsersForm } from '@/entries/popup/components/sections/posts/highlighted-users/form'
 import { Form as IgnoredUsersForm } from '@/entries/popup/components/sections/posts/ignored-users/form'
@@ -13,6 +14,7 @@ export const PostsSection = () => {
         <GeminiForm />
         <IgnoredUsersForm />
         <ShowIgnoredUsersSwitch />
+        <AnnotatedUsersForm />
         <HighlightedUsersForm />
       </main>
     </section>

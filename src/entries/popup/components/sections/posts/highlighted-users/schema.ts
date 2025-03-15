@@ -1,39 +1,17 @@
-import AwesomeDebouncePromise from 'awesome-debounce-promise'
-import { type RefinementCtx, z } from 'zod'
+import { z } from 'zod'
 
-import { getPostsConfig } from '@/services/config'
-import { checkUser } from '@/services/media-vida'
-
-const userValidator = async (value: string, ctx: RefinementCtx) => {
-  try {
-    const postsConfig = await getPostsConfig()
-    if (postsConfig.highlightedUsers.includes(value)) {
-      throw new Error('El usuario ya está en la lista de ignorados.')
-    }
-    await checkUser(value)
-  } catch (error) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: (error as Error).message
-    })
-  }
-}
+import { noValueAbortEarly, userValidator } from '@/utils/zod'
 
 export const highlightedUsersFormSchema = z.object({
   highlightedUser: z
     .string()
-    .superRefine((value, ctx) => {
-      if (!value) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Introduce un usuario',
-          fatal: true
-        })
-
-        return z.NEVER
-      }
-    })
-    .superRefine(AwesomeDebouncePromise(userValidator, 500))
+    .superRefine(noValueAbortEarly('Introduce un usuario'))
+    .superRefine(
+      userValidator({
+        condition: (postsConfig, value) => postsConfig.highlightedUsers.includes(value),
+        message: 'El usuario ya está en la lista de destacados.'
+      })
+    )
 })
 
 export type HighlightedUsersFormData = z.infer<typeof highlightedUsersFormSchema>
