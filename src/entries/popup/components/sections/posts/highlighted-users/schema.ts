@@ -1,7 +1,23 @@
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
-import { z } from 'zod'
+import { type RefinementCtx, z } from 'zod'
 
-import { userValidator } from '@/services/media-vida'
+import { getPostsConfig } from '@/services/config'
+import { checkUser } from '@/services/media-vida'
+
+const userValidator = async (value: string, ctx: RefinementCtx) => {
+  try {
+    const postsConfig = await getPostsConfig()
+    if (postsConfig.highlightedUsers.includes(value)) {
+      throw new Error('El usuario ya está en la lista de ignorados.')
+    }
+    await checkUser(value)
+  } catch (error) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: (error as Error).message
+    })
+  }
+}
 
 export const highlightedUsersFormSchema = z.object({
   highlightedUser: z

@@ -1,6 +1,3 @@
-import { type RefinementCtx, z } from 'zod'
-
-import { getPostsConfig } from '@/services/config'
 import { createDOMElementIfNotPresent } from '@/utils/dom'
 
 export interface PostElements {
@@ -43,7 +40,7 @@ export const getPostsElements = (): PostElements[] => {
     .filter(Boolean)
 }
 
-const checkUser = async (nick: string) => {
+export const checkUser = async (nick: string) => {
   const response = await fetch('https://www.mediavida.com/usuarios/action/joincheck.php', {
     method: 'POST',
     headers: {
@@ -60,19 +57,4 @@ const checkUser = async (nick: string) => {
   const data = (await response.json()) as number
 
   if (!data) throw new Error('El usuario no existe.')
-}
-
-export const userValidator = async (value: string, ctx: RefinementCtx) => {
-  try {
-    const postsConfig = await getPostsConfig()
-    if (postsConfig.ignoredUsers.includes(value)) {
-      throw new Error('El usuario ya está en la lista de ignorados.')
-    }
-    await checkUser(value)
-  } catch (error) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: (error as Error).message
-    })
-  }
 }
