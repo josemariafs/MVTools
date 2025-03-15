@@ -28,6 +28,28 @@ export const CSS_CLASS_NAMES = {
 
 export type CssClassName = (typeof CSS_CLASS_NAMES)[keyof typeof CSS_CLASS_NAMES]
 
+export const HTML_ATTRIBUTES = {
+  DATA_AUTOR: 'data-autor'
+} as const
+
+export const CSS_SELECTORS = {
+  POSTS: {
+    MAIN_CONTAINER: `[${HTML_ATTRIBUTES.DATA_AUTOR}]`,
+    COMMENT_CONTAINER: '.post-contents',
+    AVATAR_CONTAINER: '.post-avatar',
+    BODY_CONTAINER: '.post-body',
+    BUTTONS_CONTAINER: '.buttons'
+  },
+  REPLIES: {
+    MAIN_CONTAINER: '.rep',
+    AUTHOR_CONTAINER: '.autor',
+    AVATAR_CONTAINER: '.post-avatar-reply',
+    META_CONTAINER: '.post-meta-reply',
+    BODY_CONTAINER: '.post-contents',
+    POST_CONTROLS_CONTAINER: '.post-controls-reply'
+  }
+} as const
+
 export const DEFAULT_POSTS_CONFIG: PostsConfig = {
   geminiApiKey: '',
   ignoredUsers: [],

@@ -18,7 +18,11 @@ export const IgnoreUser = ({ toggleElements, author }: Props) => {
   useEffect(() => {
     setShowPost(false)
     setDisplay(toggleElements, isIgnoredUser ? 'none' : 'block')
-  }, [isIgnoredUser])
+
+    return () => {
+      setDisplay(toggleElements, 'block')
+    }
+  }, [isIgnoredUser, showIgnoredUsers])
 
   const handleShowPost = useCallback(() => {
     setShowPost(true)

@@ -9,15 +9,17 @@ interface Props {
   target: Node
   callback: MutationCallback
   options?: MutationObserverInit
+  onUnmount?: () => void
   deps?: DependencyList
 }
 
-export const useMutationObserver = ({ target, callback, options = defaultOptions, deps = [] }: Props) => {
+export const useMutationObserver = ({ target, callback, options = defaultOptions, onUnmount, deps = [] }: Props) => {
   useEffect(() => {
     const observer = new MutationObserver(callback)
     observer.observe(target, options)
 
     return () => {
+      onUnmount?.()
       observer.disconnect()
     }
   }, deps)

@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
 import { Portal } from '@/components/ui/portal'
-import { IgnoreUser } from '@/features/posts/components/users/Ignore-user'
-import { usePostsConfigStore } from '@/features/posts/hooks/use-posts-config-store'
+import { CSS_SELECTORS } from '@/constants'
+import { IgnoreUser } from '@/features/posts/components/users/ignore/ignore-user'
 import { usePostContext } from '@/features/posts/providers/post-context-provider'
 import { useMutationObserver } from '@/hooks/use-mutation-observer'
 import { getPostRepliesElements, type PostReplyElements } from '@/services/media-vida'
@@ -10,16 +10,19 @@ import { searchMutationListFor } from '@/utils/dom'
 
 export const IgnoreUsers = () => {
   const { postContainer, postAvatarContainer, postBodyContainer, author } = usePostContext()
-  const ignoredUsers = usePostsConfigStore(state => state.ignoredUsers)
   const [replies, setReplies] = useState<PostReplyElements[]>([])
 
   useMutationObserver({
     target: postContainer,
-    deps: [ignoredUsers],
     callback: mutations => {
-      const replies = searchMutationListFor(mutations, '.rep')
+      const replies = searchMutationListFor(mutations, CSS_SELECTORS.REPLIES.MAIN_CONTAINER)
       if (!replies.length) return
-      setReplies(getPostRepliesElements(replies))
+
+      const newReplies = getPostRepliesElements(replies)
+      setReplies(oldReplies => [...oldReplies, ...newReplies])
+    },
+    onUnmount: () => {
+      setReplies([])
     }
   })
 

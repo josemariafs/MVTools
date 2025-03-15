@@ -1,3 +1,8 @@
+import { CSS_SELECTORS, HTML_ATTRIBUTES } from '@/constants'
+
+const { POSTS, REPLIES } = CSS_SELECTORS
+const { DATA_AUTOR } = HTML_ATTRIBUTES
+
 export interface PostElements {
   id: string
   author: string
@@ -10,18 +15,18 @@ export interface PostElements {
 }
 
 export const getPostsElements = (): PostElements[] => {
-  return Array.from<HTMLElement>(document.querySelectorAll('[data-autor]'))
+  return Array.from<HTMLElement>(document.querySelectorAll(POSTS.MAIN_CONTAINER))
     .map(post => {
-      const commentContainer = post.querySelector<HTMLElement>('.post-contents')!
+      const commentContainer = post.querySelector<HTMLElement>(POSTS.COMMENT_CONTAINER)!
       return {
         id: post.id,
-        author: post.getAttribute('data-autor')!,
+        author: post.getAttribute(DATA_AUTOR)!,
         comment: commentContainer.innerText,
         postContainer: post,
         commentContainer,
-        postAvatarContainer: post.querySelector<HTMLElement>('.post-avatar')!,
-        postBodyContainer: post.querySelector<HTMLElement>('.post-body')!,
-        postButtonsContainer: post.querySelector<HTMLElement>('.buttons')!
+        postAvatarContainer: post.querySelector<HTMLElement>(POSTS.AVATAR_CONTAINER)!,
+        postBodyContainer: post.querySelector<HTMLElement>(POSTS.BODY_CONTAINER)!,
+        postButtonsContainer: post.querySelector<HTMLElement>(POSTS.BUTTONS_CONTAINER)!
       }
     })
     .filter(Boolean)
@@ -40,12 +45,12 @@ export interface PostReplyElements {
 export const getPostRepliesElements = (postRepliesContainers: HTMLElement[]): PostReplyElements[] => {
   return postRepliesContainers.map(replyContainer => ({
     id: replyContainer.dataset.num!,
-    author: replyContainer.querySelector('.autor')!.textContent!,
+    author: replyContainer.querySelector(REPLIES.AUTHOR_CONTAINER)!.textContent!,
     replyContainer,
-    replyAvatarContainer: replyContainer.querySelector<HTMLElement>('.post-avatar-reply')!,
-    replyMetaContainer: replyContainer.querySelector<HTMLElement>('.post-meta-reply')!,
-    replyBodyContainer: replyContainer.querySelector<HTMLElement>('.post-contents')!,
-    replyPostControlsContainer: replyContainer.querySelector<HTMLElement>('.post-controls-reply')
+    replyAvatarContainer: replyContainer.querySelector<HTMLElement>(REPLIES.AVATAR_CONTAINER)!,
+    replyMetaContainer: replyContainer.querySelector<HTMLElement>(REPLIES.META_CONTAINER)!,
+    replyBodyContainer: replyContainer.querySelector<HTMLElement>(REPLIES.BODY_CONTAINER)!,
+    replyPostControlsContainer: replyContainer.querySelector<HTMLElement>(REPLIES.POST_CONTROLS_CONTAINER)
   }))
 }
 

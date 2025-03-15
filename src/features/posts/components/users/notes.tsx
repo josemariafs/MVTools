@@ -7,7 +7,7 @@ import { usePostsConfigStore } from '@/features/posts/hooks/use-posts-config-sto
 import { usePostContext } from '@/features/posts/providers/post-context-provider'
 import { useShadowRootContext } from '@/providers/shadow-root-provider'
 
-export const UserNote = () => {
+export const Notes = () => {
   const userNotes = usePostsConfigStore(state => state.userNotes)
   const { shadowRoot } = useShadowRootContext()
   const { author } = usePostContext()
