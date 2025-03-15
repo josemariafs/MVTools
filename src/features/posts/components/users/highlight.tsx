@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react'
 
 import { usePostsConfigStore } from '@/features/posts/hooks/use-posts-config-store'
 import { usePostContext } from '@/features/posts/providers/post-context-provider'
+import { toggleStyle } from '@/utils/dom'
 
 export const Highlight = () => {
   const { postContainer, author } = usePostContext()
@@ -12,11 +13,10 @@ export const Highlight = () => {
   )
 
   useEffect(() => {
-    const styles = 'border-left:10px #de6e17 solid; padding-left: 10px;'
-    postContainer.setAttribute('style', isHighlightedUser ? styles : '')
+    toggleStyle(postContainer, isHighlightedUser, { borderLeft: '10px #de6e17 solid', paddingLeft: '10px' })
 
     return () => {
-      postContainer.removeAttribute('style')
+      toggleStyle(postContainer, false)
     }
   }, [postContainer, isHighlightedUser])
 
