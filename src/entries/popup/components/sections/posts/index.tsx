@@ -1,4 +1,5 @@
 import { Form as GeminiForm } from '@/entries/popup/components/sections/posts/gemini/form'
+import { Form as HighlightedUsersForm } from '@/entries/popup/components/sections/posts/highlighted-users/form'
 import { Form as IgnoredUsersForm } from '@/entries/popup/components/sections/posts/ignored-users/form'
 import { ShowIgnoredUsersSwitch } from '@/entries/popup/components/sections/posts/ignored-users/show-ignored-users-switch'
 
@@ -12,6 +13,7 @@ export const PostsSection = () => {
         <GeminiForm />
         <IgnoredUsersForm />
         <ShowIgnoredUsersSwitch />
+        <HighlightedUsersForm />
       </main>
     </section>
   )
