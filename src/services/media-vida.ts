@@ -7,6 +7,7 @@ export interface PostElements {
   postContainer: HTMLElement
   postAvatarContainer: HTMLElement
   postBodyContainer: HTMLElement
+  userNotesContainer?: HTMLElement
   aiButtonContainer?: HTMLElement
   aiContentContainer?: HTMLElement
 }
@@ -25,14 +26,20 @@ export const getPostsElements = (): PostElements[] => {
         tagName: 'li',
         where: 'afterbegin'
       })
+      const postAvatarContainer = post.querySelector<HTMLElement>('.post-avatar')!
+      const userNotesContainer = createDOMElementIfNotPresent({
+        id: `${post.id}-user-notes`,
+        container: postAvatarContainer
+      })
 
       return {
         id: post.id,
         author: post.getAttribute('data-autor')!,
         comment: commentContainer.innerText,
         postContainer: post,
-        postAvatarContainer: post.querySelector<HTMLElement>('.post-avatar')!,
+        postAvatarContainer,
         postBodyContainer: post.querySelector<HTMLElement>('.post-body')!,
+        userNotesContainer,
         aiButtonContainer,
         aiContentContainer
       }

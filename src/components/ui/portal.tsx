@@ -3,6 +3,8 @@ import '@/global.css'
 import { type PropsWithChildren, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 
+import { TooltipProvider } from '@/components/ui/tooltip'
+import { ShadowRootContextProvider } from '@/providers/shadow-root-provider'
 import { type Theme, ThemeProvider } from '@/providers/theme-provider'
 import { renderContent } from '@/utils/dom'
 
@@ -26,7 +28,9 @@ export const Portal = ({ children, root, theme }: Props) => {
       root={shadowRoot}
       defaultTheme={theme ?? 'light'}
     >
-      {children}
+      <TooltipProvider>
+        <ShadowRootContextProvider shadowRoot={shadowRoot}>{children}</ShadowRootContextProvider>
+      </TooltipProvider>
     </ThemeProvider>,
     shadowRoot
   )
