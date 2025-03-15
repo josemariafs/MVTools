@@ -17,11 +17,11 @@ export const IgnoreUser = () => {
     setDisplay([postAvatarContainer, postBodyContainer], isIgnoredUser ? 'none' : 'block')
   }, [isIgnoredUser])
 
-  const handleToggleShowPost = useCallback(() => {
+  const handleShowPost = useCallback(() => {
     setShowPost(true)
     setDisplay([postAvatarContainer, postBodyContainer], 'block')
   }, [])
 
   if (!isIgnoredUser || showPost) return null
-  return !showIgnoredUsers ? 'Mensaje ignorado' : <Button onClick={handleToggleShowPost}>Mostrar mensaje ignorado</Button>
+  return !showIgnoredUsers ? 'Mensaje ignorado' : <Button onClick={handleShowPost}>Mostrar mensaje ignorado</Button>
 }
