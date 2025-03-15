@@ -32,6 +32,7 @@ export const IgnoreUsers = () => {
   return (
     <>
       <IgnoreUser
+        parentElement={postContainer}
         toggleElements={[postAvatarContainer, postBodyContainer]}
         author={author}
       />
@@ -42,6 +43,7 @@ export const IgnoreUsers = () => {
             key={id}
           >
             <IgnoreUser
+              parentElement={replyContainer}
               toggleElements={[replyBodyContainer, replyAvatarContainer, replyMetaContainer, replyPostControlsContainer].filter(Boolean)}
               author={author}
             />
