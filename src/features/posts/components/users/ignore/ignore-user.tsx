@@ -3,14 +3,16 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { usePostsConfigStore } from '@/features/posts/hooks/use-posts-config-store'
 import { toggleStyle } from '@/utils/dom'
+import { cn } from '@/utils/tailwind'
 
 interface Props {
   parentElement: HTMLElement
   toggleElements: HTMLElement[]
   author: string
+  type: 'post' | 'reply'
 }
 
-export const IgnoreUser = ({ parentElement, toggleElements, author }: Props) => {
+export const IgnoreUser = ({ parentElement, toggleElements, author, type }: Props) => {
   const [showPost, setShowPost] = useState(false)
   const ignoredUsers = usePostsConfigStore(state => state.ignoredUsers)
   const showIgnoredUsers = usePostsConfigStore(state => state.showIgnoredUsers)
@@ -39,7 +41,7 @@ export const IgnoreUser = ({ parentElement, toggleElements, author }: Props) => 
 
   if (!isIgnoredUser || showPost) return null
   return (
-    <div className='ml-[74px] flex h-[21px] items-center'>
+    <div className={cn('flex h-[21px] items-center', type === 'post' && 'ml-[74px]')}>
       <span>🚩1 comentario ignorado</span>
       {showIgnoredUsers && (
         <Button

@@ -32,24 +32,24 @@ export const IgnoreUsers = () => {
   return (
     <>
       <IgnoreUser
+        type='post'
         parentElement={postContainer}
         toggleElements={[postAvatarContainer, postBodyContainer]}
         author={author}
       />
-      {replies.map(
-        ({ replyContainer, id, author, replyBodyContainer, replyAvatarContainer, replyMetaContainer, replyPostControlsContainer }) => (
-          <Portal
-            root={replyContainer}
-            key={id}
-          >
-            <IgnoreUser
-              parentElement={replyContainer}
-              toggleElements={[replyBodyContainer, replyAvatarContainer, replyMetaContainer, replyPostControlsContainer].filter(Boolean)}
-              author={author}
-            />
-          </Portal>
-        )
-      )}
+      {replies.map(({ replyContainer, id, author, ...rest }) => (
+        <Portal
+          root={replyContainer}
+          key={id}
+        >
+          <IgnoreUser
+            type='reply'
+            parentElement={replyContainer}
+            toggleElements={Object.values(rest).filter(Boolean)}
+            author={author}
+          />
+        </Portal>
+      ))}
     </>
   )
 }
