@@ -52,3 +52,21 @@ export const setDisplay = (element: HTMLElement[], display: 'none' | 'block') =>
     element.style = `display: ${display}`
   })
 }
+
+export const createDOMElementIfNotPresent = ({
+  id,
+  container,
+  where = 'beforeend',
+  tagName = 'div'
+}: {
+  id: string
+  container?: HTMLElement | null
+  where?: InsertPosition
+  tagName?: keyof HTMLElementTagNameMap
+}) => {
+  if (document.getElementById(id)) return
+  const element = document.createElement(tagName)
+  element.id = id
+  container?.insertAdjacentElement(where, element)
+  return container ? element : undefined
+}

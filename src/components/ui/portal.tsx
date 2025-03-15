@@ -7,7 +7,7 @@ import { type Theme, ThemeProvider } from '@/providers/theme-provider'
 import { renderContent } from '@/utils/dom'
 
 interface Props extends PropsWithChildren {
-  root: HTMLElement
+  root?: HTMLElement
   theme?: Theme
 }
 
@@ -15,6 +15,7 @@ export const Portal = ({ children, root, theme }: Props) => {
   const [shadowRoot, setShadowRoot] = useState<HTMLElement | null>(null)
 
   useEffect(() => {
+    if (!root) return
     renderContent(import.meta.PLUGIN_WEB_EXT_CHUNK_CSS_PATHS, root, setShadowRoot)
   }, [root])
 

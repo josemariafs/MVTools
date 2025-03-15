@@ -1,6 +1,7 @@
 import { type RefinementCtx, z } from 'zod'
 
 import { getPostsConfig } from '@/services/config'
+import { createDOMElementIfNotPresent } from '@/utils/dom'
 
 export interface PostElements {
   id: string
@@ -9,24 +10,29 @@ export interface PostElements {
   postContainer: HTMLElement
   postAvatarContainer: HTMLElement
   postBodyContainer: HTMLElement
-  aiButtonContainer: HTMLElement
-  aiContentContainer: HTMLElement
+  aiButtonContainer?: HTMLElement
+  aiContentContainer?: HTMLElement
 }
 
 export const getPostsElements = (): PostElements[] => {
   return Array.from<HTMLElement>(document.querySelectorAll('[data-autor]'))
     .map(post => {
-      const commentElement = post.querySelector<HTMLElement>('.post-contents')!
-      const aiContentContainer = document.createElement('div')
-      commentElement.appendChild(aiContentContainer)
-      const buttons = post.querySelector<HTMLElement>('.buttons')!
-      const aiButtonContainer = document.createElement('li')
-      buttons.insertBefore(aiButtonContainer, buttons.firstChild)
+      const commentContainer = post.querySelector<HTMLElement>('.post-contents')!
+      const aiContentContainer = createDOMElementIfNotPresent({
+        id: `${post.id}-summary-content`,
+        container: commentContainer
+      })
+      const aiButtonContainer = createDOMElementIfNotPresent({
+        id: `${post.id}-summary-button`,
+        container: post.querySelector<HTMLElement>('.buttons'),
+        tagName: 'li',
+        where: 'afterbegin'
+      })
 
       return {
         id: post.id,
         author: post.getAttribute('data-autor')!,
-        comment: commentElement.innerText,
+        comment: commentContainer.innerText,
         postContainer: post,
         postAvatarContainer: post.querySelector<HTMLElement>('.post-avatar')!,
         postBodyContainer: post.querySelector<HTMLElement>('.post-body')!,
