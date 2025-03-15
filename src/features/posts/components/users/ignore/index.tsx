@@ -19,7 +19,10 @@ export const IgnoreUsers = () => {
       if (!replies.length) return
 
       const newReplies = getPostRepliesElements(replies)
-      setReplies(oldReplies => [...oldReplies, ...newReplies])
+      setReplies(oldReplies => {
+        const newRepliesIds = newReplies.map(({ id }) => id)
+        return oldReplies.filter(({ id }) => !newRepliesIds.includes(id)).concat(newReplies)
+      })
     },
     onUnmount: () => {
       setReplies([])
