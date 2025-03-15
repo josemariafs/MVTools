@@ -31,7 +31,7 @@ export const Posts = () => {
       >
         <Button />
       </Portal>
-      <Portal root={post.postBodyContainer}>
+      <Portal root={post.commentContainer}>
         <Content />
       </Portal>
     </PostContextProvider>
