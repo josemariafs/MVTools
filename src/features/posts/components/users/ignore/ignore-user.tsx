@@ -5,6 +5,17 @@ import { usePostsConfigStore } from '@/features/posts/hooks/use-posts-config-sto
 import { toggleStyle } from '@/utils/dom'
 import { cn } from '@/utils/tailwind'
 
+const parentStyles = {
+  backgroundColor: '#272d30',
+  color: '#8f989e',
+  paddingTop: '8px',
+  paddingBottom: '8px'
+}
+
+const elementStyles = {
+  display: 'none'
+}
+
 interface Props {
   parentElement: HTMLElement
   toggleElements: HTMLElement[]
@@ -20,26 +31,23 @@ export const IgnoreUser = ({ parentElement, toggleElements, author, type }: Prop
 
   useEffect(() => {
     setShowPost(false)
-    toggleStyle(toggleElements, isIgnoredUser, { display: 'none' })
-    toggleStyle(parentElement, isIgnoredUser, {
-      backgroundColor: '#272d30',
-      borderColor: '#21262b',
-      color: '#8f989e',
-      paddingTop: '8px',
-      paddingBottom: '8px'
-    })
+    toggleStyle(parentElement, isIgnoredUser, parentStyles)
+    toggleStyle(toggleElements, isIgnoredUser, elementStyles)
 
     return () => {
-      toggleStyle([...toggleElements, parentElement], false)
+      toggleStyle(parentElement, false, parentStyles)
+      toggleStyle(toggleElements, false, elementStyles)
     }
-  }, [isIgnoredUser, showIgnoredUsers])
+  }, [isIgnoredUser, showIgnoredUsers, toggleElements, parentElement])
 
   const handleShowPost = useCallback(() => {
     setShowPost(true)
-    toggleStyle([...toggleElements, parentElement], false)
-  }, [])
+    toggleStyle(parentElement, false, parentStyles)
+    toggleStyle(toggleElements, false, elementStyles)
+  }, [toggleElements, parentElement])
 
   if (!isIgnoredUser || showPost) return null
+
   return (
     <div className={cn('flex h-[21px] items-center', type === 'post' && 'ml-[74px]')}>
       <span>🚩1 comentario ignorado</span>

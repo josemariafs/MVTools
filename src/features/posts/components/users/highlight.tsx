@@ -4,6 +4,8 @@ import { usePostsConfigStore } from '@/features/posts/hooks/use-posts-config-sto
 import { usePostContext } from '@/features/posts/providers/post-context-provider'
 import { toggleStyle } from '@/utils/dom'
 
+const styles = { 'border-left': '10px #de6e17 solid', 'padding-left': '10px' }
+
 export const Highlight = () => {
   const { postContainer, author } = usePostContext()
   const highlightedUsers = usePostsConfigStore(state => state.highlightedUsers)
@@ -13,10 +15,10 @@ export const Highlight = () => {
   )
 
   useEffect(() => {
-    toggleStyle(postContainer, isHighlightedUser, { borderLeft: '10px #de6e17 solid', paddingLeft: '10px' })
+    toggleStyle(postContainer, isHighlightedUser, styles)
 
     return () => {
-      toggleStyle(postContainer, false)
+      toggleStyle(postContainer, false, styles)
     }
   }, [postContainer, isHighlightedUser])
 

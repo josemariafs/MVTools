@@ -61,17 +61,14 @@ export const toggleClass = (className: CssClassName, enable: boolean) => {
   enable ? bodyClassList.add(className) : bodyClassList.remove(className)
 }
 
-export const toggleStyle = (elements: HTMLElement | HTMLElement[], enable: boolean, style?: Partial<CSSStyleDeclaration>) => {
+export const toggleStyle = (elements: HTMLElement | HTMLElement[], enable: boolean, style: Partial<CSSStyleDeclaration>) => {
   if (!Array.isArray(elements)) elements = [elements]
 
   elements.forEach(element => {
-    enable
-      ? Object.assign(element.style, style)
-      : style
-        ? Object.keys(style).forEach(key => element.style.removeProperty(key))
-        : element.removeAttribute('style')
+    enable ? Object.assign(element.style, style) : Object.keys(style).forEach(key => (element.style[key as any] = ''))
   })
 }
+
 /**
  * Searches mutations from MutationObserver for elements matching a query.
  * Returns an array with found matching elements.
