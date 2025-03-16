@@ -8,7 +8,7 @@ export const ignoredUsersFormSchema = z.object({
     .superRefine(noValueAbortEarly('Introduce un usuario'))
     .superRefine(
       userValidator({
-        condition: (postsConfig, value) => postsConfig.ignoredUsers.includes(value),
+        condition: (postsConfig, value) => postsConfig.ignoredUsers.map(user => user.toLowerCase()).includes(value.toLowerCase()),
         message: 'El usuario ya está en la lista de ignorados.'
       })
     )

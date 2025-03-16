@@ -11,7 +11,10 @@ export const Notes = () => {
   const userNotes = usePostsConfigStore(state => state.userNotes)
   const { shadowRoot } = useShadowRootContext()
   const { author } = usePostContext()
-  const userNote = useMemo(() => userNotes.find(({ username }) => username === author)?.note, [author, userNotes])
+  const userNote = useMemo(
+    () => userNotes.find(({ username }) => username.toLowerCase() === author.toLowerCase())?.note,
+    [author, userNotes]
+  )
 
   if (!userNote) return null
 

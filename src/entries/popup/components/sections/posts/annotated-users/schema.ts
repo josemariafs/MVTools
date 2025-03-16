@@ -9,7 +9,8 @@ export const annotatedUsersFormSchema = z
   })
   .superRefine(
     userValidator({
-      condition: (postsConfig, value) => postsConfig.userNotes.some(({ username }) => username === value.username),
+      condition: (postsConfig, value) =>
+        postsConfig.userNotes.some(({ username }) => username.toLowerCase() === value.username.toLowerCase()),
       userName: value => value.username,
       path: 'username',
       message: 'El usuario ya está en la lista de anotados.'

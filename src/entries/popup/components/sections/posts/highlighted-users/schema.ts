@@ -8,7 +8,7 @@ export const highlightedUsersFormSchema = z.object({
     .superRefine(noValueAbortEarly('Introduce un usuario'))
     .superRefine(
       userValidator({
-        condition: (postsConfig, value) => postsConfig.highlightedUsers.includes(value),
+        condition: (postsConfig, value) => postsConfig.highlightedUsers.map(user => user.toLowerCase()).includes(value.toLowerCase()),
         message: 'El usuario ya está en la lista de destacados.'
       })
     )
