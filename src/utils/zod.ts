@@ -7,7 +7,7 @@ import { checkUser } from '@/services/media-vida'
 
 export const noValueAbortEarly = (message: string) => {
   return (value: string, ctx: RefinementCtx) => {
-    if (!value) {
+    if (!value.trim()) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message,
@@ -16,6 +16,8 @@ export const noValueAbortEarly = (message: string) => {
 
       return z.NEVER
     }
+
+    return value.trim()
   }
 }
 

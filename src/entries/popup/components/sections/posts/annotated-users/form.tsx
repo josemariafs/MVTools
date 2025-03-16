@@ -9,6 +9,7 @@ import { useAnnotatedUsersForm } from '@/entries/popup/components/sections/posts
 import type { AnnotatedUsersFormData } from '@/entries/popup/components/sections/posts/annotated-users/schema'
 import { useMutatePostsConfig, usePostsConfig } from '@/entries/popup/components/sections/posts/hooks'
 import { UserList } from '@/entries/popup/components/sections/posts/user-list'
+import { cn } from '@/utils/tailwind'
 
 export const Form = () => {
   const form = useAnnotatedUsersForm()
@@ -32,7 +33,7 @@ export const Form = () => {
         className='flex gap-2'
       >
         <Label
-          className='min-w-28 pt-1'
+          className={cn('min-w-28 pt-1', Object.keys(form.formState.errors).length && 'text-destructive')}
           htmlFor='username'
         >
           Añadir notas a usuario

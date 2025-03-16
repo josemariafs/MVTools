@@ -4,8 +4,8 @@ import { noValueAbortEarly, userValidator } from '@/utils/zod'
 
 export const annotatedUsersFormSchema = z
   .object({
-    username: z.string().superRefine(noValueAbortEarly('Introduce un usuario')),
-    note: z.string().superRefine(noValueAbortEarly('Introduce una nota'))
+    username: z.string().transform(noValueAbortEarly('Introduce un usuario')),
+    note: z.string().transform(noValueAbortEarly('Introduce una nota'))
   })
   .superRefine(
     userValidator({

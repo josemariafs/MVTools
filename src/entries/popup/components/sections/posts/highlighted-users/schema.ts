@@ -5,7 +5,7 @@ import { noValueAbortEarly, userValidator } from '@/utils/zod'
 export const highlightedUsersFormSchema = z.object({
   highlightedUser: z
     .string()
-    .superRefine(noValueAbortEarly('Introduce un usuario'))
+    .transform(noValueAbortEarly('Introduce un usuario'))
     .superRefine(
       userValidator({
         condition: (postsConfig, value) => postsConfig.highlightedUsers.map(user => user.toLowerCase()).includes(value.toLowerCase()),
