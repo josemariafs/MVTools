@@ -20,7 +20,10 @@ export const StylesSection = () => {
               className='text-blue-200'
             />
           </TooltipTrigger>
-          <TooltipContent className='w-full max-w-48'>
+          <TooltipContent
+            className='w-full max-w-48'
+            side='right'
+          >
             <p>Se recomienda usar el Theme de Mediavida Oscuro cuando se activan los estilos de MV Premium.</p>
           </TooltipContent>
         </Tooltip>

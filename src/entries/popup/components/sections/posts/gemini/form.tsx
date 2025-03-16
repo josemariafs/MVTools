@@ -27,46 +27,48 @@ export const Form = () => {
           name='geminiApiKey'
           disabled={form.formState.isSubmitting}
           render={({ field }) => (
-            <FormItem className='flex w-full gap-2 space-x-4 space-y-0'>
-              <FormLabel className='min-w-fit pt-2.5'>Gemini API Key</FormLabel>
-              <div className='w-full'>
-                <FormControl>
-                  <PasswordInput
-                    {...field}
-                    placeholder='Gemini API Key'
-                    autoComplete='off'
-                  />
-                </FormControl>
-                <FormDescription>
-                  <Button
-                    variant='link'
-                    type='button'
-                    className='h-fit p-0 pt-1.5 text-orange-500'
-                    asChild
-                  >
-                    <a
-                      href={URLS.GEMINI_CREATE_API_KEY}
-                      target='_blank'
-                      rel='noreferrer'
+            <FormItem className='flex w-full gap-2.5 space-y-0'>
+              <FormLabel className='min-w-28 pt-2.5'>Gemini API Key</FormLabel>
+              <div className='flex w-full gap-2.5'>
+                <div className='w-full'>
+                  <FormControl>
+                    <PasswordInput
+                      {...field}
+                      placeholder='Gemini API Key'
+                      autoComplete='off'
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    <Button
+                      variant='link'
+                      type='button'
+                      className='h-fit p-0 pt-1.5 text-orange-500'
+                      asChild
                     >
-                      Clicka aquí para generar una API Key
-                    </a>
-                  </Button>
-                </FormDescription>
-                <FormMessage />
+                      <a
+                        href={URLS.GEMINI_CREATE_API_KEY}
+                        target='_blank'
+                        rel='noreferrer'
+                      >
+                        Clicka aquí para generar una API Key
+                      </a>
+                    </Button>
+                  </FormDescription>
+                  <FormMessage className='pt-1' />
+                </div>
+                <Button
+                  size='icon'
+                  variant='outline'
+                  type='submit'
+                  className='min-w-9'
+                  disabled={form.formState.isSubmitting}
+                >
+                  {form.formState.isSubmitting ? <Loader2 className='animate-spin' /> : <Save />}
+                </Button>
               </div>
             </FormItem>
           )}
         />
-        <Button
-          size='icon'
-          variant='outline'
-          type='submit'
-          className='min-w-fit'
-          disabled={form.formState.isSubmitting}
-        >
-          {form.formState.isSubmitting ? <Loader2 className='animate-spin' /> : <Save />}
-        </Button>
       </form>
     </DefaultForm>
   )

@@ -10,14 +10,14 @@ export const ShowIgnoredUsersSwitch = () => {
   const { mutatePartial } = useMutatePostsConfig()
 
   return (
-    <div className='flex w-full gap-2 space-x-4 space-y-0'>
+    <div className='flex w-full gap-2.5 pb-2.5 pt-2'>
       <Label
         htmlFor='showIgnoredUsers'
-        className='w-36'
+        className='min-w-28'
       >
         Ver mensajes ignorados
       </Label>
-      <div className='flex w-full items-center justify-between pr-1.5'>
+      <div className='flex w-full items-center gap-5'>
         <Switch
           id='showIgnoredUsers'
           checked={data.showIgnoredUsers}
@@ -28,11 +28,14 @@ export const ShowIgnoredUsersSwitch = () => {
         <Tooltip>
           <TooltipTrigger>
             <Info
-              size={18}
+              size={20}
               className='text-blue-200'
             />
           </TooltipTrigger>
-          <TooltipContent className='w-full max-w-48'>
+          <TooltipContent
+            className='w-full max-w-48'
+            side='right'
+          >
             <p>Si esta opción está activada se podrá mostrar mensajes de usuarios ignorados.</p>
           </TooltipContent>
         </Tooltip>
