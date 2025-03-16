@@ -38,7 +38,7 @@ export const IgnoreUser = ({ parentElement, toggleElements, author, type }: Prop
       toggleStyle(parentElement, false, parentStyles)
       toggleStyle(toggleElements, false, elementStyles)
     }
-  }, [isIgnoredUser, showIgnoredUsers, toggleElements, parentElement])
+  }, [isIgnoredUser, showIgnoredUsers])
 
   const handleShowPost = useCallback(() => {
     setShowPost(true)
