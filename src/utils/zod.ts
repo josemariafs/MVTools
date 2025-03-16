@@ -34,40 +34,53 @@ export const apiKeyValidator = async (value: string, ctx: RefinementCtx) => {
   }
 }
 
-interface CommonValidatorProps<T> {
+type StringKeys<T> = Extract<keyof T, string>
+
+interface ObjectUserKey<T extends object> {
+  userKey: StringKeys<T>
+}
+
+interface StringUserKey {
+  userKey?: never
+}
+
+interface CommonIsDuplicatedValidatorProps<T> {
   condition: (postConfig: Awaited<ReturnType<typeof getPostsConfig>>, value: T) => boolean
   message: string
+}
+
+export const postConfigConditionValidator = <T>({ condition, message }: CommonIsDuplicatedValidatorProps<T>) => {
+  return async (value: T, ctx: RefinementCtx) => {
+    const postsConfig = await getPostsConfig()
+    if (condition(postsConfig, value)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        fatal: true,
+        message
+      })
+      return z.NEVER
+    }
+  }
+}
+
+interface CommonExistsUserValidatorProps {
   debounce?: number
+  formField?: string
 }
 
-type ObjectValidatorProps<T extends object> = CommonValidatorProps<T> & {
-  userName: (value: T) => string
-  path: keyof T
-}
+export const existUserValidator = <T>(
+  props?: T extends object ? ObjectUserKey<T> & CommonExistsUserValidatorProps : StringUserKey & CommonExistsUserValidatorProps
+) => {
+  const { userKey, formField, debounce = 500 } = props ?? {}
 
-type StringValidatorProps<T> = CommonValidatorProps<T> & {
-  userName?: (value: T) => string
-  path?: never
-}
-
-export const userValidator = <T>({
-  condition,
-  message,
-  userName,
-  path,
-  debounce = 500
-}: T extends object ? ObjectValidatorProps<T> : T extends string ? StringValidatorProps<T> : never) => {
   return AwesomeDebouncePromise(async (value: T, ctx: RefinementCtx) => {
     try {
-      const postsConfig = await getPostsConfig()
-      if (condition(postsConfig, value)) {
-        throw new Error(message)
-      }
-      await checkUser(userName?.(value) ?? String(value))
+      const username = userKey ? String(value[userKey]) : String(value)
+      await checkUser(username)
     } catch (error) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        path: path != null ? [String(path)] : undefined,
+        path: formField ? [formField] : undefined,
         message: (error as Error).message
       })
     }

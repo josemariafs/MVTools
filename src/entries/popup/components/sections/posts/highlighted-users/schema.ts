@@ -1,17 +1,18 @@
 import { z } from 'zod'
 
-import { noValueAbortEarly, userValidator } from '@/utils/zod'
+import { existUserValidator, noValueAbortEarly, postConfigConditionValidator } from '@/utils/zod'
 
 export const highlightedUsersFormSchema = z.object({
   highlightedUser: z
     .string()
     .transform(noValueAbortEarly('Introduce un usuario'))
     .superRefine(
-      userValidator({
-        condition: (postsConfig, value) => postsConfig.highlightedUsers.map(user => user.toLowerCase()).includes(value.toLowerCase()),
+      postConfigConditionValidator({
+        condition: (postConfig, value) => postConfig.highlightedUsers.some(user => user.toLowerCase() === value.toLowerCase()),
         message: 'El usuario ya está en la lista de destacados.'
       })
     )
+    .superRefine(existUserValidator())
 })
 
 export type HighlightedUsersFormData = z.infer<typeof highlightedUsersFormSchema>
