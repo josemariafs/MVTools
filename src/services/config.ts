@@ -2,9 +2,9 @@ import { z } from 'zod'
 
 import { getStoredProperty, setStoredProperty } from '@/services/storage'
 
-import { DEFAULT_POSTS_CONFIG, STORAGE_KEYS } from '../constants'
+import { DEFAULT_GLOBAL_CONFIG, STORAGE_KEYS } from '../constants'
 
-export const postsConfigSchema = z.object({
+export const globalConfigSchema = z.object({
   geminiApiKey: z.string(),
   ignoredUsers: z.array(z.string()),
   showIgnoredUsers: z.boolean(),
@@ -12,11 +12,11 @@ export const postsConfigSchema = z.object({
   highlightedUsers: z.array(z.string())
 })
 
-export type PostsConfig = z.infer<typeof postsConfigSchema>
-export type UserNote = PostsConfig['userNotes'][number]
+export type GlobalConfig = z.infer<typeof globalConfigSchema>
+export type UserNote = GlobalConfig['userNotes'][number]
 
-export const getPostsConfig = () => getStoredProperty<PostsConfig>(STORAGE_KEYS.POSTS_CONFIG, DEFAULT_POSTS_CONFIG)
-export const setPostsConfig = (value: PostsConfig) => setStoredProperty(STORAGE_KEYS.POSTS_CONFIG, value)
+export const getGlobalConfig = () => getStoredProperty<GlobalConfig>(STORAGE_KEYS.GLOBAL_CONFIG, DEFAULT_GLOBAL_CONFIG)
+export const setGlobalConfig = (value: GlobalConfig) => setStoredProperty(STORAGE_KEYS.GLOBAL_CONFIG, value)
 
 export const stylesConfigSchema = z.object({
   premiumEnabled: z.boolean(),
@@ -36,7 +36,7 @@ export const getStylesConfig = () =>
 export const setStylesConfig = (value: StylesConfig) => setStoredProperty(STORAGE_KEYS.STYLES_CONFIG, value)
 
 export const getAllStorageConfigs = () =>
-  Promise.all([getStylesConfig(), getPostsConfig()]).then(([stylesConfig, postsConfig]) => ({
+  Promise.all([getStylesConfig(), getGlobalConfig()]).then(([stylesConfig, globalConfig]) => ({
     [STORAGE_KEYS.STYLES_CONFIG]: stylesConfig,
-    [STORAGE_KEYS.POSTS_CONFIG]: postsConfig
+    [STORAGE_KEYS.GLOBAL_CONFIG]: globalConfig
   }))

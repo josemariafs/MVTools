@@ -3,11 +3,11 @@ import { Info } from 'lucide-react'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { useMutatePostsConfig, usePostsConfig } from '@/entries/popup/components/sections/posts/hooks'
+import { useGlobalConfig, useMutateGlobalConfig } from '@/entries/popup/components/sections/posts/hooks'
 
 export const ShowIgnoredUsersSwitch = () => {
-  const { data } = usePostsConfig()
-  const { mutatePartial } = useMutatePostsConfig()
+  const { data } = useGlobalConfig()
+  const { mutatePartial } = useMutateGlobalConfig()
 
   return (
     <div className='flex w-full gap-2.5 pb-2.5 pt-2'>

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { usePostsConfigStore } from '@/features/posts/hooks/use-posts-config-store'
+import { useGlobalConfigStore } from '@/features/posts/hooks/use-global-config-store'
 import { toggleStyle } from '@/utils/dom'
 import { cn } from '@/utils/tailwind'
 
@@ -25,8 +25,8 @@ interface Props {
 
 export const IgnoreUser = ({ parentElement, toggleElements, author, type }: Props) => {
   const [showPost, setShowPost] = useState(false)
-  const ignoredUsers = usePostsConfigStore(state => state.ignoredUsers)
-  const showIgnoredUsers = usePostsConfigStore(state => state.showIgnoredUsers)
+  const ignoredUsers = useGlobalConfigStore(state => state.ignoredUsers)
+  const showIgnoredUsers = useGlobalConfigStore(state => state.showIgnoredUsers)
   const isIgnoredUser = useMemo(() => ignoredUsers.map(user => user.toLowerCase()).includes(author.toLowerCase()), [author, ignoredUsers])
 
   useEffect(() => {

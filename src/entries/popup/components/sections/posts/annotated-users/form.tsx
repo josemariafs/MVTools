@@ -5,15 +5,15 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useAnnotatedUsersForm } from '@/entries/popup/components/sections/posts/annotated-users/hooks'
-import { useMutatePostsConfig, usePostsConfig } from '@/entries/popup/components/sections/posts/hooks'
+import { useGlobalConfig, useMutateGlobalConfig } from '@/entries/popup/components/sections/posts/hooks'
 import { UserList } from '@/entries/popup/components/sections/posts/user-list'
 import type { UserNote } from '@/services/config'
 import { cn } from '@/utils/tailwind'
 
 export const Form = () => {
   const form = useAnnotatedUsersForm()
-  const { data } = usePostsConfig()
-  const { mutatePartial } = useMutatePostsConfig()
+  const { data } = useGlobalConfig()
+  const { mutatePartial } = useMutateGlobalConfig()
 
   const handleSubmit = useCallback((e: FormEvent) => {
     e.stopPropagation()

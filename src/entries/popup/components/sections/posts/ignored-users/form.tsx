@@ -2,14 +2,14 @@ import { Loader2, UserRoundPlus } from 'lucide-react'
 import { type FormEvent, useCallback } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { useMutatePostsConfig, usePostsConfig } from '@/entries/popup/components/sections/posts/hooks'
+import { useGlobalConfig, useMutateGlobalConfig } from '@/entries/popup/components/sections/posts/hooks'
 import { useIgnoredUsersForm } from '@/entries/popup/components/sections/posts/ignored-users/hooks'
 import { UserList } from '@/entries/popup/components/sections/posts/user-list'
 
 export const Form = () => {
   const form = useIgnoredUsersForm()
-  const { data } = usePostsConfig()
-  const { mutatePartial } = useMutatePostsConfig()
+  const { data } = useGlobalConfig()
+  const { mutatePartial } = useMutateGlobalConfig()
 
   const handleSubmit = useCallback((e: FormEvent) => {
     e.stopPropagation()

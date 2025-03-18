@@ -1,10 +1,10 @@
 import { z } from 'zod'
 
-import type { PostsConfig } from '@/services/config'
+import type { GlobalConfig } from '@/services/config'
 import { checkUser } from '@/services/media-vida'
 import { asyncValidator } from '@/utils/zod'
 
-export const getHighlightedUsersSchema = (data: PostsConfig) =>
+export const getHighlightedUsersSchema = (data: GlobalConfig) =>
   z.object({
     highlightedUser: z
       .string()

@@ -4,13 +4,13 @@ import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { AI_MIN_POST_LENGTH } from '@/constants'
 import { useAnalyzeComment } from '@/features/posts/hooks/use-analyze-comment'
-import { usePostsConfigStore } from '@/features/posts/hooks/use-posts-config-store'
+import { useGlobalConfigStore } from '@/features/posts/hooks/use-global-config-store'
 import { usePostContext } from '@/features/posts/providers/post-context-provider'
 import { ACTIONS } from '@/services/gemini'
 
 export const Content = () => {
   const { comment } = usePostContext()
-  const apiKey = usePostsConfigStore(state => state.geminiApiKey)
+  const apiKey = useGlobalConfigStore(state => state.geminiApiKey)
   const { data: analyzedComment, isFetching, isError } = useAnalyzeComment({ action: ACTIONS.SUMMARY, apiKey })
   const [isClosed, setIsClosed] = useState(false)
 

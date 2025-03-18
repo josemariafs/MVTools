@@ -3,7 +3,7 @@
 // The ID must be unique and in the format of a UUID.
 // More info: https://extensionworkshop.com/documentation/develop/extensions-and-the-add-on-id/
 
-import type { PostsConfig } from '@/services/config'
+import type { GlobalConfig } from '@/services/config'
 
 export const FIREFOX_ADDON_ID = '{unknown}' // Replace with the UUID of the extension
 
@@ -15,7 +15,7 @@ export const URLS = {
 
 export const STORAGE_KEYS = {
   STYLES_CONFIG: 'stylesConfig',
-  POSTS_CONFIG: 'postsConfig'
+  GLOBAL_CONFIG: 'globalConfig'
 } as const
 
 export type StorageKey = (typeof STORAGE_KEYS)[keyof typeof STORAGE_KEYS]
@@ -47,10 +47,17 @@ export const CSS_SELECTORS = {
     META_CONTAINER: '.post-meta-reply',
     BODY_CONTAINER: '.post-contents',
     POST_CONTROLS_CONTAINER: '.post-controls-reply'
+  },
+  PRIVATE_MESSAGES: {
+    USERS_CONTAINER: '#pms > div.threads7.pm-col.c-side-alt > div.wpx > div > ul',
+    USER_CONTAINER: 'li',
+    USER_NAME: 'strong',
+    TITLE: '#pms > div.msgs.pm-col.c-main-alt > div > h1',
+    CONTENT_CONTAINER: '#pm-form'
   }
 } as const
 
-export const DEFAULT_POSTS_CONFIG: PostsConfig = {
+export const DEFAULT_GLOBAL_CONFIG: GlobalConfig = {
   geminiApiKey: '',
   ignoredUsers: [],
   showIgnoredUsers: false,

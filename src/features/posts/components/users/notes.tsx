@@ -3,12 +3,12 @@ import { useMemo } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { usePostsConfigStore } from '@/features/posts/hooks/use-posts-config-store'
+import { useGlobalConfigStore } from '@/features/posts/hooks/use-global-config-store'
 import { usePostContext } from '@/features/posts/providers/post-context-provider'
 import { useShadowRootContext } from '@/providers/shadow-root-provider'
 
 export const Notes = () => {
-  const userNotes = usePostsConfigStore(state => state.userNotes)
+  const userNotes = useGlobalConfigStore(state => state.userNotes)
   const { shadowRoot } = useShadowRootContext()
   const { author } = usePostContext()
   const userNote = useMemo(

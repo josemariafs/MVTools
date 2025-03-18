@@ -2,13 +2,13 @@ import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 
 import { STORAGE_KEYS } from '@/constants'
 import { useMutate } from '@/entries/popup/hooks/use-mutate'
-import { getPostsConfig, setPostsConfig } from '@/services/config'
+import { getGlobalConfig, setGlobalConfig } from '@/services/config'
 
-export const postsConfigQueryOptions = queryOptions({
-  queryKey: [STORAGE_KEYS.POSTS_CONFIG],
-  queryFn: getPostsConfig
+export const globalConfigQueryOptions = queryOptions({
+  queryKey: [STORAGE_KEYS.GLOBAL_CONFIG],
+  queryFn: getGlobalConfig
 })
 
-export const usePostsConfig = () => useSuspenseQuery(postsConfigQueryOptions)
-export const useMutatePostsConfig = ({ toast = false }: { toast?: boolean } = {}) =>
-  useMutate(postsConfigQueryOptions.queryKey, setPostsConfig, toast)
+export const useGlobalConfig = () => useSuspenseQuery(globalConfigQueryOptions)
+export const useMutateGlobalConfig = ({ toast = false }: { toast?: boolean } = {}) =>
+  useMutate(globalConfigQueryOptions.queryKey, setGlobalConfig, toast)

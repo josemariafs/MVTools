@@ -1,10 +1,10 @@
 import { useAppForm } from '@/components/ui/form'
 import { getHighlightedUsersSchema } from '@/entries/popup/components/sections/posts/highlighted-users/schema'
-import { useMutatePostsConfig, usePostsConfig } from '@/entries/popup/components/sections/posts/hooks'
+import { useGlobalConfig, useMutateGlobalConfig } from '@/entries/popup/components/sections/posts/hooks'
 
 export const useHighlightedUsersForm = () => {
-  const { data } = usePostsConfig()
-  const { mutatePartial } = useMutatePostsConfig()
+  const { data } = useGlobalConfig()
+  const { mutatePartial } = useMutateGlobalConfig()
 
   return useAppForm({
     defaultValues: {

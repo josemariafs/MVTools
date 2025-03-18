@@ -3,13 +3,13 @@ import { type FormEvent, useCallback } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { useHighlightedUsersForm } from '@/entries/popup/components/sections/posts/highlighted-users/hooks'
-import { useMutatePostsConfig, usePostsConfig } from '@/entries/popup/components/sections/posts/hooks'
+import { useGlobalConfig, useMutateGlobalConfig } from '@/entries/popup/components/sections/posts/hooks'
 import { UserList } from '@/entries/popup/components/sections/posts/user-list'
 
 export const Form = () => {
   const form = useHighlightedUsersForm()
-  const { data } = usePostsConfig()
-  const { mutatePartial } = useMutatePostsConfig()
+  const { data } = useGlobalConfig()
+  const { mutatePartial } = useMutateGlobalConfig()
 
   const handleSubmit = useCallback((e: FormEvent) => {
     e.stopPropagation()

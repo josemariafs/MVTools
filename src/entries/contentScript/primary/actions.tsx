@@ -1,7 +1,7 @@
 import { CSS_CLASS_NAMES, STORAGE_KEYS, type StorageKey } from '@/constants'
 import { renderPosts } from '@/features/posts/main'
-import { postsConfigSchema, stylesConfigSchema } from '@/services/config'
-import { updatePostsConfigStore } from '@/store/posts-config-store'
+import { globalConfigSchema, stylesConfigSchema } from '@/services/config'
+import { updateGlobalConfigStore } from '@/store/global-config-store'
 import { objectEntries } from '@/utils/asserts'
 import { toggleClass } from '@/utils/dom'
 import { devLog } from '@/utils/logging'
@@ -20,29 +20,29 @@ export const toggleStylesAction = (value: unknown) => {
   })
 }
 
-export const updatePostsAction = (value: unknown) => {
-  const validPostsConfig = postsConfigSchema.safeParse(value)
-  if (!validPostsConfig.success) return
+export const updateGlobalConfigAction = (value: unknown) => {
+  const validGlobalConfig = globalConfigSchema.safeParse(value)
+  if (!validGlobalConfig.success) return
 
-  devLog.log('Posts config updated:', validPostsConfig.data)
-  updatePostsConfigStore(validPostsConfig.data)
+  devLog.log('Posts config updated:', validGlobalConfig.data)
+  updateGlobalConfigStore(validGlobalConfig.data)
 }
 
-export const renderPostsAction = (value: unknown) => {
-  const validPostsConfig = postsConfigSchema.safeParse(value)
-  if (!validPostsConfig.success) return
+export const globalConfigAction = (value: unknown) => {
+  const validGlobalConfig = globalConfigSchema.safeParse(value)
+  if (!validGlobalConfig.success) return
 
-  devLog.log('Rendering Posts with:', validPostsConfig.data)
-  updatePostsConfigStore(validPostsConfig.data)
+  devLog.log('Rendering Posts with:', validGlobalConfig.data)
+  updateGlobalConfigStore(validGlobalConfig.data)
   renderPosts()
 }
 
 export const INIT_STORAGE_ACTIONS: Record<StorageKey, (value: unknown) => void> = {
   [STORAGE_KEYS.STYLES_CONFIG]: toggleStylesAction,
-  [STORAGE_KEYS.POSTS_CONFIG]: renderPostsAction
+  [STORAGE_KEYS.GLOBAL_CONFIG]: globalConfigAction
 } as const
 
 export const UPDATE_STORAGE_ACTIONS: Record<StorageKey, (value: unknown) => void> = {
   [STORAGE_KEYS.STYLES_CONFIG]: toggleStylesAction,
-  [STORAGE_KEYS.POSTS_CONFIG]: updatePostsAction
+  [STORAGE_KEYS.GLOBAL_CONFIG]: updateGlobalConfigAction
 }

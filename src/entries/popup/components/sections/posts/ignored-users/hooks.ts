@@ -1,10 +1,10 @@
 import { useAppForm } from '@/components/ui/form'
-import { useMutatePostsConfig, usePostsConfig } from '@/entries/popup/components/sections/posts/hooks'
+import { useGlobalConfig, useMutateGlobalConfig } from '@/entries/popup/components/sections/posts/hooks'
 import { getIgnoredUsersSchema } from '@/entries/popup/components/sections/posts/ignored-users/schema'
 
 export const useIgnoredUsersForm = () => {
-  const { data } = usePostsConfig()
-  const { mutatePartial } = useMutatePostsConfig()
+  const { data } = useGlobalConfig()
+  const { mutatePartial } = useMutateGlobalConfig()
 
   return useAppForm({
     defaultValues: {
