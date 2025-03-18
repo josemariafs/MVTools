@@ -13,6 +13,7 @@ export const postsConfigSchema = z.object({
 })
 
 export type PostsConfig = z.infer<typeof postsConfigSchema>
+export type UserNote = PostsConfig['userNotes'][number]
 
 export const getPostsConfig = () => getStoredProperty<PostsConfig>(STORAGE_KEYS.POSTS_CONFIG, DEFAULT_POSTS_CONFIG)
 export const setPostsConfig = (value: PostsConfig) => setStoredProperty(STORAGE_KEYS.POSTS_CONFIG, value)
@@ -23,7 +24,7 @@ export const stylesConfigSchema = z.object({
   ultraWideEnabled: z.boolean()
 })
 
-export type StylesConfig = z.infer<typeof stylesConfigSchema>
+type StylesConfig = z.infer<typeof stylesConfigSchema>
 
 export const getStylesConfig = () =>
   getStoredProperty<StylesConfig>(STORAGE_KEYS.STYLES_CONFIG, {

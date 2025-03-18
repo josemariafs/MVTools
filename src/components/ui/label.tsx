@@ -18,4 +18,6 @@ const Label = React.forwardRef<
 ))
 Label.displayName = LabelPrimitive.Root.displayName
 
+export type LabelProps = React.ComponentProps<typeof Label>
+
 export { Label }

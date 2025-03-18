@@ -1,15 +1,21 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
+import { useAppForm } from '@/components/ui/form'
+import { getHighlightedUsersSchema } from '@/entries/popup/components/sections/posts/highlighted-users/schema'
+import { useMutatePostsConfig, usePostsConfig } from '@/entries/popup/components/sections/posts/hooks'
 
-import {
-  type HighlightedUsersFormData,
-  highlightedUsersFormSchema
-} from '@/entries/popup/components/sections/posts/highlighted-users/schema'
+export const useHighlightedUsersForm = () => {
+  const { data } = usePostsConfig()
+  const { mutatePartial } = useMutatePostsConfig()
 
-export const useHighlightedUsersForm = () =>
-  useForm<HighlightedUsersFormData>({
-    resolver: zodResolver(highlightedUsersFormSchema),
+  return useAppForm({
     defaultValues: {
       highlightedUser: ''
+    },
+    validators: {
+      onSubmitAsync: getHighlightedUsersSchema(data)
+    },
+    onSubmit: ({ value: { highlightedUser }, formApi }) => {
+      mutatePartial({ highlightedUsers: [...data.highlightedUsers, highlightedUser] })
+      formApi.reset()
     }
   })
+}

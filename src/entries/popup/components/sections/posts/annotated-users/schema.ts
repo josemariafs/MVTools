@@ -1,20 +1,20 @@
 import { z } from 'zod'
 
-import { existUserValidator, noValueAbortEarly, postConfigConditionValidator } from '@/utils/zod'
+import type { PostsConfig } from '@/services/config'
+import { checkUser } from '@/services/media-vida'
+import { asyncValidator } from '@/utils/zod'
 
-export const annotatedUsersFormSchema = z
-  .object({
-    username: z
-      .string()
-      .transform(noValueAbortEarly('Introduce un usuario'))
-      .superRefine(
-        postConfigConditionValidator({
-          condition: (postConfig, value) => postConfig.userNotes.some(({ username }) => username.toLowerCase() === value.toLowerCase()),
-          message: 'El usuario ya está en la lista de anotados'
-        })
-      ),
-    note: z.string().transform(noValueAbortEarly('Introduce una nota'))
+const commonSchema = z.string().trim()
+
+export const getAnnotatedUsersSchema = (data: PostsConfig) =>
+  z.object({
+    username: commonSchema
+      .toLowerCase()
+      .nonempty('Introduce un nick de usuario')
+      .refine(
+        value => !data.userNotes.some(({ username }) => username.toLowerCase() === value),
+        'El usuario ya está en la lista de anotados'
+      )
+      .superRefine(asyncValidator(checkUser)),
+    note: commonSchema.nonempty('Introduce una nota')
   })
-  .superRefine(existUserValidator({ userKey: 'username', formField: 'username' }))
-
-export type AnnotatedUsersFormData = z.infer<typeof annotatedUsersFormSchema>

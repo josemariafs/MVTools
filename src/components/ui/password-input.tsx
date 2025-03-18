@@ -55,4 +55,6 @@ const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(({ classNam
 })
 PasswordInput.displayName = 'PasswordInput'
 
+export type PasswordInputProps = React.ComponentProps<typeof PasswordInput>
+
 export { PasswordInput }

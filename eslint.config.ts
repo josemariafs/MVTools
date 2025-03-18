@@ -59,6 +59,7 @@ export default [
       'react/prop-types': 'off',
       'react/no-unstable-nested-components': 'error',
       'react/no-deprecated': 'off',
+      'react/no-children-prop': 'off',
       // @typescript-eslint
       '@typescript-eslint/init-declarations': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',

@@ -24,4 +24,6 @@ const Switch = React.forwardRef<
 ))
 Switch.displayName = SwitchPrimitives.Root.displayName
 
+export type SwitchProps = React.ComponentProps<typeof Switch>
+
 export { Switch }

@@ -1,18 +1,19 @@
 import { z } from 'zod'
 
-import { existUserValidator, noValueAbortEarly, postConfigConditionValidator } from '@/utils/zod'
+import type { PostsConfig } from '@/services/config'
+import { checkUser } from '@/services/media-vida'
+import { asyncValidator } from '@/utils/zod'
 
-export const highlightedUsersFormSchema = z.object({
-  highlightedUser: z
-    .string()
-    .transform(noValueAbortEarly('Introduce un usuario'))
-    .superRefine(
-      postConfigConditionValidator({
-        condition: (postConfig, value) => postConfig.highlightedUsers.some(user => user.toLowerCase() === value.toLowerCase()),
-        message: 'El usuario ya está en la lista de destacados.'
-      })
-    )
-    .superRefine(existUserValidator())
-})
-
-export type HighlightedUsersFormData = z.infer<typeof highlightedUsersFormSchema>
+export const getHighlightedUsersSchema = (data: PostsConfig) =>
+  z.object({
+    highlightedUser: z
+      .string()
+      .trim()
+      .toLowerCase()
+      .nonempty('Introduce un nick de usuario')
+      .refine(
+        value => !data.userNotes.some(({ username }) => username.toLowerCase() === value),
+        'El usuario ya está en la lista de anotados'
+      )
+      .superRefine(asyncValidator(checkUser))
+  })

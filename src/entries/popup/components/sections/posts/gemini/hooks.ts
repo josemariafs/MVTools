@@ -1,19 +1,22 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-
-import { type GeminiFormData, geminiFormSchema } from '@/entries/popup/components/sections/posts/gemini/schema'
-import { usePostsConfig } from '@/entries/popup/components/sections/posts/hooks'
+import { useAppForm } from '@/components/ui/form'
+import { geminiFormSchema } from '@/entries/popup/components/sections/posts/gemini/schema'
+import { useMutatePostsConfig, usePostsConfig } from '@/entries/popup/components/sections/posts/hooks'
 
 export const useGeminiForm = () => {
+  const { mutatePartial } = useMutatePostsConfig({ toast: true })
   const {
     data: { geminiApiKey }
   } = usePostsConfig()
 
-  return useForm<GeminiFormData>({
-    resolver: zodResolver(geminiFormSchema),
-    reValidateMode: 'onSubmit',
+  return useAppForm({
     defaultValues: {
       geminiApiKey
+    },
+    validators: {
+      onSubmitAsync: geminiFormSchema
+    },
+    onSubmit: ({ value }) => {
+      mutatePartial(value)
     }
   })
 }

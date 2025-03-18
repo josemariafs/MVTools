@@ -1,9 +1,8 @@
 import { z } from 'zod'
 
-import { apiKeyValidator } from '@/utils/zod'
+import { checkApiKey } from '@/services/gemini'
+import { asyncValidator } from '@/utils/zod'
 
 export const geminiFormSchema = z.object({
-  geminiApiKey: z.string().superRefine(apiKeyValidator)
+  geminiApiKey: z.string().superRefine(asyncValidator(checkApiKey, true))
 })
-
-export type GeminiFormData = z.infer<typeof geminiFormSchema>

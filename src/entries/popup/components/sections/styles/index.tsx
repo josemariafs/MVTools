@@ -1,10 +1,10 @@
 import { Info } from 'lucide-react'
 
-import { Form } from '@/components/ui/form'
 import { Separator } from '@/components/ui/separator'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { FormSwitch } from '@/entries/popup/components/sections/styles/form-switch'
 import { useStylesConfigForm } from '@/entries/popup/components/sections/styles/hooks'
+
+import { MVPremiumLabel } from './mv-premium-label'
 
 export const StylesSection = () => {
   const form = useStylesConfigForm()
@@ -29,27 +29,47 @@ export const StylesSection = () => {
         </Tooltip>
       </header>
       <main className='items-center justify-between rounded-lg border p-3 shadow-sm'>
-        <Form {...form}>
-          <form className='space-y-2.5'>
-            <FormSwitch
-              name='premiumEnabled'
-              label='Activar estilos'
-              isMVPremium
-            />
-            <Separator />
-            <FormSwitch
-              name='premiumBgDisabled'
-              disabled={!form.getValues('premiumEnabled')}
-              label='Quitar fondo'
-              isMVPremium
-            />
-            <Separator />
-            <FormSwitch
-              name='ultraWideEnabled'
-              label='Modo Ultrawide'
-            />
-          </form>
-        </Form>
+        <form className='space-y-2.5'>
+          <form.AppField
+            name='premiumEnabled'
+            children={field => (
+              <field.FormItem className='flex items-center justify-between space-y-0'>
+                <field.FormLabel>
+                  <MVPremiumLabel label='Activar estilos' />
+                </field.FormLabel>
+                <field.FormControl>
+                  <field.FormSwitch onCheckedChange={() => form.handleSubmit()} />
+                </field.FormControl>
+              </field.FormItem>
+            )}
+          />
+          <Separator />
+          <form.AppField
+            name='premiumBgDisabled'
+            children={field => (
+              <field.FormItem className='flex items-center justify-between space-y-0'>
+                <field.FormLabel>
+                  <MVPremiumLabel label='Quitar fondo' />
+                </field.FormLabel>
+                <field.FormControl>
+                  <field.FormSwitch onCheckedChange={() => form.handleSubmit()} />
+                </field.FormControl>
+              </field.FormItem>
+            )}
+          />
+          <Separator />
+          <form.AppField
+            name='ultraWideEnabled'
+            children={field => (
+              <field.FormItem className='flex items-center justify-between space-y-0'>
+                <field.FormLabel>Modo Ultrawide</field.FormLabel>
+                <field.FormControl>
+                  <field.FormSwitch onCheckedChange={() => form.handleSubmit()} />
+                </field.FormControl>
+              </field.FormItem>
+            )}
+          />
+        </form>
       </main>
     </section>
   )

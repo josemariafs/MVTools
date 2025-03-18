@@ -1,22 +1,35 @@
-import { zodResolver } from '@hookform/resolvers/zod'
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
-import { useForm } from 'react-hook-form'
 
+import { useAppForm } from '@/components/ui/form'
 import { STORAGE_KEYS } from '@/constants'
 import { useMutate } from '@/entries/popup/hooks/use-mutate'
-import { getStylesConfig, setStylesConfig, type StylesConfig, stylesConfigSchema } from '@/services/config'
+import { getStylesConfig, setStylesConfig, stylesConfigSchema } from '@/services/config'
 
 export const stylesConfigQueryOptions = queryOptions({
   queryKey: [STORAGE_KEYS.STYLES_CONFIG],
   queryFn: getStylesConfig
 })
 
-export const useMutateStylesConfig = () => useMutate(stylesConfigQueryOptions.queryKey, setStylesConfig)
+const useMutateStylesConfig = () => useMutate(stylesConfigQueryOptions.queryKey, setStylesConfig)
 export const useStylesConfigForm = () => {
+  const { mutate } = useMutateStylesConfig()
   const { data } = useSuspenseQuery(stylesConfigQueryOptions)
 
-  return useForm<StylesConfig>({
-    resolver: zodResolver(stylesConfigSchema),
-    defaultValues: data
+  return useAppForm({
+    defaultValues: data,
+    validators: {
+      onSubmit: stylesConfigSchema
+    },
+    onSubmit: ({ value: { premiumBgDisabled, premiumEnabled, ...rest }, formApi }) => {
+      mutate({
+        ...rest,
+        premiumEnabled,
+        premiumBgDisabled: !premiumEnabled ? false : premiumBgDisabled
+      })
+
+      if (!premiumEnabled) {
+        formApi.setFieldValue('premiumBgDisabled', false)
+      }
+    }
   })
 }
