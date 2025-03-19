@@ -2,13 +2,13 @@ import { useState } from 'react'
 
 import { Portal } from '@/components/ui/portal'
 import { CSS_SELECTORS } from '@/constants'
-import { IgnoreUser } from '@/features/posts/components/users/ignore/ignore-user'
-import { usePostContext } from '@/features/posts/providers/post-context-provider'
+import { IgnoreUser } from '@/features/components/ignore-user'
+import { usePostContext } from '@/features/thread/providers/post-context-provider'
 import { useMutationObserver } from '@/hooks/use-mutation-observer'
 import { getPostRepliesElements, type PostReplyElements } from '@/services/media-vida'
 import { searchMutationListFor } from '@/utils/dom'
 
-export const IgnoreUsers = () => {
+export const Ignore = () => {
   const { postContainer, postAvatarContainer, postBodyContainer, author } = usePostContext()
   const [replies, setReplies] = useState<PostReplyElements[]>([])
 

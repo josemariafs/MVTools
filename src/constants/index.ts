@@ -13,6 +13,12 @@ export const URLS = {
   GEMINI_CREATE_API_KEY: 'https://aistudio.google.com/app/apikey?hl=es-419'
 } as const
 
+export const PATH_REGEXP = {
+  BLACKLIST: /^\/embed\/.*$/,
+  THREAD: /^\/foro\/[^/]+\/[^/]+$/,
+  PRIVATE_MESSAGES: /^\/mensajes(\/.*)?$/
+} satisfies Record<string, RegExp>
+
 export const STORAGE_KEYS = {
   STYLES_CONFIG: 'stylesConfig',
   GLOBAL_CONFIG: 'globalConfig'
@@ -51,6 +57,7 @@ export const CSS_SELECTORS = {
   PRIVATE_MESSAGES: {
     USERS_CONTAINER: '#pms > div.threads7.pm-col.c-side-alt > div.wpx > div > ul',
     USER_CONTAINER: 'li',
+    USER_CONTENT: 'a',
     USER_NAME: 'strong',
     TITLE: '#pms > div.msgs.pm-col.c-main-alt > div > h1',
     CONTENT_CONTAINER: '#pm-form'

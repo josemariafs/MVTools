@@ -3,8 +3,8 @@ import { useMemo } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { useGlobalConfigStore } from '@/features/posts/hooks/use-global-config-store'
-import { usePostContext } from '@/features/posts/providers/post-context-provider'
+import { useGlobalConfigStore } from '@/features/thread/hooks/use-global-config-store'
+import { usePostContext } from '@/features/thread/providers/post-context-provider'
 import { useShadowRootContext } from '@/providers/shadow-root-provider'
 
 export const Notes = () => {

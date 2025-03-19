@@ -1,15 +1,15 @@
 import { useMemo } from 'react'
 
 import { Portal } from '@/components/ui/portal'
-import { Button } from '@/features/posts/components/ai/button'
-import { Content } from '@/features/posts/components/ai/content'
-import { Highlight } from '@/features/posts/components/users/highlight'
-import { IgnoreUsers } from '@/features/posts/components/users/ignore'
-import { Notes } from '@/features/posts/components/users/notes'
-import { PostContextProvider } from '@/features/posts/providers/post-context-provider'
+import { Button } from '@/features/thread/components/ai/button'
+import { Content } from '@/features/thread/components/ai/content'
+import { Highlight } from '@/features/thread/components/users/highlight'
+import { Ignore } from '@/features/thread/components/users/ignore'
+import { Notes } from '@/features/thread/components/users/notes'
+import { PostContextProvider } from '@/features/thread/providers/post-context-provider'
 import { getPostsElements } from '@/services/media-vida'
 
-export const Posts = () => {
+export const Thread = () => {
   const posts = useMemo(getPostsElements, [])
 
   return posts.map(post => (
@@ -18,7 +18,7 @@ export const Posts = () => {
       {...post}
     >
       <Portal root={post.postContainer}>
-        <IgnoreUsers />
+        <Ignore />
       </Portal>
       <Portal root={post.postAvatarContainer}>
         <Notes />

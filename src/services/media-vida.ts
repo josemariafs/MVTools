@@ -1,6 +1,6 @@
 import { CSS_SELECTORS, HTML_ATTRIBUTES } from '@/constants'
 
-const { POSTS, REPLIES } = CSS_SELECTORS
+const { POSTS, REPLIES, PRIVATE_MESSAGES } = CSS_SELECTORS
 const { DATA_AUTOR } = HTML_ATTRIBUTES
 
 export interface PostElements {
@@ -52,6 +52,32 @@ export const getPostRepliesElements = (postRepliesContainers: HTMLElement[]): Po
     replyBodyContainer: replyContainer.querySelector<HTMLElement>(REPLIES.BODY_CONTAINER)!,
     replyPostControlsContainer: replyContainer.querySelector<HTMLElement>(REPLIES.POST_CONTROLS_CONTAINER)
   }))
+}
+
+export interface PrivateMessagesElements {
+  userMessagesElements: Array<{
+    author: string
+    userContainer: HTMLElement
+    userContent: HTMLElement
+  }>
+  author: string
+  title: HTMLElement
+  contentContainer: HTMLElement
+}
+
+export const getPrivateMessagesElements = (): PrivateMessagesElements => {
+  const usersContainer = document.querySelector<HTMLElement>(PRIVATE_MESSAGES.USERS_CONTAINER)!
+  const title = document.querySelector<HTMLElement>(PRIVATE_MESSAGES.TITLE)!
+  return {
+    userMessagesElements: Array.from(usersContainer.querySelectorAll<HTMLElement>(PRIVATE_MESSAGES.USER_CONTAINER)).map(user => ({
+      author: user.querySelector<HTMLElement>(PRIVATE_MESSAGES.USER_NAME)!.textContent!,
+      userContainer: user,
+      userContent: user.querySelector<HTMLElement>(PRIVATE_MESSAGES.USER_CONTENT)!
+    })),
+    author: title.innerText,
+    title,
+    contentContainer: document.querySelector<HTMLElement>(PRIVATE_MESSAGES.CONTENT_CONTAINER)!
+  }
 }
 
 export const checkUser = async (nick: string) => {

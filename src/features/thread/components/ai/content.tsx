@@ -3,9 +3,9 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { AI_MIN_POST_LENGTH } from '@/constants'
-import { useAnalyzeComment } from '@/features/posts/hooks/use-analyze-comment'
-import { useGlobalConfigStore } from '@/features/posts/hooks/use-global-config-store'
-import { usePostContext } from '@/features/posts/providers/post-context-provider'
+import { useAnalyzeComment } from '@/features/thread/hooks/use-analyze-comment'
+import { useGlobalConfigStore } from '@/features/thread/hooks/use-global-config-store'
+import { usePostContext } from '@/features/thread/providers/post-context-provider'
 import { ACTIONS } from '@/services/gemini'
 
 export const Content = () => {

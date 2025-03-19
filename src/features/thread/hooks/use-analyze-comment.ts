@@ -1,6 +1,6 @@
 import { queryOptions, useQuery } from '@tanstack/react-query'
 
-import { usePostContext } from '@/features/posts/providers/post-context-provider'
+import { usePostContext } from '@/features/thread/providers/post-context-provider'
 import { type Action, analyzeComment, type AnalyzeCommentParams } from '@/services/gemini'
 
 interface QueryOptionsParams extends AnalyzeCommentParams {

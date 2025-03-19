@@ -1,9 +1,13 @@
 import browser from 'webextension-polyfill'
 
-import type { StorageKey } from '@/constants'
+import { PATH_REGEXP, type StorageKey } from '@/constants'
 import { INIT_STORAGE_ACTIONS, UPDATE_STORAGE_ACTIONS } from '@/entries/contentScript/primary/actions'
 import { getAllStorageConfigs } from '@/services/config'
-import { isStorageKey, objectEntries } from '@/utils/asserts'
+import { isStorageKey, isUrlPath, objectEntries } from '@/utils/asserts'
+
+if (!isUrlPath(PATH_REGEXP.BLACKLIST)) {
+  loadContent()
+}
 
 browser.storage.onChanged.addListener((changes, areaName) => {
   if (areaName !== 'sync') return
@@ -15,7 +19,9 @@ browser.storage.onChanged.addListener((changes, areaName) => {
     })
 })
 
-const storageConfigs = await getAllStorageConfigs()
-objectEntries(storageConfigs).forEach(([storageKey, value]) => {
-  INIT_STORAGE_ACTIONS[storageKey](value)
-})
+async function loadContent() {
+  const storageConfigs = await getAllStorageConfigs()
+  objectEntries(storageConfigs).forEach(([storageKey, value]) => {
+    INIT_STORAGE_ACTIONS[storageKey](value)
+  })
+}
