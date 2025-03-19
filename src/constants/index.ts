@@ -16,7 +16,8 @@ export const URLS = {
 export const PATH_REGEXP = {
   BLACKLIST: /^\/embed\/.*$/,
   THREAD: /^\/foro\/[^/]+\/[^/]+$/,
-  PRIVATE_MESSAGES: /^\/mensajes(\/.*)?$/
+  PRIVATE_MESSAGES: /^\/mensajes(\/.*)?$/,
+  PROFILE: /^\/id(\/.*)?$/
 } satisfies Record<string, RegExp>
 
 export const STORAGE_KEYS = {
