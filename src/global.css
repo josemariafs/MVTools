@@ -68,10 +68,7 @@
   body {
     @apply bg-background text-foreground;
   }
-  :host {
+  :host > html {
     @apply font-inherit;
-    & > html {
-      @apply font-inherit;
-    }
   }
 }
