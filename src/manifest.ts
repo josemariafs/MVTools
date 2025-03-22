@@ -28,8 +28,7 @@ const sharedManifest: SharedManifest = {
       js: ['src/entries/contentScript/primary/main.ts'],
       css: ['src/entries/contentScript/primary/premium-styles.css'],
       matches: allowedUrls,
-      all_frames: true,
-      run_at: 'document_start'
+      all_frames: true
     }
   ],
   icons: {

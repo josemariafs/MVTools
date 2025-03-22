@@ -3,7 +3,7 @@ import { MODULES, renderApp } from '@/features/main'
 import { globalConfigSchema, stylesConfigSchema } from '@/services/config'
 import { updateGlobalConfigStore } from '@/store/global-config-store'
 import { isUrlPath, objectEntries } from '@/utils/asserts'
-import { toggleClass } from '@/utils/dom'
+import { toggleBodyClass } from '@/utils/dom'
 import { devLog } from '@/utils/logging'
 
 const { MV_PREMIUM, MV_PREMIUM_WITHOUT_BG, MV_ULTRA_WIDE } = CSS_CLASS_NAMES
@@ -13,9 +13,9 @@ const toggleStylesActions = (value: unknown, from: string) => {
   if (!validStylesConfig.success) return
 
   objectEntries(validStylesConfig.data).forEach(([key, value]) => {
-    key === 'premiumEnabled' && toggleClass(MV_PREMIUM, value)
-    key === 'premiumBgDisabled' && toggleClass(MV_PREMIUM_WITHOUT_BG, value)
-    key === 'ultraWideEnabled' && toggleClass(MV_ULTRA_WIDE, value)
+    key === 'premiumEnabled' && toggleBodyClass(MV_PREMIUM, value)
+    key === 'premiumBgDisabled' && toggleBodyClass(MV_PREMIUM_WITHOUT_BG, value)
+    key === 'ultraWideEnabled' && toggleBodyClass(MV_ULTRA_WIDE, value)
   })
   devLog.log(`Styles config ${from}:`, validStylesConfig.data)
 }
