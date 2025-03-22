@@ -16,30 +16,30 @@ interface Props extends PropsWithChildren {
 }
 
 export const Portal = ({ children, root, where, styles, theme }: Props) => {
-  const [shadowRoot, setShadowRoot] = useState<HTMLElement | null>(null)
+  const [appRoot, setAppRoot] = useState<HTMLElement | null>(null)
 
   useEffect(() => {
     if (!root) return
     renderContent({
       cssPaths: import.meta.PLUGIN_WEB_EXT_CHUNK_CSS_PATHS,
-      render: setShadowRoot,
+      render: setAppRoot,
       container: root,
       where,
       styles
     })
   }, [root])
 
-  if (!shadowRoot) return null
+  if (!appRoot) return null
 
   return createPortal(
     <ThemeProvider
-      root={shadowRoot}
+      root={appRoot}
       defaultTheme={theme ?? 'light'}
     >
       <TooltipProvider>
-        <ShadowRootContextProvider shadowRoot={shadowRoot}>{children}</ShadowRootContextProvider>
+        <ShadowRootContextProvider appRoot={appRoot}>{children}</ShadowRootContextProvider>
       </TooltipProvider>
     </ThemeProvider>,
-    shadowRoot
+    appRoot
   )
 }

@@ -41,7 +41,7 @@ export const renderContent = async ({
   const shadowRoot = appContainer.attachShadow({
     mode: import.meta.env.MODE === 'development' ? 'open' : 'closed'
   })
-  const appRoot = document.createElement('html')
+  const appRoot = document.createElement('body')
 
   if (import.meta.hot) {
     const { addViteStyleTarget } = await import('@samrum/vite-plugin-web-extension/client')
@@ -56,7 +56,7 @@ export const renderContent = async ({
   render(appRoot)
 }
 
-export const toggleClass = (className: CssClassName, enable: boolean) => {
+export const toggleBodyClass = (className: CssClassName, enable: boolean) => {
   const bodyClassList = document.body.classList
   enable ? bodyClassList.add(className) : bodyClassList.remove(className)
 }

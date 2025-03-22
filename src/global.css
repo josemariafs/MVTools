@@ -32,6 +32,7 @@
   }
   :host {
     --background: transparent;
+    --foreground: inherit;
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -67,8 +68,5 @@
   }
   body {
     @apply bg-background text-foreground;
-  }
-  :host > html {
-    @apply font-inherit;
   }
 }

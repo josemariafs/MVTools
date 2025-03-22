@@ -1,7 +1,7 @@
 import { createContext, type PropsWithChildren, useContext, useMemo } from 'react'
 
 interface ShadowRootData {
-  shadowRoot: HTMLElement
+  appRoot: HTMLElement
 }
 
 const ShadowRootContext = createContext<ShadowRootData | null>(null)

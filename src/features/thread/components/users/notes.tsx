@@ -9,7 +9,7 @@ import { useShadowRootContext } from '@/providers/shadow-root-provider'
 
 export const Notes = () => {
   const userNotes = useGlobalConfigStore(state => state.userNotes)
-  const { shadowRoot } = useShadowRootContext()
+  const { appRoot } = useShadowRootContext()
   const { author } = usePostContext()
   const userNote = useMemo(
     () => userNotes.find(({ username }) => username.toLowerCase() === author.toLowerCase())?.note,
@@ -31,7 +31,7 @@ export const Notes = () => {
         </Button>
       </TooltipTrigger>
       <TooltipContent
-        container={shadowRoot}
+        container={appRoot}
         side='bottom'
         className='max-w-96 text-balance text-left text-base'
       >
