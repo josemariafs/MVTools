@@ -1,5 +1,3 @@
-import '@/global.css'
-
 import { type PropsWithChildren, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 
@@ -20,6 +18,7 @@ export const Portal = ({ children, root, where, styles, theme }: Props) => {
 
   useEffect(() => {
     if (!root) return
+    import('@/global.css')
     renderContent({
       cssPaths: import.meta.PLUGIN_WEB_EXT_CHUNK_CSS_PATHS,
       render: setAppRoot,
