@@ -1,3 +1,5 @@
+import '../../enableDevHmr'
+
 import browser from 'webextension-polyfill'
 
 import { PATH_REGEXP, type StorageKey } from '@/constants'
