@@ -23,6 +23,8 @@ export const AnalyzeReports = () => {
     refetch()
   }, [refetch])
 
+  if (!apiKey) return null
+
   return (
     <Tooltip>
       <Button
