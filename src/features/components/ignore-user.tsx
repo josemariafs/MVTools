@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { useGlobalConfigStore } from '@/features/thread/hooks/use-global-config-store'
+import { useGlobalConfigStore } from '@/features/hooks/use-global-config-store'
 import { toggleStyle } from '@/utils/dom'
 import { cn } from '@/utils/tailwind'
 

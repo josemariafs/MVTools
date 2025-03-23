@@ -1,8 +1,7 @@
 import { useMemo } from 'react'
 
 import { Portal } from '@/components/ui/portal'
-import { Button } from '@/features/thread/components/ai/button'
-import { Content } from '@/features/thread/components/ai/content'
+import { IA } from '@/features/thread/components/ia'
 import { Highlight } from '@/features/thread/components/users/highlight'
 import { Ignore } from '@/features/thread/components/users/ignore'
 import { Notes } from '@/features/thread/components/users/notes'
@@ -24,16 +23,7 @@ export const Thread = () => {
         <Notes />
       </Portal>
       <Highlight />
-      <Portal
-        root={post.postButtonsContainer}
-        where='afterbegin'
-        styles={{ listStyle: 'none', float: 'left', padding: '0', position: 'relative', marginRight: '2px' }}
-      >
-        <Button />
-      </Portal>
-      <Portal root={post.commentContainer}>
-        <Content />
-      </Portal>
+      <IA />
     </PostContextProvider>
   ))
 }

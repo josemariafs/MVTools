@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { useGlobalConfigStore } from '@/features/thread/hooks/use-global-config-store'
+import { useGlobalConfigStore } from '@/features/hooks/use-global-config-store'
 import { usePostContext } from '@/features/thread/providers/post-context-provider'
 import { useShadowRootContext } from '@/providers/shadow-root-provider'
 

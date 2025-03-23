@@ -37,11 +37,12 @@ export const renderContent = async ({
   styles?: Partial<CSSStyleDeclaration>
 }) => {
   const appContainer = document.createElement('div')
+  const appRoot = document.createElement('body')
   Object.assign(appContainer.style, styles)
+
   const shadowRoot = appContainer.attachShadow({
     mode: import.meta.env.MODE === 'development' ? 'open' : 'closed'
   })
-  const appRoot = document.createElement('body')
 
   if (import.meta.hot) {
     const { addViteStyleTarget } = await import('@samrum/vite-plugin-web-extension/client')

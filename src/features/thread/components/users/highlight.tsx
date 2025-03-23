@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react'
 
-import { useGlobalConfigStore } from '@/features/thread/hooks/use-global-config-store'
+import { useGlobalConfigStore } from '@/features/hooks/use-global-config-store'
 import { usePostContext } from '@/features/thread/providers/post-context-provider'
 import { toggleStyle } from '@/utils/dom'
 

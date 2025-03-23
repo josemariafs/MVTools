@@ -17,7 +17,8 @@ export const PATH_REGEXP = {
   BLACKLIST: /^\/embed\/.*$/,
   THREAD: /^\/foro\/[^/]+\/[^/]+$/,
   PRIVATE_MESSAGES: /^\/mensajes(\/.*)?$/,
-  PROFILE: /^\/id(\/.*)?$/
+  PROFILE: /^\/id(\/.*)?$/,
+  REPORTS: /^\/foro\/reportes\.php(\?.*)?$/
 } satisfies Record<string, RegExp>
 
 export const STORAGE_KEYS = {
@@ -62,6 +63,13 @@ export const CSS_SELECTORS = {
     USER_NAME: 'strong',
     TITLE: '#pms > div.msgs.pm-col.c-main-alt > div > h1',
     CONTENT_CONTAINER: '#pm-form'
+  },
+  REPORTS: {
+    TITLE: '#title > div > h1',
+    REPORTS_CONTAINER: '.mod-panel',
+    REPORT_CONTAINER: '.entry',
+    REPORT_BUTTONS_CONTAINER: '.side-options.c-side',
+    REPORT_COMMENT_CONTAINER: '.msg'
   }
 } as const
 

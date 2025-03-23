@@ -216,7 +216,8 @@
         color: #bfc6cc;
     }
 
-    /* Content Background */
+    /* AiMessage Background */
+    /*noinspection CssUnknownTarget*/
 
     #content {
         background-position-y: 0;

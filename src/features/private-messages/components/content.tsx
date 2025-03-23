@@ -1,7 +1,7 @@
 import { type Dispatch, type SetStateAction, useEffect, useMemo } from 'react'
 
+import { useGlobalConfigStore } from '@/features/hooks/use-global-config-store'
 import { usePrivateMessageContext } from '@/features/private-messages/providers/private-message-context-provider'
-import { useGlobalConfigStore } from '@/features/thread/hooks/use-global-config-store'
 import { toggleStyle } from '@/utils/dom'
 
 const elementStyles = {

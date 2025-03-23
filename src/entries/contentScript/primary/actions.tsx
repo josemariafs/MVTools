@@ -43,6 +43,12 @@ const globalConfigActions = (value: unknown) => {
   if (isUrlPath(PATH_REGEXP.PRIVATE_MESSAGES)) {
     devLog.log('Rendering Private Messages with:', validGlobalConfig.data.ignoredUsers)
     renderApp(MODULES.PRIVATE_MESSAGES)
+    return
+  }
+
+  if (isUrlPath(PATH_REGEXP.REPORTS)) {
+    devLog.log('Rendering Reports with:', validGlobalConfig.data.geminiApiKey)
+    renderApp(MODULES.REPORTS)
   }
 }
 

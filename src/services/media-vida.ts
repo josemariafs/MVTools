@@ -80,6 +80,35 @@ export const getPrivateMessagesElements = (): PrivateMessagesElements => {
   }
 }
 
+export interface ReportElements {
+  reportElements: Array<{
+    buttonContainer: HTMLElement
+    commentContainer: HTMLElement
+    comment: string
+    id: number
+  }>
+  title: HTMLElement
+}
+
+export const getReportsElements = (): ReportElements => {
+  const reportsContainer = document.querySelector<HTMLElement>(CSS_SELECTORS.REPORTS.REPORTS_CONTAINER)!
+  return {
+    reportElements: Array.from(reportsContainer.querySelectorAll<HTMLElement>(CSS_SELECTORS.REPORTS.REPORT_CONTAINER)).map(
+      (report, index) => {
+        const commentContainer = report.querySelector<HTMLElement>(CSS_SELECTORS.REPORTS.REPORT_COMMENT_CONTAINER)!
+        return {
+          buttonContainer: report.querySelector<HTMLElement>(CSS_SELECTORS.REPORTS.REPORT_BUTTONS_CONTAINER)!
+            .lastElementChild! as HTMLElement,
+          commentContainer,
+          comment: commentContainer.innerText,
+          id: index
+        }
+      }
+    ),
+    title: document.querySelector<HTMLElement>(CSS_SELECTORS.REPORTS.TITLE)!
+  }
+}
+
 export const checkUser = async (nick: string) => {
   const response = await fetch('https://www.mediavida.com/usuarios/action/joincheck.php', {
     method: 'POST',
