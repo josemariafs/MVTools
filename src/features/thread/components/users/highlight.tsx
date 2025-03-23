@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react'
 
-import { useGlobalConfigStore } from '@/features/hooks/use-global-config-store'
-import { usePostContext } from '@/features/thread/providers/post-context-provider'
+import { useGlobalConfigStore } from '@/features/shared/hooks/use-global-config-store'
+import { usePostContext } from '@/features/thread/hooks/use-post'
 import { toggleStyle } from '@/utils/dom'
 
 const styles = { 'border-left': '10px #de6e17 solid', 'padding-left': '10px' }

@@ -1,7 +1,7 @@
 import { type Dispatch, type SetStateAction, useEffect, useMemo } from 'react'
 
-import { useGlobalConfigStore } from '@/features/hooks/use-global-config-store'
-import { usePrivateMessageContext } from '@/features/private-messages/providers/private-message-context-provider'
+import { usePrivateMessage } from '@/features/private-messages/hooks/use-private-message'
+import { useGlobalConfigStore } from '@/features/shared/hooks/use-global-config-store'
 import { toggleStyle } from '@/utils/dom'
 
 const elementStyles = {
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const Content = ({ showContent, setShowContent }: Props) => {
-  const { author, title, contentContainer } = usePrivateMessageContext()
+  const { author, title, contentContainer } = usePrivateMessage()
   const [ignoredUsers, showIgnoredUsers] = useGlobalConfigStore(state => [state.ignoredUsers, state.showIgnoredUsers])
   const isIgnoredUser = useMemo(
     () => ignoredUsers.map(user => user.toLowerCase()).includes(author.toLowerCase()) && !showContent,

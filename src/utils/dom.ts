@@ -66,6 +66,7 @@ export const toggleStyle = (elements: HTMLElement | HTMLElement[], enable: boole
   if (!Array.isArray(elements)) elements = [elements]
 
   elements.forEach(element => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- We need to set style properties dynamically
     enable ? Object.assign(element.style, style) : Object.keys(style).forEach(key => (element.style[key as any] = ''))
   })
 }

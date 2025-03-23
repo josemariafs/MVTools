@@ -1,11 +1,11 @@
 import { Brain } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-import { Portal } from '@/components/ui/portal'
 import { AI_MIN_POST_LENGTH } from '@/constants'
-import { AiButton, type AiButtonProps } from '@/features/components/ai-button'
-import { AiMessage } from '@/features/components/ai-message'
-import { usePostContext } from '@/features/thread/providers/post-context-provider'
+import { Portal } from '@/features/shared/components/portal'
+import { AiButton, type AiButtonProps } from '@/features/shared/components/ui/ai-button'
+import { AiMessage } from '@/features/shared/components/ui/ai-message'
+import { usePostContext } from '@/features/thread/hooks/use-post'
 import { ACTIONS } from '@/services/gemini'
 
 const AnalyzePostButton = (props: AiButtonProps) => (

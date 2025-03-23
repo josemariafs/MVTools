@@ -1,8 +1,8 @@
 import type { ReactElement } from 'react'
 
 import type { ButtonProps } from '@/components/ui/button'
-import { useAnalyzeComment } from '@/features/hooks/use-analyze-comment'
-import { useGlobalConfigStore } from '@/features/hooks/use-global-config-store'
+import { useAnalyzeComment } from '@/features/shared/hooks/use-analyze-comment'
+import { useGlobalConfigStore } from '@/features/shared/hooks/use-global-config-store'
 import type { Action } from '@/services/gemini'
 
 export interface AiButtonProps {

@@ -1,6 +1,6 @@
-import { useAppForm } from '@/components/ui/form'
 import { geminiFormSchema } from '@/entries/popup/components/sections/posts/gemini/schema'
 import { useGlobalConfig, useMutateGlobalConfig } from '@/entries/popup/components/sections/posts/hooks'
+import { useAppForm } from '@/hooks/use-form'
 
 export const useGeminiForm = () => {
   const { mutatePartial } = useMutateGlobalConfig({ toast: true })

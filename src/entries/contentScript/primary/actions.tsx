@@ -1,5 +1,5 @@
-import { CSS_CLASS_NAMES, PATH_REGEXP, STORAGE_KEYS, type StorageKey } from '@/constants'
-import { MODULES, renderApp } from '@/features/main'
+import { CSS_CLASS_NAMES, type Module, MODULES, PATH_REGEXP, STORAGE_KEYS, type StorageKey } from '@/constants'
+import { renderApp } from '@/entries/contentScript/primary'
 import { globalConfigSchema, stylesConfigSchema } from '@/services/config'
 import { updateGlobalConfigStore } from '@/store/global-config-store'
 import { isUrlPath, objectEntries } from '@/utils/asserts'
@@ -34,21 +34,19 @@ const globalConfigActions = (value: unknown) => {
 
   updateGlobalConfigStore(validGlobalConfig.data)
 
-  if (isUrlPath(PATH_REGEXP.THREAD)) {
-    devLog.log('Rendering Thread with:', validGlobalConfig.data)
-    renderApp(MODULES.THREAD)
-    return
+  const pathToModuleMap: Record<string, Module> = {
+    [PATH_REGEXP.THREAD.source]: MODULES.THREAD,
+    [PATH_REGEXP.PRIVATE_MESSAGES.source]: MODULES.PRIVATE_MESSAGES,
+    [PATH_REGEXP.REPORTS.source]: MODULES.REPORTS,
+    [PATH_REGEXP.CLONES.source]: MODULES.CLONES
   }
 
-  if (isUrlPath(PATH_REGEXP.PRIVATE_MESSAGES)) {
-    devLog.log('Rendering Private Messages with:', validGlobalConfig.data.ignoredUsers)
-    renderApp(MODULES.PRIVATE_MESSAGES)
-    return
-  }
-
-  if (isUrlPath(PATH_REGEXP.REPORTS)) {
-    devLog.log('Rendering Reports with:', validGlobalConfig.data.geminiApiKey)
-    renderApp(MODULES.REPORTS)
+  for (const [path, module] of objectEntries(pathToModuleMap)) {
+    if (isUrlPath(RegExp(path))) {
+      devLog.log(`Rendering ${module} with:`, validGlobalConfig.data)
+      renderApp(module)
+      return
+    }
   }
 }
 

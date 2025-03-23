@@ -1,10 +1,12 @@
 import '@/entries/enableDevHmr'
-import '@/global.css'
+import '@/entries/contentScript/global.css'
 
 import type { ReactNode } from 'react'
 import ReactDOM, { type Root } from 'react-dom/client'
 
-import { PrivateMessages } from '@/features/private-messages/index'
+import { type Module, MODULES } from '@/constants'
+import { Clones } from '@/features/clones'
+import { PrivateMessages } from '@/features/private-messages'
 import { Reports } from '@/features/reports'
 import { Thread } from '@/features/thread'
 import { DefaultQueryClientProvider } from '@/providers/query-client-provider'
@@ -12,18 +14,11 @@ import { DefaultQueryClientProvider } from '@/providers/query-client-provider'
 let root: Root | null = null
 let appRoot: HTMLElement | null = null
 
-export const MODULES = {
-  THREAD: 'thread',
-  PRIVATE_MESSAGES: 'private-messages',
-  REPORTS: 'reports'
-} as const
-
-type Module = (typeof MODULES)[keyof typeof MODULES]
-
 const MODULE_COMPONENT: Record<Module, ReactNode> = {
   [MODULES.THREAD]: <Thread />,
   [MODULES.PRIVATE_MESSAGES]: <PrivateMessages />,
-  [MODULES.REPORTS]: <Reports />
+  [MODULES.REPORTS]: <Reports />,
+  [MODULES.CLONES]: <Clones />
 } as const
 
 export const renderApp = (module: Module) => {

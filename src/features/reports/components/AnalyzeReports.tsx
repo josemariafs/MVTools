@@ -3,17 +3,17 @@ import { useCallback } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { useAnalyzeComments } from '@/features/hooks/use-analyze-comment'
-import { useGlobalConfigStore } from '@/features/hooks/use-global-config-store'
-import { useReportContext } from '@/features/reports/providers/reports-context-provider'
-import { useShadowRootContext } from '@/providers/shadow-root-provider'
+import { useReport } from '@/features/reports/hooks/use-report'
+import { useAnalyzeComments } from '@/features/shared/hooks/use-analyze-comment'
+import { useGlobalConfigStore } from '@/features/shared/hooks/use-global-config-store'
+import { useShadowRoot } from '@/features/shared/hooks/use-shadow-root'
 import { ACTIONS } from '@/services/gemini'
 import { cn } from '@/utils/tailwind'
 
 export const AnalyzeReports = () => {
-  const { appRoot } = useShadowRootContext()
+  const { appRoot } = useShadowRoot()
   const apiKey = useGlobalConfigStore(state => state.geminiApiKey)
-  const { reportElements } = useReportContext()
+  const { reportElements } = useReport()
   const { pending, refetch } = useAnalyzeComments({
     apiKey,
     comments: reportElements.map(({ comment, id }) => ({ comment, id, action: ACTIONS.RULES }))

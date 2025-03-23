@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 
-import { Portal } from '@/components/ui/portal'
 import { Report } from '@/features/reports/components/Report'
-import { ReportContextProvider } from '@/features/reports/providers/reports-context-provider'
+import { ReportProvider } from '@/features/reports/providers/report-provider'
+import { Portal } from '@/features/shared/components/portal'
 import { getReportsElements } from '@/services/media-vida'
 
 import { AnalyzeReports } from './components/AnalyzeReports'
@@ -11,7 +11,7 @@ export const Reports = () => {
   const reportsElements = useMemo(getReportsElements, [])
 
   return (
-    <ReportContextProvider {...reportsElements}>
+    <ReportProvider {...reportsElements}>
       <Portal
         root={reportsElements.title}
         styles={{ display: 'inline-block', marginBottom: '10px' }}
@@ -24,6 +24,6 @@ export const Reports = () => {
           {...report}
         />
       ))}
-    </ReportContextProvider>
+    </ReportProvider>
   )
 }

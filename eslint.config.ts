@@ -6,6 +6,7 @@ import tanstackQuery from '@tanstack/eslint-plugin-query'
 import loveConfig from 'eslint-config-love'
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 import reactPlugin from 'eslint-plugin-react'
+import reactRefresh from 'eslint-plugin-react-refresh'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
 import tailwind from 'eslint-plugin-tailwindcss'
 import globals from 'globals'
@@ -22,6 +23,7 @@ export default [
   { ignores: [...ignoreFiles, ...includeIgnoreFile(gitignorePath).ignores!] },
   loveConfig,
   reactPlugin.configs.flat.recommended,
+  reactRefresh.configs.vite,
   ...tanstackQuery.configs['flat/recommended'],
   ...tailwind.configs['flat/recommended'],
   eslintPluginPrettierRecommended,

@@ -18,7 +18,8 @@ export const PATH_REGEXP = {
   THREAD: /^\/foro\/[^/]+\/[^/]+$/,
   PRIVATE_MESSAGES: /^\/mensajes(\/.*)?$/,
   PROFILE: /^\/id(\/.*)?$/,
-  REPORTS: /^\/foro\/reportes\.php(\?.*)?$/
+  REPORTS: /^\/foro\/reportes\.php(\?.*)?$/,
+  CLONES: /^\/usuarios\/clones\.php(\?.*)?$/
 } satisfies Record<string, RegExp>
 
 export const STORAGE_KEYS = {
@@ -80,3 +81,12 @@ export const DEFAULT_GLOBAL_CONFIG: GlobalConfig = {
   userNotes: [],
   highlightedUsers: []
 }
+
+export const MODULES = {
+  THREAD: 'thread',
+  PRIVATE_MESSAGES: 'private-messages',
+  REPORTS: 'reports',
+  CLONES: 'clones'
+} as const
+
+export type Module = (typeof MODULES)[keyof typeof MODULES]

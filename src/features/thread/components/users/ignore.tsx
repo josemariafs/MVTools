@@ -1,10 +1,10 @@
 import { useState } from 'react'
 
-import { Portal } from '@/components/ui/portal'
 import { CSS_SELECTORS } from '@/constants'
-import { IgnoreUser } from '@/features/components/ignore-user'
-import { useMutationObserver } from '@/features/hooks/use-mutation-observer'
-import { usePostContext } from '@/features/thread/providers/post-context-provider'
+import { Portal } from '@/features/shared/components/portal'
+import { IgnoreUser } from '@/features/shared/components/ui/ignore-user'
+import { useMutationObserver } from '@/features/shared/hooks/use-mutation-observer'
+import { usePostContext } from '@/features/thread/hooks/use-post'
 import { getPostRepliesElements, type PostReplyElements } from '@/services/media-vida'
 import { searchMutationListFor } from '@/utils/dom'
 

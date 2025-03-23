@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react'
 import { Toaster as Sonner } from 'sonner'
 
-import { useTheme } from '@/providers/theme-provider'
+import { useTheme } from '@/hooks/use-theme'
 
 type ToasterProps = ComponentProps<typeof Sonner>
 

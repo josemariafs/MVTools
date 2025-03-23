@@ -1,14 +1,10 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import type { ReactNode } from 'react'
+import type { PropsWithChildren } from 'react'
 
-interface Props {
-  children: ReactNode
-}
+import { defaultQueryClient } from '@/constants/tanstack'
 
-export const defaultQueryClient = new QueryClient()
-
-export const DefaultQueryClientProvider = ({ children }: Props) => {
+export const DefaultQueryClientProvider = ({ children }: PropsWithChildren) => {
   return (
     <QueryClientProvider client={defaultQueryClient}>
       {children}

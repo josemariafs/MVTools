@@ -1,18 +1,18 @@
 import { useMemo } from 'react'
 
-import { Portal } from '@/components/ui/portal'
+import { Portal } from '@/features/shared/components/portal'
 import { IA } from '@/features/thread/components/ia'
 import { Highlight } from '@/features/thread/components/users/highlight'
 import { Ignore } from '@/features/thread/components/users/ignore'
 import { Notes } from '@/features/thread/components/users/notes'
-import { PostContextProvider } from '@/features/thread/providers/post-context-provider'
+import { PostProvider } from '@/features/thread/providers/post-provider'
 import { getPostsElements } from '@/services/media-vida'
 
 export const Thread = () => {
   const posts = useMemo(getPostsElements, [])
 
   return posts.map(post => (
-    <PostContextProvider
+    <PostProvider
       key={post.id}
       {...post}
     >
@@ -24,6 +24,6 @@ export const Thread = () => {
       </Portal>
       <Highlight />
       <IA />
-    </PostContextProvider>
+    </PostProvider>
   ))
 }

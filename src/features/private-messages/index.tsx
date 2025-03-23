@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useState } from 'react'
 
-import { Portal } from '@/components/ui/portal'
-import { IgnoreUser } from '@/features/components/ignore-user'
 import { Content } from '@/features/private-messages/components/content'
-import { PrivateMessageContextProvider } from '@/features/private-messages/providers/private-message-context-provider'
+import { PrivateMessageProvider } from '@/features/private-messages/providers/private-message-provider'
+import { Portal } from '@/features/shared/components/portal'
+import { IgnoreUser } from '@/features/shared/components/ui/ignore-user'
 import { getPrivateMessagesElements } from '@/services/media-vida'
 
 export const PrivateMessages = () => {
@@ -15,7 +15,7 @@ export const PrivateMessages = () => {
   }, [])
 
   return (
-    <PrivateMessageContextProvider {...privateMessages}>
+    <PrivateMessageProvider {...privateMessages}>
       {privateMessages.userMessagesElements.map(privateMessage => (
         <Portal
           key={privateMessage.author}
@@ -39,6 +39,6 @@ export const PrivateMessages = () => {
           showContent={showContent}
         />
       </Portal>
-    </PrivateMessageContextProvider>
+    </PrivateMessageProvider>
   )
 }

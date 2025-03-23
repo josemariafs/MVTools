@@ -1,14 +1,15 @@
-import '../enableDevHmr'
-import '@/global.css'
+import '@/entries/enableDevHmr'
+import '@/entries/popup/global.css'
 
 import { Suspense } from '@suspensive/react'
 import ReactDOM from 'react-dom/client'
 
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { defaultQueryClient } from '@/constants/tanstack'
 import { globalConfigQueryOptions } from '@/entries/popup/components/sections/posts/hooks'
 import { stylesConfigQueryOptions } from '@/entries/popup/components/sections/styles/hooks'
-import { defaultQueryClient, DefaultQueryClientProvider } from '@/providers/query-client-provider'
+import { DefaultQueryClientProvider } from '@/providers/query-client-provider'
 import { ThemeProvider } from '@/providers/theme-provider'
 
 import App from './App'

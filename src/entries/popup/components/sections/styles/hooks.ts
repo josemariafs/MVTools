@@ -1,8 +1,8 @@
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 
-import { useAppForm } from '@/components/ui/form'
 import { STORAGE_KEYS } from '@/constants'
 import { useMutate } from '@/entries/popup/hooks/use-mutate'
+import { useAppForm } from '@/hooks/use-form'
 import { getStylesConfig, setStylesConfig, stylesConfigSchema } from '@/services/config'
 
 export const stylesConfigQueryOptions = queryOptions({

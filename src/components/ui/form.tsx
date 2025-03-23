@@ -1,17 +1,15 @@
 import { Slot } from '@radix-ui/react-slot'
-import { createFormHook, createFormHookContexts, type StandardSchemaV1Issue } from '@tanstack/react-form'
+import type { StandardSchemaV1Issue } from '@tanstack/react-form'
 import type { LucideIcon } from 'lucide-react'
 import React from 'react'
 
 import { Input, type InputProps } from '@/components/ui/input'
 import { PasswordInput, type PasswordInputProps } from '@/components/ui/password-input'
 import { Switch, type SwitchProps } from '@/components/ui/switch'
-import { cn } from '@/utils/tailwind'
+import { useFieldContext } from '@/hooks/use-form'
+import { buttonVariants, cn } from '@/utils/tailwind'
 
-import { buttonVariants } from './button'
 import { Label, type LabelProps } from './label'
-
-const { fieldContext, formContext, useFieldContext } = createFormHookContexts()
 
 interface FormItemContextValues {
   id: string
@@ -33,7 +31,7 @@ const useFormItem = () => {
 }
 
 type FormItemProps = React.ComponentProps<'div'>
-const FormItem: React.FC<FormItemProps> = ({ className, ...props }) => {
+export const FormItem: React.FC<FormItemProps> = ({ className, ...props }) => {
   const field = useFieldContext()
   const id = React.useId()
   const formItemContextValues = React.useMemo<FormItemContextValues>(
@@ -60,7 +58,7 @@ const FormItem: React.FC<FormItemProps> = ({ className, ...props }) => {
   )
 }
 
-const FormLabel: React.FC<LabelProps> = ({ className, ...props }) => {
+export const FormLabel: React.FC<LabelProps> = ({ className, ...props }) => {
   const { hasError, formItemId } = useFormItem()
   return (
     <Label
@@ -72,7 +70,7 @@ const FormLabel: React.FC<LabelProps> = ({ className, ...props }) => {
 }
 
 type FormControlProps = React.ComponentProps<typeof Slot>
-const FormControl: React.FC<FormControlProps> = ({ ...props }) => {
+export const FormControl: React.FC<FormControlProps> = ({ ...props }) => {
   const { hasError, formItemId } = useFormItem()
 
   return (
@@ -86,7 +84,7 @@ const FormControl: React.FC<FormControlProps> = ({ ...props }) => {
 }
 
 type FormMessageProps = React.ComponentProps<'p'>
-const FormMessage: React.FC<FormMessageProps> = ({ className, ...props }) => {
+export const FormMessage: React.FC<FormMessageProps> = ({ className, ...props }) => {
   const { hasError, errors, formMessageId } = useFormItem()
 
   return hasError ? (
@@ -101,7 +99,7 @@ const FormMessage: React.FC<FormMessageProps> = ({ className, ...props }) => {
 }
 
 type FormDescriptionProps = React.ComponentProps<'p'>
-const FormDescription: React.FC<FormDescriptionProps> = ({ className, ...props }) => {
+export const FormDescription: React.FC<FormDescriptionProps> = ({ className, ...props }) => {
   const { formDescriptionId } = useFormItem()
 
   return (
@@ -117,7 +115,7 @@ type FormFieldWithIconProps = React.ComponentProps<'div'> & {
   Icon: LucideIcon
 }
 
-const FormFieldWithIcon: React.FC<FormFieldWithIconProps> = ({ className, Icon, children, ...props }) => {
+export const FormFieldWithIcon: React.FC<FormFieldWithIconProps> = ({ className, Icon, children, ...props }) => {
   const { hasError, id, name } = useFormItem()
 
   return (
@@ -144,7 +142,7 @@ const FormFieldWithIcon: React.FC<FormFieldWithIconProps> = ({ className, Icon, 
   )
 }
 
-const FormInput = ({ className, ...props }: Omit<InputProps, 'value' | 'onChange'>) => {
+export const FormInput = ({ className, ...props }: Omit<InputProps, 'value' | 'onChange'>) => {
   const field = useFieldContext<string>()
 
   return (
@@ -158,7 +156,7 @@ const FormInput = ({ className, ...props }: Omit<InputProps, 'value' | 'onChange
   )
 }
 
-const FormPasswordInput = (props: Omit<PasswordInputProps, 'value' | 'onChange'>) => {
+export const FormPasswordInput = (props: Omit<PasswordInputProps, 'value' | 'onChange'>) => {
   const field = useFieldContext<string>()
 
   return (
@@ -172,7 +170,7 @@ const FormPasswordInput = (props: Omit<PasswordInputProps, 'value' | 'onChange'>
   )
 }
 
-const FormSwitch = ({ onCheckedChange, ...rest }: Omit<SwitchProps, 'checked'>) => {
+export const FormSwitch = ({ onCheckedChange, ...rest }: Omit<SwitchProps, 'checked'>) => {
   const field = useFieldContext<boolean>()
 
   return (
@@ -186,20 +184,3 @@ const FormSwitch = ({ onCheckedChange, ...rest }: Omit<SwitchProps, 'checked'>) 
     />
   )
 }
-
-export const {  useAppForm } = createFormHook({
-  fieldComponents: {
-    FormItem,
-    FormLabel,
-    FormControl,
-    FormMessage,
-    FormDescription,
-    FormFieldWithIcon,
-    FormInput,
-    FormPasswordInput,
-    FormSwitch
-  },
-  formComponents: {},
-  fieldContext,
-  formContext
-})

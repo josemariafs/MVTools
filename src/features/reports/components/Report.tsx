@@ -1,9 +1,9 @@
 import { Brain } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-import { Portal } from '@/components/ui/portal'
-import { AiButton, type AiButtonProps } from '@/features/components/ai-button'
-import { AiMessage } from '@/features/components/ai-message'
+import { Portal } from '@/features/shared/components/portal'
+import { AiButton, type AiButtonProps } from '@/features/shared/components/ui/ai-button'
+import { AiMessage } from '@/features/shared/components/ui/ai-message'
 import { ACTIONS } from '@/services/gemini'
 import type { ReportElements } from '@/services/media-vida'
 import { cn } from '@/utils/tailwind'

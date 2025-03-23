@@ -2,8 +2,9 @@ import { type PropsWithChildren, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 import { TooltipProvider } from '@/components/ui/tooltip'
-import { ShadowRootContextProvider } from '@/providers/shadow-root-provider'
-import { type Theme, ThemeProvider } from '@/providers/theme-provider'
+import { ShadowRootProvider } from '@/features/shared/providers/shadow-root-provider'
+import type { Theme } from '@/providers/theme-context'
+import { ThemeProvider } from '@/providers/theme-provider'
 import { renderContent } from '@/utils/dom'
 
 interface Props extends PropsWithChildren {
@@ -35,7 +36,7 @@ export const Portal = ({ children, root, where, styles, theme }: Props) => {
       defaultTheme={theme ?? 'light'}
     >
       <TooltipProvider>
-        <ShadowRootContextProvider appRoot={appRoot}>{children}</ShadowRootContextProvider>
+        <ShadowRootProvider appRoot={appRoot}>{children}</ShadowRootProvider>
       </TooltipProvider>
     </ThemeProvider>,
     appRoot

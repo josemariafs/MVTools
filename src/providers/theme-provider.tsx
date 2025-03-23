@@ -1,30 +1,12 @@
-import { createContext, type ReactNode, useContext, useEffect, useState } from 'react'
+import { type ReactNode, useEffect, useMemo, useState } from 'react'
 
-const THEMES = {
-  DARK: 'dark',
-  LIGHT: 'light',
-  SYSTEM: 'system'
-} as const
-
-export type Theme = (typeof THEMES)[keyof typeof THEMES]
+import { type Theme, ThemeContext } from '@/providers/theme-context'
 
 interface ThemeProviderProps {
   children: ReactNode
   defaultTheme?: Theme
   root?: HTMLElement
 }
-
-interface ThemeProviderState {
-  theme: Theme
-  setTheme: (theme: Theme) => void
-}
-
-const initialState: ThemeProviderState = {
-  theme: THEMES.SYSTEM,
-  setTheme: () => null
-}
-
-const ThemeProviderContext = createContext<ThemeProviderState | null>(initialState)
 
 export function ThemeProvider({ children, defaultTheme = 'system', root = window.document.documentElement, ...props }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(defaultTheme)
@@ -42,25 +24,13 @@ export function ThemeProvider({ children, defaultTheme = 'system', root = window
     root.classList.add(theme)
   }, [theme])
 
-  const value = {
-    theme,
-    setTheme
-  }
-
+  const value = useMemo(() => ({ theme, setTheme }), [theme, setTheme])
   return (
-    <ThemeProviderContext.Provider
+    <ThemeContext
       {...props}
       value={value}
     >
       {children}
-    </ThemeProviderContext.Provider>
+    </ThemeContext>
   )
-}
-
-export const useTheme = () => {
-  const context = useContext(ThemeProviderContext)
-
-  if (context == null) throw new Error('useTheme must be used within a ThemeProvider')
-
-  return context
 }
