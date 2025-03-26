@@ -23,6 +23,10 @@ const applyStyleToShadow = async (cssPath: string, shadowRoot: ShadowRoot): Prom
   shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, styleSheet]
 }
 
+export const getAssetUrl = (assetPath: string) => {
+  return new URL(assetPath, import.meta.url).href
+}
+
 export const renderContent = async ({
   render,
   where = 'beforeend',

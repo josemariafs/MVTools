@@ -109,6 +109,58 @@ export const getReportsElements = (): ReportElements => {
   }
 }
 
+export interface CloneElements {
+  mainContainer: HTMLElement
+  contentContainer: HTMLElement
+  clonesHeader?: string
+  cantTouchThis: boolean
+  currentQueriesText: string
+  clonesList: Array<{
+    href: string
+    nick: string
+    text: string
+    badge: string | undefined
+  }>
+}
+
+const getCloneBadge = (clone: HTMLElement) => {
+  const type = clone.querySelector('strong')?.textContent
+  if (!type) return
+
+  const BADGE_TYPES = {
+    b: 'BANNED',
+    p: 'Sanción activa',
+    d: 'Cuenta desactivada'
+  } as const
+
+  return BADGE_TYPES[type as keyof typeof BADGE_TYPES]
+}
+
+export const getClonesElements = (): CloneElements => {
+  const mainContainer = document.getElementById('main')!
+  const contentContainer = mainContainer.querySelector<HTMLElement>('.wrw')!
+  const boxContainers = Array.from<HTMLElement>(mainContainer.querySelectorAll<HTMLElement>('.box'))
+  const currentQueriesText = boxContainers[0]?.innerText ?? contentContainer.innerText
+
+  return {
+    mainContainer,
+    contentContainer,
+    currentQueriesText,
+    cantTouchThis: currentQueriesText.includes("Can't touch this"),
+    clonesHeader: boxContainers[1]?.querySelector('h3')?.innerText,
+    clonesList: Array.from<HTMLElement>(mainContainer.querySelectorAll('ul > li')).map(clone => {
+      const anchor = clone.querySelector('a')!
+      const badge = getCloneBadge(clone)
+      return {
+        href: anchor.href,
+        nick: anchor.textContent!,
+        text: badge ? clone.innerText.trim().slice(-1) : clone.innerText,
+        badge: getCloneBadge(clone)
+      }
+    })
+  }
+}
+
 export const checkUser = async (nick: string) => {
   const response = await fetch('https://www.mediavida.com/usuarios/action/joincheck.php', {
     method: 'POST',

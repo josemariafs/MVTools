@@ -19,13 +19,7 @@ export const Portal = ({ children, root, where, styles, theme }: Props) => {
 
   useEffect(() => {
     if (!root) return
-    renderContent({
-      cssPaths: import.meta.PLUGIN_WEB_EXT_CHUNK_CSS_PATHS,
-      render: setAppRoot,
-      container: root,
-      where,
-      styles
-    })
+    renderContent({ cssPaths: import.meta.PLUGIN_WEB_EXT_CHUNK_CSS_PATHS, render: setAppRoot, container: root, where, styles })
   }, [root])
 
   if (!appRoot) return null
