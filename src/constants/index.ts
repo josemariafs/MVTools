@@ -71,6 +71,15 @@ export const CSS_SELECTORS = {
     REPORT_CONTAINER: '.entry',
     REPORT_BUTTONS_CONTAINER: '.side-options.c-side',
     REPORT_COMMENT_CONTAINER: '.msg'
+  },
+  CLONES: {
+    MAIN_CONTAINER: '#main',
+    CONTENT_CONTAINER: '.wrw',
+    BOX_CONTAINER: '.box',
+    HEADER: 'h3',
+    LIST: 'ul > li',
+    CLONE_ANCHOR: 'a',
+    CLONE_BADGE: 'strong'
   }
 } as const
 

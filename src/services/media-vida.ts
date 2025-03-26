@@ -1,6 +1,6 @@
 import { CSS_SELECTORS, HTML_ATTRIBUTES } from '@/constants'
 
-const { POSTS, REPLIES, PRIVATE_MESSAGES } = CSS_SELECTORS
+const { POSTS, REPLIES, PRIVATE_MESSAGES, REPORTS, CLONES } = CSS_SELECTORS
 const { DATA_AUTOR } = HTML_ATTRIBUTES
 
 export interface PostElements {
@@ -91,21 +91,18 @@ export interface ReportElements {
 }
 
 export const getReportsElements = (): ReportElements => {
-  const reportsContainer = document.querySelector<HTMLElement>(CSS_SELECTORS.REPORTS.REPORTS_CONTAINER)!
+  const reportsContainer = document.querySelector<HTMLElement>(REPORTS.REPORTS_CONTAINER)!
   return {
-    reportElements: Array.from(reportsContainer.querySelectorAll<HTMLElement>(CSS_SELECTORS.REPORTS.REPORT_CONTAINER)).map(
-      (report, index) => {
-        const commentContainer = report.querySelector<HTMLElement>(CSS_SELECTORS.REPORTS.REPORT_COMMENT_CONTAINER)!
-        return {
-          buttonContainer: report.querySelector<HTMLElement>(CSS_SELECTORS.REPORTS.REPORT_BUTTONS_CONTAINER)!
-            .lastElementChild! as HTMLElement,
-          commentContainer,
-          comment: commentContainer.innerText,
-          id: index
-        }
+    reportElements: Array.from(reportsContainer.querySelectorAll<HTMLElement>(REPORTS.REPORT_CONTAINER)).map((report, index) => {
+      const commentContainer = report.querySelector<HTMLElement>(REPORTS.REPORT_COMMENT_CONTAINER)!
+      return {
+        buttonContainer: report.querySelector<HTMLElement>(REPORTS.REPORT_BUTTONS_CONTAINER)!.lastElementChild! as HTMLElement,
+        commentContainer,
+        comment: commentContainer.innerText,
+        id: index
       }
-    ),
-    title: document.querySelector<HTMLElement>(CSS_SELECTORS.REPORTS.TITLE)!
+    }),
+    title: document.querySelector<HTMLElement>(REPORTS.TITLE)!
   }
 }
 
@@ -124,7 +121,7 @@ export interface CloneElements {
 }
 
 const getCloneBadge = (clone: HTMLElement) => {
-  const type = clone.querySelector('strong')?.textContent
+  const type = clone.querySelector(CLONES.CLONE_BADGE)?.textContent
   if (!type) return
 
   const BADGE_TYPES = {
@@ -137,9 +134,9 @@ const getCloneBadge = (clone: HTMLElement) => {
 }
 
 export const getClonesElements = (): CloneElements => {
-  const mainContainer = document.getElementById('main')!
-  const contentContainer = mainContainer.querySelector<HTMLElement>('.wrw')!
-  const boxContainers = Array.from<HTMLElement>(mainContainer.querySelectorAll<HTMLElement>('.box'))
+  const mainContainer = document.querySelector<HTMLElement>(CLONES.MAIN_CONTAINER)!
+  const contentContainer = mainContainer.querySelector<HTMLElement>(CLONES.CONTENT_CONTAINER)!
+  const boxContainers = Array.from<HTMLElement>(mainContainer.querySelectorAll<HTMLElement>(CLONES.BOX_CONTAINER))
   const currentQueriesText = boxContainers[0]?.innerText ?? contentContainer.innerText
 
   return {
@@ -147,9 +144,9 @@ export const getClonesElements = (): CloneElements => {
     contentContainer,
     currentQueriesText,
     cantTouchThis: currentQueriesText.includes("Can't touch this"),
-    clonesHeader: boxContainers[1]?.querySelector('h3')?.innerText,
-    clonesList: Array.from<HTMLElement>(mainContainer.querySelectorAll('ul > li')).map(clone => {
-      const anchor = clone.querySelector('a')!
+    clonesHeader: boxContainers[1]?.querySelector(CLONES.HEADER)?.innerText,
+    clonesList: Array.from<HTMLElement>(mainContainer.querySelectorAll(CLONES.LIST)).map(clone => {
+      const anchor = clone.querySelector(CLONES.CLONE_ANCHOR)!
       const badge = getCloneBadge(clone)
       return {
         href: anchor.href,
