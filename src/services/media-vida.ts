@@ -148,10 +148,12 @@ export const getClonesElements = (): CloneElements => {
     clonesList: Array.from<HTMLElement>(mainContainer.querySelectorAll(CLONES.LIST)).map(clone => {
       const anchor = clone.querySelector(CLONES.CLONE_ANCHOR)!
       const badge = getCloneBadge(clone)
+      const nick = anchor.textContent!
+      const textWithoutNick = clone.innerText.trim().replace(nick, '')
       return {
         href: anchor.href,
-        nick: anchor.textContent!,
-        text: badge ? clone.innerText.trim().slice(-1) : clone.innerText,
+        nick,
+        text: badge ? textWithoutNick.slice(0, -1) : textWithoutNick,
         badge: getCloneBadge(clone)
       }
     })

@@ -3,14 +3,15 @@ import { useEffect, useMemo } from 'react'
 import mcGif from '@/assets/mc.gif'
 import { Portal } from '@/features/shared/components/portal'
 import { getClonesElements } from '@/services/media-vida'
-import { getAssetUrl } from '@/utils/dom'
+import { getAssetUrl, toggleStyle } from '@/utils/dom'
 import { cn } from '@/utils/tailwind'
 
 export const Clones = () => {
   const { clonesHeader, clonesList, contentContainer, mainContainer, currentQueriesText, cantTouchThis } = useMemo(getClonesElements, [])
 
   useEffect(() => {
-    contentContainer.remove()
+    const isDevMode = import.meta.env.MODE !== 'production'
+    isDevMode ? toggleStyle(contentContainer, true, { display: 'none' }) : contentContainer.remove()
   }, [])
 
   return (
