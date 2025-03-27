@@ -120,16 +120,16 @@ export interface CloneElements {
   }>
 }
 
-type CloneBadgeType = 'b' | 'p' | 'd'
+type CloneBadgeType = 'b' | 'p' | 'd' | (string & {})
 
 interface CloneBadge {
   text: string
   twBg: string
 }
 
-const getCloneBadge = (clone: HTMLElement) => {
+const getCloneBadge = (clone: HTMLElement): CloneBadge | undefined => {
   const type = clone.querySelector(CLONES.CLONE_BADGE)?.textContent as CloneBadgeType | undefined
-  if (!type) return
+  if (type == null) return
 
   const BADGE_TYPES: Record<CloneBadgeType, CloneBadge> = {
     b: {
@@ -143,10 +143,14 @@ const getCloneBadge = (clone: HTMLElement) => {
     d: {
       text: 'Cuenta desactivada',
       twBg: 'bg-[#2d2d2d]'
+    },
+    unknown: {
+      text: 'Desconocido',
+      twBg: 'bg-[#2d2d2d]'
     }
   } as const
 
-  return BADGE_TYPES[type]
+  return BADGE_TYPES[type] ?? BADGE_TYPES.unknown
 }
 
 export const getClonesElements = (): CloneElements => {
