@@ -116,21 +116,37 @@ export interface CloneElements {
     href: string
     nick: string
     text: string
-    badge: string | undefined
+    badge: CloneBadge | undefined
   }>
 }
 
+type CloneBadgeType = 'b' | 'p' | 'd'
+
+interface CloneBadge {
+  text: string
+  twBg: string
+}
+
 const getCloneBadge = (clone: HTMLElement) => {
-  const type = clone.querySelector(CLONES.CLONE_BADGE)?.textContent
+  const type = clone.querySelector(CLONES.CLONE_BADGE)?.textContent as CloneBadgeType | undefined
   if (!type) return
 
-  const BADGE_TYPES = {
-    b: 'BANNED',
-    p: 'Sanción activa',
-    d: 'Cuenta desactivada'
+  const BADGE_TYPES: Record<CloneBadgeType, CloneBadge> = {
+    b: {
+      text: 'BANNED',
+      twBg: 'bg-[#af2727]'
+    },
+    p: {
+      text: 'Sanción activa',
+      twBg: 'bg-[#34588f]'
+    },
+    d: {
+      text: 'Cuenta desactivada',
+      twBg: 'bg-[#2d2d2d]'
+    }
   } as const
 
-  return BADGE_TYPES[type as keyof typeof BADGE_TYPES]
+  return BADGE_TYPES[type]
 }
 
 export const getClonesElements = (): CloneElements => {

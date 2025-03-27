@@ -37,7 +37,7 @@ export const Clones = () => {
             >
               {nick}
             </a>{' '}
-            {text} {badge && <span className='rounded-[5px] bg-[#2d2d2d] px-[5px] py-px'>{badge}</span>}
+            {text} {badge && <span className={`${badge.twBg} rounded-[5px] px-[5px] py-px`}>{badge.text}</span>}
           </li>
         ))}
       </ul>
