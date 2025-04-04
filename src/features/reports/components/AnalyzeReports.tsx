@@ -35,7 +35,7 @@ export const AnalyzeReports = () => {
           'disabled:pointer-events-none disabled:opacity-50',
           'shadow-[0 2px 0 rgba(0,0,0,.03)]'
         ])}
-        disabled={pending}
+        disabled={pending || !reportElements.length}
         onClick={handleClick}
       >
         Analizar reportes
