@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react'
+import { toast } from 'sonner'
 
 import { TableBodyRows } from '@/features/favorites/components/table-body-rows'
 import { TableHeaderCell } from '@/features/favorites/components/table-header-cell'
@@ -14,8 +15,14 @@ export const Favorites = () => {
   const form = useAppForm({
     defaultValues,
     onSubmit: async ({ value: { items } }) => {
-      await removeFavoriteThreads(items, favoritesElements.token)
-      location.reload()
+      try {
+        await removeFavoriteThreads(items, favoritesElements.token)
+        location.reload()
+      } catch (error) {
+        toast.error('No se han podido eliminar los favoritos', {
+          description: error instanceof Error ? error.message : 'Error desconocido'
+        })
+      }
     }
   })
 

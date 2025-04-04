@@ -23,6 +23,14 @@ const applyStyleToShadow = async (cssPath: string, shadowRoot: ShadowRoot): Prom
   shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, styleSheet]
 }
 
+export const appendSonnerStyles = (shadowRoot: ShadowRoot) => {
+  document.head.querySelectorAll('style').forEach(styleEl => {
+    if (styleEl.textContent?.includes('[data-sonner-toaster]')) {
+      shadowRoot.append(styleEl)
+    }
+  })
+}
+
 export const getAssetUrl = (assetPath: string) => {
   return new URL(assetPath, import.meta.url).href
 }
@@ -35,7 +43,7 @@ export const renderContent = async ({
   cssPaths
 }: {
   cssPaths: string[]
-  render: (appRoot: HTMLElement) => void
+  render: (appRoot: HTMLElement, shadowRoot: ShadowRoot) => void
   container?: HTMLElement
   where?: InsertPosition
   styles?: Partial<CSSStyleDeclaration>
@@ -58,7 +66,7 @@ export const renderContent = async ({
 
   shadowRoot.appendChild(appRoot)
   container.insertAdjacentElement(where, appContainer)
-  render(appRoot)
+  render(appRoot, shadowRoot)
 }
 
 export const toggleBodyClass = (className: CssClassName, enable: boolean) => {

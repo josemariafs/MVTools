@@ -6,10 +6,12 @@ import { Highlight } from '@/features/thread/components/users/highlight'
 import { Ignore } from '@/features/thread/components/users/ignore'
 import { Notes } from '@/features/thread/components/users/notes'
 import { PostProvider } from '@/features/thread/providers/post-provider'
+import { useTheme } from '@/hooks/use-theme'
 import { getPostsElements } from '@/services/media-vida'
 
 export const Thread = () => {
   const posts = useMemo(getPostsElements, [])
+  useTheme('light')
 
   return posts.map(post => (
     <PostProvider

@@ -1,4 +1,4 @@
-import { type MouseEventHandler, useCallback } from 'react'
+import { type MouseEvent, useCallback } from 'react'
 
 import { SubmitButton } from '@/features/favorites/components/unfav-button/submit-button'
 import { useFavorites } from '@/features/favorites/hooks/use-favorites'
@@ -17,10 +17,10 @@ export const UnfavButton = withForm({
   render: ({ form }) => {
     const { buttonsContainer } = useFavorites()
 
-    const handleSubmit: MouseEventHandler<HTMLButtonElement> = useCallback(e => {
+    const handleSubmit = useCallback(async (e: MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation()
       e.preventDefault()
-      form.handleSubmit()
+      await form.handleSubmit()
     }, [])
 
     return (
@@ -28,7 +28,6 @@ export const UnfavButton = withForm({
         selector={state => ({ items: state.values.items, isSubmitting: state.isSubmitting })}
         children={({ items, isSubmitting }) => (
           <Portal
-            theme='dark'
             root={buttonsContainer}
             styles={styles}
           >

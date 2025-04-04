@@ -1,5 +1,5 @@
 import { Loader2, Trash2 } from 'lucide-react'
-import { type MouseEventHandler, useCallback, useState } from 'react'
+import { type MouseEvent, useCallback, useState } from 'react'
 
 import {
   AlertDialog,
@@ -17,7 +17,7 @@ import { useShadowRoot } from '@/features/shared/hooks/use-shadow-root'
 import { cn } from '@/utils/tailwind'
 
 interface ButtonProps {
-  onSubmit: MouseEventHandler<HTMLButtonElement>
+  onSubmit: (e: MouseEvent<HTMLButtonElement>) => Promise<void>
   items: string[]
   isSubmitting: boolean
 }
@@ -26,9 +26,9 @@ export const SubmitButton = ({ onSubmit, items, isSubmitting }: ButtonProps) => 
   const [open, setOpen] = useState(false)
   const { appRoot } = useShadowRoot()
 
-  const handleSubmit: MouseEventHandler<HTMLButtonElement> = useCallback(e => {
+  const handleSubmit = useCallback(async (e: MouseEvent<HTMLButtonElement>) => {
+    await onSubmit(e)
     setOpen(false)
-    onSubmit(e)
   }, [])
 
   return (
@@ -47,7 +47,7 @@ export const SubmitButton = ({ onSubmit, items, isSubmitting }: ButtonProps) => 
           ])}
           disabled={!items.length}
         >
-          {isSubmitting ? <Loader2 className='animate-spin' /> : <Trash2 size={14} />} <span>Eliminar favoritos</span>
+          <Trash2 size={14} /> Eliminar favoritos
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent container={appRoot}>
@@ -59,8 +59,8 @@ export const SubmitButton = ({ onSubmit, items, isSubmitting }: ButtonProps) => 
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleSubmit}>Continue</AlertDialogAction>
+          <AlertDialogCancel disabled={isSubmitting}>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleSubmit}>Continue {isSubmitting && <Loader2 className='animate-spin' />}</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
