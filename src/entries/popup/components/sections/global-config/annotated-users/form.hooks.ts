@@ -1,6 +1,6 @@
 import { getAnnotatedUsersSchema } from '@/entries/popup/components/sections/global-config/annotated-users/schema'
+import { useAppForm } from '@/entries/popup/hooks/use-form'
 import { useGlobalConfig, useMutateGlobalConfig } from '@/entries/popup/hooks/use-global-config'
-import { useAppForm } from '@/hooks/use-form'
 
 export const useAnnotatedUsersForm = () => {
   const { data } = useGlobalConfig()

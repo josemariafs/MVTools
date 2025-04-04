@@ -6,7 +6,7 @@ import React from 'react'
 import { Input, type InputProps } from '@/components/ui/input'
 import { PasswordInput, type PasswordInputProps } from '@/components/ui/password-input'
 import { Switch, type SwitchProps } from '@/components/ui/switch'
-import { useFieldContext } from '@/hooks/use-form'
+import { useFieldContext } from '@/entries/popup/hooks/use-form'
 import { buttonVariants, cn } from '@/utils/tailwind'
 
 import { Label, type LabelProps } from './label'
