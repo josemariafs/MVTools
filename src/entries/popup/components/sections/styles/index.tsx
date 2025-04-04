@@ -2,7 +2,7 @@ import { Info } from 'lucide-react'
 
 import { Separator } from '@/components/ui/separator'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { useStylesConfigForm } from '@/entries/popup/components/sections/styles/hooks'
+import { useStylesConfigForm } from '@/entries/popup/components/sections/styles/index.hooks'
 
 import { MVPremiumLabel } from './mv-premium-label'
 

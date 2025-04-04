@@ -1,5 +1,5 @@
-import { getHighlightedUsersSchema } from '@/entries/popup/components/sections/posts/highlighted-users/schema'
-import { useGlobalConfig, useMutateGlobalConfig } from '@/entries/popup/components/sections/posts/hooks'
+import { getHighlightedUsersSchema } from '@/entries/popup/components/sections/global-config/highlighted-users/schema'
+import { useGlobalConfig, useMutateGlobalConfig } from '@/entries/popup/hooks/use-global-config'
 import { useAppForm } from '@/hooks/use-form'
 
 export const useHighlightedUsersForm = () => {

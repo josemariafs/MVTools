@@ -19,7 +19,8 @@ export const PATH_REGEXP = {
   PRIVATE_MESSAGES: /^\/mensajes(\/.*)?$/,
   PROFILE: /^\/id(\/.*)?$/,
   REPORTS: /^\/foro\/reportes\.php(\?.*)?$/,
-  CLONES: /^\/usuarios\/clones\.php(\?.*)?$/
+  CLONES: /^\/usuarios\/clones\.php(\?.*)?$/,
+  FAVORITES: /^\/foro\/favoritos/
 } satisfies Record<string, RegExp>
 
 export const STORAGE_KEYS = {
@@ -80,6 +81,13 @@ export const CSS_SELECTORS = {
     LIST: 'ul > li',
     CLONE_ANCHOR: 'a',
     CLONE_BADGE: 'strong'
+  },
+  FAVOURITES: {
+    TOKEN: '#token',
+    BUTTONS_CONTAINER: '.cf.mpad.mg-b',
+    TABLE_HEADER_ROW: '#tablatemas > thead > tr',
+    TABLE_BODY_ROW: '#tablatemas > tbody > tr',
+    TABLE_FOOTER_ROW_CELL: '#tablatemas > tfoot > tr > td'
   }
 } as const
 
@@ -95,7 +103,8 @@ export const MODULES = {
   THREAD: 'thread',
   PRIVATE_MESSAGES: 'private-messages',
   REPORTS: 'reports',
-  CLONES: 'clones'
+  CLONES: 'clones',
+  FAVORITES: 'favorites'
 } as const
 
 export type Module = (typeof MODULES)[keyof typeof MODULES]

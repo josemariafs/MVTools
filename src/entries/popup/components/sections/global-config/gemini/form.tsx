@@ -3,7 +3,7 @@ import { type FormEvent, useCallback } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { URLS } from '@/constants'
-import { useGeminiForm } from '@/entries/popup/components/sections/posts/gemini/hooks'
+import { useGeminiForm } from '@/entries/popup/components/sections/global-config/gemini/form.hooks'
 
 export const Form = () => {
   const form = useGeminiForm()

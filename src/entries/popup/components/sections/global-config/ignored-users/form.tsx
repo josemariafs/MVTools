@@ -2,12 +2,12 @@ import { Loader2, UserRoundPlus } from 'lucide-react'
 import { type FormEvent, useCallback } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { useHighlightedUsersForm } from '@/entries/popup/components/sections/posts/highlighted-users/hooks'
-import { useGlobalConfig, useMutateGlobalConfig } from '@/entries/popup/components/sections/posts/hooks'
-import { UserList } from '@/entries/popup/components/sections/posts/user-list'
+import { useIgnoredUsersForm } from '@/entries/popup/components/sections/global-config/ignored-users/form.hooks'
+import { UserList } from '@/entries/popup/components/sections/global-config/user-list'
+import { useGlobalConfig, useMutateGlobalConfig } from '@/entries/popup/hooks/use-global-config'
 
 export const Form = () => {
-  const form = useHighlightedUsersForm()
+  const form = useIgnoredUsersForm()
   const { data } = useGlobalConfig()
   const { mutatePartial } = useMutateGlobalConfig()
 
@@ -18,17 +18,17 @@ export const Form = () => {
   }, [])
 
   const handleDelete = (user: string) => {
-    const newHighlightedUsers = data.highlightedUsers.filter(highlightedUser => highlightedUser !== user)
-    mutatePartial({ highlightedUsers: newHighlightedUsers })
+    const newIgnoredUsers = data.ignoredUsers.filter(ignoredUser => ignoredUser !== user)
+    mutatePartial({ ignoredUsers: newIgnoredUsers })
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <form.AppField
-        name='highlightedUser'
+        name='ignoredUser'
         children={field => (
           <field.FormItem className='flex w-full gap-2.5 space-y-0'>
-            <field.FormLabel className='min-w-28 pt-2.5'>Destacar usuario</field.FormLabel>
+            <field.FormLabel className='min-w-28 pt-2.5'>Ignorar usuario</field.FormLabel>
             <div className='w-full space-y-2'>
               <div className='flex w-full gap-2.5'>
                 <div className='w-full space-y-1'>
@@ -56,7 +56,7 @@ export const Form = () => {
                 />
               </div>
               <UserList
-                users={data.highlightedUsers}
+                users={data.ignoredUsers}
                 getKey={username => username}
                 onDelete={handleDelete}
                 renderItem={username => username}

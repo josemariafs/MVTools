@@ -3,7 +3,7 @@ import { Info } from 'lucide-react'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { useGlobalConfig, useMutateGlobalConfig } from '@/entries/popup/components/sections/posts/hooks'
+import { useGlobalConfig, useMutateGlobalConfig } from '@/entries/popup/hooks/use-global-config'
 
 export const ShowIgnoredUsersSwitch = () => {
   const { data } = useGlobalConfig()

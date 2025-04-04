@@ -1,6 +1,6 @@
 import { CSS_SELECTORS, HTML_ATTRIBUTES } from '@/constants'
 
-const { POSTS, REPLIES, PRIVATE_MESSAGES, REPORTS, CLONES } = CSS_SELECTORS
+const { POSTS, REPLIES, PRIVATE_MESSAGES, REPORTS, CLONES, FAVOURITES } = CSS_SELECTORS
 const { DATA_AUTOR } = HTML_ATTRIBUTES
 
 export interface PostElements {
@@ -180,6 +180,30 @@ export const getClonesElements = (): CloneElements => {
   }
 }
 
+export interface FavoritesElements {
+  token: string
+  buttonsContainer: HTMLElement
+  tableHeaderRow: HTMLTableRowElement
+  tableFooterRowCell: HTMLTableColElement
+  tableRows: Array<{
+    id: string
+    row: HTMLTableRowElement
+  }>
+}
+
+export const getFavoritesElements = (): FavoritesElements => ({
+  token: document.querySelector<HTMLInputElement>(FAVOURITES.TOKEN)!.value,
+  buttonsContainer: document.querySelector<HTMLElement>(FAVOURITES.BUTTONS_CONTAINER)!,
+  tableHeaderRow: document.querySelector<HTMLTableRowElement>(FAVOURITES.TABLE_HEADER_ROW)!,
+  tableFooterRowCell: document.querySelector<HTMLTableColElement>(FAVOURITES.TABLE_FOOTER_ROW_CELL)!,
+  tableRows: Array.from<HTMLTableRowElement>(document.querySelectorAll(FAVOURITES.TABLE_BODY_ROW)).map(row => {
+    return {
+      id: row.id.slice(1),
+      row
+    }
+  })
+})
+
 export const checkUser = async (nick: string) => {
   const response = await fetch('https://www.mediavida.com/usuarios/action/joincheck.php', {
     method: 'POST',
@@ -197,4 +221,56 @@ export const checkUser = async (nick: string) => {
   const data = (await response.json()) as number
 
   if (!data) throw new Error('El usuario no existe.')
+}
+
+const toggleFavoriteThread = async ({ isFavorite, threadId, token }: { threadId: string; isFavorite: boolean; token: string }) => {
+  const todo = isFavorite ? 'fav' : 'delfav'
+
+  const response = await fetch('https://www.mediavida.com/foro/action/topic_fav.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      'X-Requested-With': 'XMLHttpRequest'
+    },
+    body: `todo=${todo}&tid=${threadId}&token=${token}`
+  })
+
+  if (!response.ok) {
+    throw new Error('Ocurrió un error al marcar/desmarcar el hilo como favorito.')
+  }
+
+  const data = (await response.json()) as number
+  if (!data) throw new Error('Ocurrió un error al marcar/desmarcar el hilo como favorito.')
+}
+
+const getNewToken = async () => {
+  const response = await fetch('https://www.mediavida.com/foro/favoritos')
+
+  if (!response.ok) {
+    throw new Error('Ocurrió un error al obtener el nuevo token.')
+  }
+
+  const text = await response.text()
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(text, 'text/html')
+  const token = doc.querySelector<HTMLInputElement>(FAVOURITES.TOKEN)?.value
+  if (!token) throw new Error('No se encontró el nuevo token.')
+  return token
+}
+
+export const removeFavoriteThreads = async (items: string[], token: string, retries = 0): Promise<void> => {
+  const results = await Promise.allSettled(
+    items.map(async threadId => {
+      await toggleFavoriteThread({ isFavorite: false, threadId, token })
+      return threadId
+    })
+  )
+
+  const fulfilledValues = results.filter(result => result.status === 'fulfilled').map(({ value }) => value)
+  const rejectedValues = items.filter(item => !fulfilledValues.includes(item))
+
+  if (rejectedValues.length && retries < 3) {
+    const newToken = await getNewToken()
+    await removeFavoriteThreads(rejectedValues, newToken, retries + 1)
+  }
 }

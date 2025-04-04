@@ -38,7 +38,8 @@ const globalConfigActions = (value: unknown) => {
     [PATH_REGEXP.THREAD.source]: MODULES.THREAD,
     [PATH_REGEXP.PRIVATE_MESSAGES.source]: MODULES.PRIVATE_MESSAGES,
     [PATH_REGEXP.REPORTS.source]: MODULES.REPORTS,
-    [PATH_REGEXP.CLONES.source]: MODULES.CLONES
+    [PATH_REGEXP.CLONES.source]: MODULES.CLONES,
+    [PATH_REGEXP.FAVORITES.source]: MODULES.FAVORITES
   }
 
   for (const [path, module] of objectEntries(pathToModuleMap)) {

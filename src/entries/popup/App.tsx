@@ -1,5 +1,5 @@
 import { NewPopupButton } from '@/entries/popup/components/new-popup-button'
-import { PostsSection } from '@/entries/popup/components/sections/posts'
+import { GlobalConfigSection } from '@/entries/popup/components/sections/global-config'
 import { StylesSection } from '@/entries/popup/components/sections/styles'
 
 const App = () => {
@@ -8,7 +8,7 @@ const App = () => {
       <NewPopupButton />
       <div className='space-y-5'>
         <StylesSection />
-        <PostsSection />
+        <GlobalConfigSection />
       </div>
     </main>
   )

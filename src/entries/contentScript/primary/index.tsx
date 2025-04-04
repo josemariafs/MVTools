@@ -6,6 +6,7 @@ import ReactDOM, { type Root } from 'react-dom/client'
 
 import { type Module, MODULES } from '@/constants'
 import { Clones } from '@/features/clones'
+import { Favorites } from '@/features/favorites'
 import { PrivateMessages } from '@/features/private-messages'
 import { Reports } from '@/features/reports'
 import { Thread } from '@/features/thread'
@@ -18,7 +19,8 @@ const MODULE_COMPONENT: Record<Module, ReactNode> = {
   [MODULES.THREAD]: <Thread />,
   [MODULES.PRIVATE_MESSAGES]: <PrivateMessages />,
   [MODULES.REPORTS]: <Reports />,
-  [MODULES.CLONES]: <Clones />
+  [MODULES.CLONES]: <Clones />,
+  [MODULES.FAVORITES]: <Favorites />
 } as const
 
 export const renderApp = (module: Module) => {
