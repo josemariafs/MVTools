@@ -12,7 +12,7 @@ export const getHighlightedUsersSchema = (data: GlobalConfig) =>
       .toLowerCase()
       .nonempty('Introduce un nick de usuario')
       .refine(
-        value => !data.userNotes.some(({ username }) => username.toLowerCase() === value),
+        value => !data.highlightedUsers.some(username => username.toLowerCase() === value),
         'El usuario ya está en la lista de anotados'
       )
       .superRefine(asyncValidator(checkUser))

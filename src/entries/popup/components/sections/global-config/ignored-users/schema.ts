@@ -11,9 +11,6 @@ export const getIgnoredUsersSchema = (data: GlobalConfig) =>
       .trim()
       .toLowerCase()
       .nonempty('Introduce un nick de usuario')
-      .refine(
-        value => !data.userNotes.some(({ username }) => username.toLowerCase() === value),
-        'El usuario ya está en la lista de ignorados'
-      )
+      .refine(value => !data.ignoredUsers.some(username => username.toLowerCase() === value), 'El usuario ya está en la lista de ignorados')
       .superRefine(asyncValidator(checkUser))
   })
