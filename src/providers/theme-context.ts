@@ -8,7 +8,7 @@ const THEMES = {
 
 export type Theme = (typeof THEMES)[keyof typeof THEMES]
 
-export interface ThemeProviderState {
+interface ThemeProviderState {
   theme: Theme
   setTheme: (theme: Theme) => void
 }

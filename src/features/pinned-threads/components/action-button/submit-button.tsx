@@ -13,6 +13,8 @@ import {
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
+import { usePinnedThreads } from '@/features/pinned-threads/hooks/use-pinned-threads'
+import { usePreventDataScrollLocked } from '@/features/pinned-threads/hooks/use-prevent-data-scroll-locked'
 import { useShadowRoot } from '@/features/shared/hooks/use-shadow-root'
 import { buttonVariants, cn } from '@/utils/tailwind'
 
@@ -24,6 +26,8 @@ interface ButtonProps {
 
 export const SubmitButton = ({ onSubmit, items, isSubmitting }: ButtonProps) => {
   const [open, setOpen] = useState(false)
+  const { type } = usePinnedThreads()
+  usePreventDataScrollLocked(open)
   const { appRoot } = useShadowRoot()
 
   const handleSubmit = useCallback(async (e: MouseEvent<HTMLButtonElement>) => {
@@ -47,14 +51,14 @@ export const SubmitButton = ({ onSubmit, items, isSubmitting }: ButtonProps) => 
           ])}
           disabled={!items.length}
         >
-          <Trash2 size={14} /> Eliminar favoritos
+          <Trash2 size={14} /> Eliminar {type}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent container={appRoot}>
         <AlertDialogHeader>
           <AlertDialogTitle>¿Estás totalmente seguro?</AlertDialogTitle>
           <AlertDialogDescription>
-            Esta acción eliminará todos los favoritos seleccionados. No podrás deshacer esta acción desde esta página y tendrás que volver a
+            Esta acción eliminará todos los {type} seleccionados. No podrás deshacer esta acción desde esta página y tendrás que volver a
             añadirlos manualmente.
           </AlertDialogDescription>
         </AlertDialogHeader>
@@ -64,7 +68,7 @@ export const SubmitButton = ({ onSubmit, items, isSubmitting }: ButtonProps) => 
             onClick={handleSubmit}
             className={buttonVariants({ variant: 'destructive' })}
           >
-            Si, Eliminar favoritos {isSubmitting && <Loader2 className='animate-spin' />}
+            Si, Eliminar {type} {isSubmitting && <Loader2 className='animate-spin' />}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

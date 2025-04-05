@@ -12,7 +12,7 @@ import {
   FormSwitch
 } from '@/components/ui/form'
 
-export const { fieldContext, formContext, useFieldContext } = createFormHookContexts()
+export const { useFieldContext } = createFormHookContexts()
 export const { useAppForm } = createFormHook({
   fieldComponents: {
     FormItem,

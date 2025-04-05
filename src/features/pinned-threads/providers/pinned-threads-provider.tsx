@@ -1,10 +1,9 @@
 import type { CheckedState } from '@radix-ui/react-checkbox'
 import { type PropsWithChildren, useMemo, useState } from 'react'
 
-import { FavouritesContext } from '@/features/favorites/providers/favourites-context'
-import type { FavoritesElements } from '@/services/media-vida'
+import { PinnedThreadsContext, type PinnedThreadsData } from '@/features/pinned-threads/providers/pinned-threads-context'
 
-export const FavouritesProvider = ({ children, ...rest }: PropsWithChildren<FavoritesElements>) => {
+export const PinnedThreadsProvider = ({ children, ...rest }: PropsWithChildren<Omit<PinnedThreadsData, 'allChecked'>>) => {
   const [allChecked, setAllChecked] = useState<CheckedState>(false)
 
   const data = useMemo(
@@ -18,5 +17,5 @@ export const FavouritesProvider = ({ children, ...rest }: PropsWithChildren<Favo
     [rest]
   )
 
-  return <FavouritesContext value={data}>{children}</FavouritesContext>
+  return <PinnedThreadsContext value={data}>{children}</PinnedThreadsContext>
 }

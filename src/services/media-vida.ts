@@ -1,4 +1,4 @@
-import { CSS_SELECTORS, HTML_ATTRIBUTES } from '@/constants'
+import { CSS_SELECTORS, HTML_ATTRIBUTES, THREAD_LIST_TYPES, type ThreadListType } from '@/constants'
 
 const { POSTS, REPLIES, PRIVATE_MESSAGES, REPORTS, CLONES, FAVOURITES } = CSS_SELECTORS
 const { DATA_AUTOR } = HTML_ATTRIBUTES
@@ -106,7 +106,7 @@ export const getReportsElements = (): ReportElements => {
   }
 }
 
-export interface CloneElements {
+interface CloneElements {
   mainContainer: HTMLElement
   contentContainer: HTMLElement
   clonesHeader?: string
@@ -243,8 +243,35 @@ const toggleFavoriteThread = async ({ isFavorite, threadId, token }: { threadId:
   if (!data) throw new Error('Ocurrió un error al marcar/desmarcar el hilo como favorito.')
 }
 
-const getNewToken = async () => {
-  const response = await fetch('https://www.mediavida.com/foro/favoritos')
+const toggleIgnoreThread = async ({ isIgnored, threadId, token }: { threadId: string; isIgnored: boolean; token: string }) => {
+  const action = isIgnored ? 'ignore' : 'unignore'
+
+  const response = await fetch('https://www.mediavida.com/foro/action/topic_ignore.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      'X-Requested-With': 'XMLHttpRequest'
+    },
+    body: `action=${action}&tid=${threadId}&token=${token}`
+  })
+
+  if (!response.ok) {
+    throw new Error('Ocurrió un error al marcar/desmarcar el hilo como ignorado.')
+  }
+
+  const data = (await response.json()) as number
+  if (!data) throw new Error('Ocurrió un error al marcar/desmarcar el hilo como ignorado.')
+}
+
+const FROM_SECTIONS = {
+  FAVORITES: 'foro/favoritos',
+  IGNORED: 'foro/ignorados'
+} as const
+
+type FromSection = (typeof FROM_SECTIONS)[keyof typeof FROM_SECTIONS]
+
+const getNewToken = async (fromSection: FromSection) => {
+  const response = await fetch(`https://www.mediavida.com/${fromSection}`)
 
   if (!response.ok) {
     throw new Error('Ocurrió un error al obtener el nuevo token.')
@@ -258,10 +285,35 @@ const getNewToken = async () => {
   return token
 }
 
-export const removeFavoriteThreads = async (items: string[], token: string, retries = 0): Promise<void> => {
+interface SectionActionsParams {
+  threadId: string
+  token: string
+  toggle: boolean
+  fromSection: FromSection
+}
+
+const getPinnedThreadsAction = async (params: SectionActionsParams) => {
+  const SECTION_ACTIONS: Record<FromSection, () => Promise<void>> = {
+    [FROM_SECTIONS.FAVORITES]: () => toggleFavoriteThread({ isFavorite: params.toggle, ...params }),
+    [FROM_SECTIONS.IGNORED]: () => toggleIgnoreThread({ isIgnored: params.toggle, ...params })
+  } as const
+  await SECTION_ACTIONS[params.fromSection]()
+}
+
+export const removePinnedThreads = async ({
+  items,
+  token,
+  fromSection,
+  retries = 0
+}: {
+  items: string[]
+  token: string
+  fromSection: FromSection
+  retries?: number
+}): Promise<void> => {
   const results = await Promise.allSettled(
     items.map(async threadId => {
-      await toggleFavoriteThread({ isFavorite: false, threadId, token })
+      await getPinnedThreadsAction({ threadId, token, toggle: false, fromSection })
       return threadId
     })
   )
@@ -270,7 +322,16 @@ export const removeFavoriteThreads = async (items: string[], token: string, retr
   const rejectedValues = items.filter(item => !fulfilledValues.includes(item))
 
   if (rejectedValues.length && retries < 3) {
-    const newToken = await getNewToken()
-    await removeFavoriteThreads(rejectedValues, newToken, retries + 1)
+    const newToken = await getNewToken(fromSection)
+    await removePinnedThreads({ items: rejectedValues, fromSection, token: newToken, retries: retries + 1 })
   }
+}
+
+export const getSectionFromType = (type: ThreadListType) => {
+  const FROM_SECTION_TYPES: Record<ThreadListType, FromSection> = {
+    [THREAD_LIST_TYPES.FAVORITES]: FROM_SECTIONS.FAVORITES,
+    [THREAD_LIST_TYPES.IGNORED]: FROM_SECTIONS.IGNORED
+  } as const
+
+  return FROM_SECTION_TYPES[type]
 }

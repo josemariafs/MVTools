@@ -6,9 +6,9 @@ import ReactDOM, { type Root } from 'react-dom/client'
 
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import { type Module, MODULES } from '@/constants'
+import { type Module, MODULES, THREAD_LIST_TYPES } from '@/constants'
 import { Clones } from '@/features/clones'
-import { Favorites } from '@/features/favorites'
+import { PinnedThreads } from '@/features/pinned-threads'
 import { PrivateMessages } from '@/features/private-messages'
 import { Reports } from '@/features/reports'
 import { ShadowRootProvider } from '@/features/shared/providers/shadow-root-provider'
@@ -25,7 +25,8 @@ const MODULE_COMPONENT: Record<Module, ReactNode> = {
   [MODULES.PRIVATE_MESSAGES]: <PrivateMessages />,
   [MODULES.REPORTS]: <Reports />,
   [MODULES.CLONES]: <Clones />,
-  [MODULES.FAVORITES]: <Favorites />
+  [MODULES.FAVORITES]: <PinnedThreads type={THREAD_LIST_TYPES.FAVORITES} />,
+  [MODULES.IGNORED]: <PinnedThreads type={THREAD_LIST_TYPES.IGNORED} />
 } as const
 
 export const renderApp = (module: Module) =>

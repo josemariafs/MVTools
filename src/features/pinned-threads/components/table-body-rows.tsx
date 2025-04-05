@@ -1,6 +1,6 @@
 import { Checkbox } from '@/components/ui/checkbox'
-import { useFavorites } from '@/features/favorites/hooks/use-favorites'
-import { defaultValues, withForm } from '@/features/favorites/hooks/use-form'
+import { defaultValues, withForm } from '@/features/pinned-threads/hooks/use-form'
+import { usePinnedThreads } from '@/features/pinned-threads/hooks/use-pinned-threads'
 import { Portal } from '@/features/shared/components/portal'
 
 const styles = {
@@ -14,7 +14,7 @@ const styles = {
 export const TableBodyRows = withForm({
   defaultValues,
   render: ({ form }) => {
-    const { allChecked, tableRows } = useFavorites()
+    const { allChecked, tableRows } = usePinnedThreads()
 
     return (
       <form.Field

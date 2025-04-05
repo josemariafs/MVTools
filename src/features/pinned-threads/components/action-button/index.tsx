@@ -1,8 +1,8 @@
 import { type MouseEvent, useCallback } from 'react'
 
-import { SubmitButton } from '@/features/favorites/components/unfav-button/submit-button'
-import { useFavorites } from '@/features/favorites/hooks/use-favorites'
-import { defaultValues, withForm } from '@/features/favorites/hooks/use-form'
+import { SubmitButton } from '@/features/pinned-threads/components/action-button/submit-button'
+import { defaultValues, withForm } from '@/features/pinned-threads/hooks/use-form'
+import { usePinnedThreads } from '@/features/pinned-threads/hooks/use-pinned-threads'
 import { Portal } from '@/features/shared/components/portal'
 
 const styles = {
@@ -12,10 +12,10 @@ const styles = {
   position: 'absolute'
 }
 
-export const UnfavButton = withForm({
+export const ActionButton = withForm({
   defaultValues,
   render: ({ form }) => {
-    const { buttonsContainer } = useFavorites()
+    const { buttonsContainer } = usePinnedThreads()
 
     const handleSubmit = useCallback(async (e: MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation()

@@ -20,7 +20,8 @@ export const PATH_REGEXP = {
   PROFILE: /^\/id(\/.*)?$/,
   REPORTS: /^\/foro\/reportes\.php(\?.*)?$/,
   CLONES: /^\/usuarios\/clones\.php(\?.*)?$/,
-  FAVORITES: /^\/foro\/favoritos/
+  FAVORITES: /^\/foro\/favoritos/,
+  IGNORED: /^\/foro\/ignorados/
 } satisfies Record<string, RegExp>
 
 export const STORAGE_KEYS = {
@@ -104,7 +105,15 @@ export const MODULES = {
   PRIVATE_MESSAGES: 'private-messages',
   REPORTS: 'reports',
   CLONES: 'clones',
-  FAVORITES: 'favorites'
+  FAVORITES: 'favorites',
+  IGNORED: 'ignored'
 } as const
 
 export type Module = (typeof MODULES)[keyof typeof MODULES]
+
+export const THREAD_LIST_TYPES = {
+  FAVORITES: 'favoritos',
+  IGNORED: 'ignorados'
+} as const
+
+export type ThreadListType = (typeof THREAD_LIST_TYPES)[keyof typeof THREAD_LIST_TYPES]
