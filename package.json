@@ -16,7 +16,7 @@
     "watch:firefox": "BROWSER=firefox vite build --mode development --minify false --watch",
     "dev": "vite",
     "serve": "web-ext run -t chromium --start-url \"https://www.mediavida.com\" --source-dir ./dist/ --chromium-profile=./chromium-profile/ --profile-create-if-missing --keep-profile-changes",
-    "serve:firefox": "web-ext run --wsl --start-url \"https://www.mediavida.com\"  --source-dir ./dist/ --firefox-profile=./firefox-profile/ --profile-create-if-missing --keep-profile-changes",
+    "serve:firefox": "web-ext run --start-url \"https://www.mediavida.com\"  --source-dir ./dist/ --firefox-profile=./firefox-profile/ --profile-create-if-missing --keep-profile-changes",
     "prettier": "prettier --check  \"**/*.{js,cjs,mts,jsx,ts,tsx}\"",
     "prettier:fix": "prettier --write  \"**/*.{js,cjs,mts,jsx,ts,tsx}\"",
     "eslint": "eslint .",
