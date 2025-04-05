@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { useShadowRoot } from '@/features/shared/hooks/use-shadow-root'
-import { cn } from '@/utils/tailwind'
+import { buttonVariants, cn } from '@/utils/tailwind'
 
 interface ButtonProps {
   onSubmit: (e: MouseEvent<HTMLButtonElement>) => Promise<void>
@@ -60,7 +60,12 @@ export const SubmitButton = ({ onSubmit, items, isSubmitting }: ButtonProps) => 
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isSubmitting}>Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={handleSubmit}>Continuar {isSubmitting && <Loader2 className='animate-spin' />}</AlertDialogAction>
+          <AlertDialogAction
+            onClick={handleSubmit}
+            className={buttonVariants({ variant: 'destructive' })}
+          >
+            Si, Eliminar favoritos {isSubmitting && <Loader2 className='animate-spin' />}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
