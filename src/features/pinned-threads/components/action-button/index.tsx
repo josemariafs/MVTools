@@ -6,10 +6,7 @@ import { usePinnedThreads } from '@/features/pinned-threads/hooks/use-pinned-thr
 import { Portal } from '@/features/shared/components/portal'
 
 const styles = {
-  display: 'inline-block',
-  paddingLeft: '5px',
-  alignSelf: 'end',
-  position: 'absolute'
+  float: 'right'
 }
 
 export const ActionButton = withForm({
