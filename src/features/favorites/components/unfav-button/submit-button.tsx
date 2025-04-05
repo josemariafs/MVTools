@@ -59,8 +59,8 @@ export const SubmitButton = ({ onSubmit, items, isSubmitting }: ButtonProps) => 
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isSubmitting}>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleSubmit}>Continue {isSubmitting && <Loader2 className='animate-spin' />}</AlertDialogAction>
+          <AlertDialogCancel disabled={isSubmitting}>Cancelar</AlertDialogCancel>
+          <AlertDialogAction onClick={handleSubmit}>Continuar {isSubmitting && <Loader2 className='animate-spin' />}</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
