@@ -33,6 +33,7 @@ export const Notes = () => {
       <TooltipContent
         container={appRoot}
         side='bottom'
+        dark
         className='max-w-96 text-balance text-left text-base'
       >
         {userNote}

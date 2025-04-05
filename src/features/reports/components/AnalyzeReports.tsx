@@ -49,6 +49,7 @@ export const AnalyzeReports = () => {
       <TooltipContent
         container={appRoot}
         side='right'
+        dark
       >
         Usar con precaución. Puede hacer que tu quota de Gemini se agote.
       </TooltipContent>
