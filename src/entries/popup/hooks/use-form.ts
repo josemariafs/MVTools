@@ -12,7 +12,8 @@ import {
   FormSwitch
 } from '@/components/ui/form'
 
-export const { useFieldContext } = createFormHookContexts()
+const { useFieldContext, fieldContext, formContext } = createFormHookContexts()
+export { useFieldContext }
 export const { useAppForm } = createFormHook({
   fieldComponents: {
     FormItem,
