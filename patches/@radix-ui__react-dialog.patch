@@ -1,0 +1,40 @@
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 81cd963c51462b3d20ea15f1c82c26fdcbe5363d..1b1983a59db3ab0018de8d353d251eab3a9eae53 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -231,7 +231,7 @@ var DialogContentImpl = React.forwardRef(
+         }
+       ),
+       /* @__PURE__ */ jsxs(Fragment, { children: [
+-        /* @__PURE__ */ jsx(TitleWarning, { titleId: context.titleId }),
++        /* @__PURE__ */ jsx(TitleWarning, { titleId: context.titleId, contentRef: contentRef }),
+         /* @__PURE__ */ jsx(DescriptionWarning, { contentRef, descriptionId: context.descriptionId })
+       ] })
+     ] });
+@@ -281,7 +281,7 @@ var [WarningProvider, useWarningContext] = createContext(TITLE_WARNING_NAME, {
+   titleName: TITLE_NAME,
+   docsSlug: "dialog"
+ });
+-var TitleWarning = ({ titleId }) => {
++var TitleWarning = ({ contentRef, titleId }) => {
+   const titleWarningContext = useWarningContext(TITLE_WARNING_NAME);
+   const MESSAGE = `\`${titleWarningContext.contentName}\` requires a \`${titleWarningContext.titleName}\` for the component to be accessible for screen reader users.
+ 
+@@ -290,7 +290,7 @@ If you want to hide the \`${titleWarningContext.titleName}\`, you can wrap it wi
+ For more information, see https://radix-ui.com/primitives/docs/components/${titleWarningContext.docsSlug}`;
+   React.useEffect(() => {
+     if (titleId) {
+-      const hasTitle = document.getElementById(titleId);
++      const hasTitle = contentRef.current?.querySelector(`[id="${titleId}"]`);
+       if (!hasTitle) console.error(MESSAGE);
+     }
+   }, [MESSAGE, titleId]);
+@@ -303,7 +303,7 @@ var DescriptionWarning = ({ contentRef, descriptionId }) => {
+   React.useEffect(() => {
+     const describedById = contentRef.current?.getAttribute("aria-describedby");
+     if (descriptionId && describedById) {
+-      const hasDescription = document.getElementById(descriptionId);
++      const hasDescription =  contentRef.current?.querySelector(`[id="${descriptionId}"]`);
+       if (!hasDescription) console.warn(MESSAGE);
+     }
+   }, [MESSAGE, contentRef, descriptionId]);
