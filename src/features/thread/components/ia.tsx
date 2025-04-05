@@ -10,9 +10,8 @@ import { ACTIONS } from '@/services/gemini'
 
 const AnalyzePostButton = (props: AiButtonProps) => (
   <Button
-    variant='outline'
-    size='icon'
-    className='size-8 rounded-none border-none text-[#b9c8ce] hover:bg-[#6e6a66] hover:text-[#b9c8ce]'
+    variant='postButton'
+    size='postIcon'
     {...props}
   >
     <Brain />

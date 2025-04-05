@@ -17,6 +17,7 @@ export const buttonVariants = cva(
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
+        postButton: 'rounded-none border-none bg-transparent text-[#b9c8ce] hover:bg-[#6e6a66] hover:text-[#b9c8ce]',
         none: ''
       },
       size: {
@@ -24,6 +25,7 @@ export const buttonVariants = cva(
         sm: 'h-8 rounded-md px-3 text-xs',
         lg: 'h-10 rounded-md px-8',
         icon: 'size-9',
+        postIcon: 'size-8',
         none: ''
       }
     },
