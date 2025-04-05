@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+
 import { Checkbox } from '@/components/ui/checkbox'
 import { defaultValues, withForm } from '@/features/pinned-threads/hooks/use-form'
 import { usePinnedThreads } from '@/features/pinned-threads/hooks/use-pinned-threads'
@@ -16,22 +18,25 @@ export const TableBodyRows = withForm({
   render: ({ form }) => {
     const { allChecked, tableRows } = usePinnedThreads()
 
+    const onChangeListener = useCallback(
+      ({ value }: { value: string[] }) => {
+        if (value.length === 0) {
+          allChecked.setState(false)
+          return
+        }
+        if (value.length === tableRows.length) {
+          allChecked.setState(true)
+          return
+        }
+        allChecked.setState('indeterminate')
+      },
+      [allChecked, tableRows]
+    )
+
     return (
       <form.Field
         name='items'
-        listeners={{
-          onChange: ({ value }) => {
-            if (value.length === 0) {
-              allChecked.setState(false)
-              return
-            }
-            if (value.length === tableRows.length) {
-              allChecked.setState(true)
-              return
-            }
-            allChecked.setState('indeterminate')
-          }
-        }}
+        listeners={{ onChange: onChangeListener }}
         children={field =>
           tableRows.map(({ id, row }) => (
             <Portal
@@ -43,11 +48,9 @@ export const TableBodyRows = withForm({
                 <Checkbox
                   checked={field.state.value.includes(id)}
                   onCheckedChange={checked => {
-                    if (checked === true) {
-                      field.setValue([...field.state.value, id])
-                    } else {
-                      field.setValue(field.state.value.filter(item => item !== id))
-                    }
+                    checked === true
+                      ? field.setValue([...field.state.value, id])
+                      : field.setValue(field.state.value.filter(item => item !== id))
                   }}
                 />
               </div>

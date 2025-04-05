@@ -1,3 +1,6 @@
+import type { CheckedState } from '@radix-ui/react-checkbox'
+import { useCallback } from 'react'
+
 import { Checkbox } from '@/components/ui/checkbox'
 import { defaultValues, withForm } from '@/features/pinned-threads/hooks/use-form'
 import { usePinnedThreads } from '@/features/pinned-threads/hooks/use-pinned-threads'
@@ -17,6 +20,11 @@ export const TableHeaderCell = withForm({
   render: ({ form }) => {
     const { tableHeaderRow, tableRows, allChecked } = usePinnedThreads()
 
+    const handleCheckedChange = useCallback((checked: CheckedState) => {
+      form.setFieldValue('items', checked === true ? tableRows.map(({ id }) => id) : [])
+      allChecked.setState(checked)
+    }, [])
+
     return (
       <Portal
         root={tableHeaderRow}
@@ -26,10 +34,7 @@ export const TableHeaderCell = withForm({
           <Checkbox
             disabled={!tableRows.length}
             checked={allChecked.state}
-            onCheckedChange={checked => {
-              form.setFieldValue('items', checked === true ? tableRows.map(({ id }) => id) : [])
-              allChecked.setState(checked)
-            }}
+            onCheckedChange={handleCheckedChange}
           />
         </div>
       </Portal>
