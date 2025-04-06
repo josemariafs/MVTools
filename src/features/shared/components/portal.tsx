@@ -23,7 +23,7 @@ export const Portal = ({ children, root, where, styles }: Props) => {
 
   useEffect(() => {
     appRoot?.classList.add(theme)
-  }, [theme])
+  }, [theme, appRoot])
 
   if (!appRoot) return null
 
