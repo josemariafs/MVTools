@@ -236,22 +236,25 @@ const getSectionFromType = (type: ThreadListType) => {
   return FROM_SECTION_TYPES[type]
 }
 
-export const removePinnedThreads = async ({
+export const modifyPinnedThreads = async ({
   items,
   token,
   type,
+  action,
   retries = 0
 }: {
   items: string[]
   token: string
   type: ThreadListType
+  action: 'add' | 'remove'
   retries?: number
 }): Promise<void> => {
   const fromSection = getSectionFromType(type)
 
   const results = await Promise.allSettled(
     items.map(async threadId => {
-      await getPinnedThreadsAction({ threadId, token, toggle: false, fromSection })
+      const toggle = action === 'add'
+      await getPinnedThreadsAction({ threadId, token, toggle, fromSection })
       return threadId
     })
   )
@@ -261,6 +264,6 @@ export const removePinnedThreads = async ({
 
   if (rejectedValues.length && retries < 3) {
     const newToken = await getNewToken(fromSection)
-    await removePinnedThreads({ items: rejectedValues, type, token: newToken, retries: retries + 1 })
+    await modifyPinnedThreads({ items: rejectedValues, type, action, token: newToken, retries: retries + 1 })
   }
 }

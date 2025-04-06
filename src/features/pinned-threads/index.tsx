@@ -6,7 +6,7 @@ import { TableBodyRows } from '@/features/pinned-threads/components/table-body-r
 import { TableHeaderCell } from '@/features/pinned-threads/components/table-header-cell'
 import { defaultValues, useAppForm } from '@/features/pinned-threads/hooks/use-form'
 import { PinnedThreadsProvider } from '@/features/pinned-threads/providers/pinned-threads-provider'
-import { getFavoritesElements, removePinnedThreads } from '@/services/media-vida'
+import { getFavoritesElements, modifyPinnedThreads } from '@/services/media-vida'
 import type { ThreadListType } from '@/types/media-vida'
 
 interface Props {
@@ -19,7 +19,7 @@ export const PinnedThreads = ({ type }: Props) => {
     defaultValues,
     onSubmit: async ({ value: { items } }) => {
       try {
-        await removePinnedThreads({ items, token: favoritesElements.token, type })
+        await modifyPinnedThreads({ items, token: favoritesElements.token, type, action: 'remove' })
         location.reload()
       } catch (error) {
         toast.error(`No se han podido eliminar los hilos ${type}`, {
