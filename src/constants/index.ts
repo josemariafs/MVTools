@@ -3,8 +3,6 @@
 // The ID must be unique and in the format of a UUID.
 // More info: https://extensionworkshop.com/documentation/develop/extensions-and-the-add-on-id/
 
-import type { GlobalConfig } from '@/services/config'
-
 export const FIREFOX_ADDON_ID = '{unknown}' // Replace with the UUID of the extension
 
 export const AI_MIN_POST_LENGTH = 350
@@ -80,14 +78,6 @@ export const CSS_SELECTORS = {
     TABLE_FOOTER_ROW_CELL: '#tablatemas > tfoot > tr > td'
   }
 } as const
-
-export const DEFAULT_GLOBAL_CONFIG: GlobalConfig = {
-  geminiApiKey: '',
-  ignoredUsers: [],
-  showIgnoredUsers: false,
-  userNotes: [],
-  highlightedUsers: []
-}
 
 export const THREAD_LIST_TYPES = {
   FAVORITES: 'favoritos',

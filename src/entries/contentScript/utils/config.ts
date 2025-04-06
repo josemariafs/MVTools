@@ -2,18 +2,17 @@ import browser from 'webextension-polyfill'
 import type { ZodSchema } from 'zod'
 
 import { STORAGE_KEYS, type StorageKey } from '@/constants'
-import {
-  getGlobalConfig,
-  getStylesConfig,
-  type GlobalConfig,
-  globalConfigSchema,
-  type StylesConfig,
-  stylesConfigSchema
-} from '@/services/config'
-import { updateGlobalConfigStore } from '@/store/global-config-store'
+import { type GlobalConfig, globalConfigSchema, type StylesConfig, stylesConfigSchema } from '@/services/config'
 import { devLog } from '@/utils/logging'
 
-const setupStorageListener = <T>(storageKey: StorageKey, schema: ZodSchema<T>, logPrefix: string, onUpdate?: (data: T) => void) => {
+interface StorageSetupParams<T> {
+  storageKey: StorageKey
+  schema: ZodSchema<T>
+  logPrefix: string
+  onChangeCb: (config: T) => void
+}
+
+const setupStorageListener = <T>({ storageKey, schema, logPrefix, onChangeCb }: StorageSetupParams<T>) => {
   browser.storage.onChanged.addListener((changes, areaName) => {
     if (areaName !== 'sync' || !changes[storageKey]) return
 
@@ -26,53 +25,24 @@ const setupStorageListener = <T>(storageKey: StorageKey, schema: ZodSchema<T>, l
 
     const validData = validationResult.data
     devLog.log(`${logPrefix} updated via listener:`, validData)
-    onUpdate?.(validData)
+    onChangeCb(validData)
   })
 }
 
-interface ConfigSetupParams<T> {
-  storageKey: StorageKey
-  schema: ZodSchema<T>
-  getConfigFn: () => Promise<T>
-  logPrefix: string
-  onChangeCb?: (config: T) => void
-  updateStoreFn?: (config: T) => void
-}
-
-const setupConfigManagement = async <T>({
-  storageKey,
-  schema,
-  getConfigFn,
-  logPrefix,
-  onChangeCb,
-  updateStoreFn
-}: ConfigSetupParams<T>): Promise<T> => {
-  setupStorageListener(storageKey, schema, logPrefix, updatedData => {
-    updateStoreFn?.(updatedData)
-    onChangeCb?.(updatedData)
-  })
-
-  const initialConfig = await getConfigFn()
-  devLog.log(`${logPrefix} initial state loaded:`, initialConfig)
-  updateStoreFn?.(initialConfig)
-  return initialConfig
-}
-
-export const updateAndListenGlobalConfigStore = (onChangeCb?: (globalConfig: GlobalConfig) => void) =>
-  setupConfigManagement<GlobalConfig>({
+export const listenGlobalConfigChanges = (onChangeCb: (globalConfig: GlobalConfig) => void) => {
+  setupStorageListener<GlobalConfig>({
     storageKey: STORAGE_KEYS.GLOBAL_CONFIG,
     schema: globalConfigSchema,
-    getConfigFn: getGlobalConfig,
     logPrefix: 'Global config',
-    updateStoreFn: updateGlobalConfigStore,
     onChangeCb
   })
+}
 
-export const getAndListenStylesConfigStore = (onChangeCb?: (stylesConfig: StylesConfig) => void) =>
-  setupConfigManagement<StylesConfig>({
+export const listenStylesConfigChanges = (onChangeCb: (stylesConfig: StylesConfig) => void) => {
+  setupStorageListener<StylesConfig>({
     storageKey: STORAGE_KEYS.STYLES_CONFIG,
     schema: stylesConfigSchema,
-    getConfigFn: getStylesConfig,
     logPrefix: 'Styles config',
     onChangeCb
   })
+}

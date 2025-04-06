@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { getStoredProperty, setStoredProperty } from '@/services/storage'
 
-import { DEFAULT_GLOBAL_CONFIG, STORAGE_KEYS } from '../constants'
+import { STORAGE_KEYS } from '../constants'
 
 export const globalConfigSchema = z.object({
   geminiApiKey: z.string(),
@@ -15,7 +15,14 @@ export const globalConfigSchema = z.object({
 export type GlobalConfig = z.infer<typeof globalConfigSchema>
 export type UserNote = GlobalConfig['userNotes'][number]
 
-export const getGlobalConfig = () => getStoredProperty<GlobalConfig>(STORAGE_KEYS.GLOBAL_CONFIG, DEFAULT_GLOBAL_CONFIG)
+export const getGlobalConfig = () =>
+  getStoredProperty<GlobalConfig>(STORAGE_KEYS.GLOBAL_CONFIG, {
+    geminiApiKey: '',
+    ignoredUsers: [],
+    showIgnoredUsers: false,
+    userNotes: [],
+    highlightedUsers: []
+  })
 export const setGlobalConfig = (value: GlobalConfig) => setStoredProperty(STORAGE_KEYS.GLOBAL_CONFIG, value)
 
 export const stylesConfigSchema = z.object({

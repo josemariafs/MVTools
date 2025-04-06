@@ -1,11 +1,12 @@
 import '@/entries/enableDevHmr'
 import '@/entries/contentScript/global.css'
 
-import { updateAndListenGlobalConfigStore } from '@/entries/contentScript/utils/config'
+import { listenGlobalConfigChanges } from '@/entries/contentScript/utils/config'
 import { renderApp } from '@/entries/contentScript/utils/render'
 import { Reports } from '@/features/reports'
+import { globalConfigStore, updateGlobalConfigStore } from '@/store/global-config-store'
 import { devLog } from '@/utils/logging'
 
-await updateAndListenGlobalConfigStore()
-devLog.log('Rendering reports')
+devLog.log('Rendering reports with API Key:', globalConfigStore.state.geminiApiKey)
 renderApp(<Reports />, import.meta.PLUGIN_WEB_EXT_CHUNK_CSS_PATHS)
+listenGlobalConfigChanges(updateGlobalConfigStore)
