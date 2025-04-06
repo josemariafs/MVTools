@@ -1,12 +1,18 @@
 import browser from 'webextension-polyfill'
 import type { ZodSchema } from 'zod'
 
-import { type GlobalConfig, globalConfigSchema, type StylesConfig, stylesConfigSchema } from '@/services/config'
-import { STORAGE_KEYS, type StorageKey } from '@/types/storage'
+import {
+  BROWSER_STORAGE_KEYS,
+  type BrowserStorageKey,
+  type GlobalConfig,
+  globalConfigSchema,
+  type StylesConfig,
+  stylesConfigSchema
+} from '@/services/config'
 import { devLog } from '@/utils/logging'
 
 interface StorageSetupParams<T> {
-  storageKey: StorageKey
+  storageKey: BrowserStorageKey
   schema: ZodSchema<T>
   logPrefix: string
   onChangeCb: (config: T) => void
@@ -31,7 +37,7 @@ const setupStorageListener = <T>({ storageKey, schema, logPrefix, onChangeCb }: 
 
 export const listenGlobalConfigChanges = (onChangeCb: (globalConfig: GlobalConfig) => void) => {
   setupStorageListener<GlobalConfig>({
-    storageKey: STORAGE_KEYS.GLOBAL_CONFIG,
+    storageKey: BROWSER_STORAGE_KEYS.GLOBAL_CONFIG,
     schema: globalConfigSchema,
     logPrefix: 'Global config',
     onChangeCb
@@ -40,7 +46,7 @@ export const listenGlobalConfigChanges = (onChangeCb: (globalConfig: GlobalConfi
 
 export const listenStylesConfigChanges = (onChangeCb: (stylesConfig: StylesConfig) => void) => {
   setupStorageListener<StylesConfig>({
-    storageKey: STORAGE_KEYS.STYLES_CONFIG,
+    storageKey: BROWSER_STORAGE_KEYS.STYLES_CONFIG,
     schema: stylesConfigSchema,
     logPrefix: 'Styles config',
     onChangeCb

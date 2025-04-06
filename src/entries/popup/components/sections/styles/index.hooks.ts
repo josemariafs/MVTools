@@ -2,11 +2,10 @@ import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 
 import { useAppForm } from '@/entries/popup/hooks/use-form'
 import { useMutate } from '@/entries/popup/hooks/use-mutate'
-import { getStylesConfig, setStylesConfig, stylesConfigSchema } from '@/services/config'
-import { STORAGE_KEYS } from '@/types/storage'
+import { BROWSER_STORAGE_KEYS, getStylesConfig, setStylesConfig, stylesConfigSchema } from '@/services/config'
 
 export const stylesConfigQueryOptions = queryOptions({
-  queryKey: [STORAGE_KEYS.STYLES_CONFIG],
+  queryKey: [BROWSER_STORAGE_KEYS.STYLES_CONFIG],
   queryFn: getStylesConfig
 })
 

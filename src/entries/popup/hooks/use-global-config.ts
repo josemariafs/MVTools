@@ -1,11 +1,10 @@
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 
 import { useMutate } from '@/entries/popup/hooks/use-mutate'
-import { getGlobalConfig, setGlobalConfig } from '@/services/config'
-import { STORAGE_KEYS } from '@/types/storage'
+import { BROWSER_STORAGE_KEYS, getGlobalConfig, setGlobalConfig } from '@/services/config'
 
 export const globalConfigQueryOptions = queryOptions({
-  queryKey: [STORAGE_KEYS.GLOBAL_CONFIG],
+  queryKey: [BROWSER_STORAGE_KEYS.GLOBAL_CONFIG],
   queryFn: getGlobalConfig
 })
 

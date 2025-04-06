@@ -1,7 +1,6 @@
 import { z } from 'zod'
 
 import { getStoredProperty, setStoredProperty } from '@/services/storage'
-import { STORAGE_KEYS } from '@/types/storage'
 
 export const globalConfigSchema = z.object({
   geminiApiKey: z.string(),
@@ -14,15 +13,22 @@ export const globalConfigSchema = z.object({
 export type GlobalConfig = z.infer<typeof globalConfigSchema>
 export type UserNote = GlobalConfig['userNotes'][number]
 
+export const BROWSER_STORAGE_KEYS = {
+  STYLES_CONFIG: 'stylesConfig',
+  GLOBAL_CONFIG: 'globalConfig'
+} as const
+
+export type BrowserStorageKey = (typeof BROWSER_STORAGE_KEYS)[keyof typeof BROWSER_STORAGE_KEYS]
+
 export const getGlobalConfig = () =>
-  getStoredProperty<GlobalConfig>(STORAGE_KEYS.GLOBAL_CONFIG, {
+  getStoredProperty<GlobalConfig>(BROWSER_STORAGE_KEYS.GLOBAL_CONFIG, {
     geminiApiKey: '',
     ignoredUsers: [],
     showIgnoredUsers: false,
     userNotes: [],
     highlightedUsers: []
   })
-export const setGlobalConfig = (value: GlobalConfig) => setStoredProperty(STORAGE_KEYS.GLOBAL_CONFIG, value)
+export const setGlobalConfig = (value: GlobalConfig) => setStoredProperty(BROWSER_STORAGE_KEYS.GLOBAL_CONFIG, value)
 
 export const stylesConfigSchema = z.object({
   premiumEnabled: z.boolean(),
@@ -33,10 +39,10 @@ export const stylesConfigSchema = z.object({
 export type StylesConfig = z.infer<typeof stylesConfigSchema>
 
 export const getStylesConfig = () =>
-  getStoredProperty<StylesConfig>(STORAGE_KEYS.STYLES_CONFIG, {
+  getStoredProperty<StylesConfig>(BROWSER_STORAGE_KEYS.STYLES_CONFIG, {
     premiumEnabled: false,
     premiumBgDisabled: false,
     ultraWideEnabled: false
   })
 
-export const setStylesConfig = (value: StylesConfig) => setStoredProperty(STORAGE_KEYS.STYLES_CONFIG, value)
+export const setStylesConfig = (value: StylesConfig) => setStoredProperty(BROWSER_STORAGE_KEYS.STYLES_CONFIG, value)
