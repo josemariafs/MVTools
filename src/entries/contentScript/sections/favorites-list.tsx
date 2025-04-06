@@ -1,9 +1,9 @@
 import '@/entries/enableDevHmr'
 import '@/entries/contentScript/global.css'
 
-import { THREAD_LIST_TYPES } from '@/constants'
 import { renderApp } from '@/entries/contentScript/utils/render'
 import { PinnedThreads } from '@/features/pinned-threads'
+import { THREAD_LIST_TYPES } from '@/types/media-vida'
 import { devLog } from '@/utils/logging'
 
 devLog.log('Rendering favorites list')

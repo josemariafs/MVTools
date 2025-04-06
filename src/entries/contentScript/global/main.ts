@@ -1,8 +1,8 @@
 import '@/entries/enableDevHmr'
 
-import { CSS_CLASS_NAMES } from '@/constants'
 import { listenStylesConfigChanges } from '@/entries/contentScript/utils/config'
 import { getStylesConfig, type StylesConfig } from '@/services/config'
+import { CSS_CLASS_NAMES } from '@/types/media-vida'
 import { objectEntries } from '@/utils/asserts'
 import { toggleBodyClass } from '@/utils/dom'
 import { devLog } from '@/utils/logging'

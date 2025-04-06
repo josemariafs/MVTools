@@ -5,7 +5,7 @@ import { Portal } from '@/features/shared/components/portal'
 import { AiButton, type AiButtonProps } from '@/features/shared/components/ui/ai-button'
 import { AiMessage } from '@/features/shared/components/ui/ai-message'
 import { ACTIONS } from '@/services/gemini'
-import type { ReportElements } from '@/services/media-vida'
+import type { ReportElements } from '@/types/media-vida'
 import { cn } from '@/utils/tailwind'
 
 type Props = ReportElements['reportElements'][number]

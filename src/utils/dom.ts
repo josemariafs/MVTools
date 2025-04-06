@@ -1,6 +1,6 @@
 import browser from 'webextension-polyfill'
 
-import type { CssClassName } from '@/constants'
+import type { CssClassName } from '@/types/media-vida'
 import { isHTMLElement } from '@/utils/asserts'
 
 const loadedStyles = new Map<string, Promise<string>>()

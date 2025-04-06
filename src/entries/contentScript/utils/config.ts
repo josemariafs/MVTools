@@ -1,8 +1,8 @@
 import browser from 'webextension-polyfill'
 import type { ZodSchema } from 'zod'
 
-import { STORAGE_KEYS, type StorageKey } from '@/constants'
 import { type GlobalConfig, globalConfigSchema, type StylesConfig, stylesConfigSchema } from '@/services/config'
+import { STORAGE_KEYS, type StorageKey } from '@/types/storage'
 import { devLog } from '@/utils/logging'
 
 interface StorageSetupParams<T> {

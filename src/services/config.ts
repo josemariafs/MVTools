@@ -1,8 +1,7 @@
 import { z } from 'zod'
 
 import { getStoredProperty, setStoredProperty } from '@/services/storage'
-
-import { STORAGE_KEYS } from '../constants'
+import { STORAGE_KEYS } from '@/types/storage'
 
 export const globalConfigSchema = z.object({
   geminiApiKey: z.string(),

@@ -1,13 +1,13 @@
 import { useEffect, useMemo } from 'react'
 import { toast } from 'sonner'
 
-import type { ThreadListType } from '@/constants'
 import { ActionButton } from '@/features/pinned-threads/components/action-button'
 import { TableBodyRows } from '@/features/pinned-threads/components/table-body-rows'
 import { TableHeaderCell } from '@/features/pinned-threads/components/table-header-cell'
 import { defaultValues, useAppForm } from '@/features/pinned-threads/hooks/use-form'
 import { PinnedThreadsProvider } from '@/features/pinned-threads/providers/pinned-threads-provider'
-import { getFavoritesElements, getSectionFromType, removePinnedThreads } from '@/services/media-vida'
+import { getFavoritesElements, removePinnedThreads } from '@/services/media-vida'
+import type { ThreadListType } from '@/types/media-vida'
 
 interface Props {
   type: ThreadListType
@@ -19,7 +19,7 @@ export const PinnedThreads = ({ type }: Props) => {
     defaultValues,
     onSubmit: async ({ value: { items } }) => {
       try {
-        await removePinnedThreads({ items, token: favoritesElements.token, fromSection: getSectionFromType(type) })
+        await removePinnedThreads({ items, token: favoritesElements.token, type })
         location.reload()
       } catch (error) {
         toast.error(`No se han podido eliminar los hilos ${type}`, {

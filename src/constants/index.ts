@@ -11,21 +11,6 @@ export const URLS = {
   GEMINI_CREATE_API_KEY: 'https://aistudio.google.com/app/apikey?hl=es-419'
 } as const
 
-export const STORAGE_KEYS = {
-  STYLES_CONFIG: 'stylesConfig',
-  GLOBAL_CONFIG: 'globalConfig'
-} as const
-
-export type StorageKey = (typeof STORAGE_KEYS)[keyof typeof STORAGE_KEYS]
-
-export const CSS_CLASS_NAMES = {
-  MV_PREMIUM: 'mvpremium',
-  MV_PREMIUM_WITHOUT_BG: 'MvPremiumCSSWithoutBG',
-  MV_ULTRA_WIDE: 'mvultrawide'
-} as const
-
-export type CssClassName = (typeof CSS_CLASS_NAMES)[keyof typeof CSS_CLASS_NAMES]
-
 export const HTML_ATTRIBUTES = {
   DATA_AUTOR: 'data-autor'
 } as const
@@ -78,10 +63,3 @@ export const CSS_SELECTORS = {
     TABLE_FOOTER_ROW_CELL: '#tablatemas > tfoot > tr > td'
   }
 } as const
-
-export const THREAD_LIST_TYPES = {
-  FAVORITES: 'favoritos',
-  IGNORED: 'ignorados'
-} as const
-
-export type ThreadListType = (typeof THREAD_LIST_TYPES)[keyof typeof THREAD_LIST_TYPES]

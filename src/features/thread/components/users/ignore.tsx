@@ -5,7 +5,8 @@ import { Portal } from '@/features/shared/components/portal'
 import { IgnoreUser } from '@/features/shared/components/ui/ignore-user'
 import { useMutationObserver } from '@/features/shared/hooks/use-mutation-observer'
 import { usePostContext } from '@/features/thread/hooks/use-post'
-import { getPostRepliesElements, type PostReplyElements } from '@/services/media-vida'
+import { getPostRepliesElements } from '@/services/media-vida'
+import type { PostReplyElements } from '@/types/media-vida'
 import { searchMutationListFor } from '@/utils/dom'
 
 export const Ignore = () => {

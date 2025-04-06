@@ -1,5 +1,5 @@
 import { createContext } from 'react'
 
-import type { PostElements } from '@/services/media-vida'
+import type { PostElements } from '@/types/media-vida'
 
 export const PostContext = createContext<PostElements | null>(null)

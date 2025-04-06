@@ -1,18 +1,22 @@
-import { CSS_SELECTORS, HTML_ATTRIBUTES, THREAD_LIST_TYPES, type ThreadListType } from '@/constants'
+import { CSS_SELECTORS, HTML_ATTRIBUTES } from '@/constants'
+import {
+  type CloneBadge,
+  type CloneBadgeType,
+  type CloneElements,
+  type FavoritesElements,
+  FROM_SECTIONS,
+  type FromSection,
+  type PostElements,
+  type PostReplyElements,
+  type PrivateMessagesElements,
+  type ReportElements,
+  type SectionActionsParams,
+  THREAD_LIST_TYPES,
+  type ThreadListType
+} from '@/types/media-vida'
 
 const { POSTS, REPLIES, PRIVATE_MESSAGES, REPORTS, CLONES, FAVOURITES } = CSS_SELECTORS
 const { DATA_AUTOR } = HTML_ATTRIBUTES
-
-export interface PostElements {
-  id: string
-  author: string
-  comment: string
-  postContainer: HTMLElement
-  commentContainer: HTMLElement
-  postAvatarContainer: HTMLElement
-  postBodyContainer: HTMLElement
-  postButtonsContainer: HTMLElement
-}
 
 export const getPostsElements = (): PostElements[] => {
   return Array.from<HTMLElement>(document.querySelectorAll(POSTS.MAIN_CONTAINER))
@@ -32,16 +36,6 @@ export const getPostsElements = (): PostElements[] => {
     .filter(Boolean)
 }
 
-export interface PostReplyElements {
-  id: string
-  author: string
-  replyContainer: HTMLElement
-  replyAvatarContainer: HTMLElement
-  replyMetaContainer: HTMLElement
-  replyBodyContainer: HTMLElement
-  replyPostControlsContainer: HTMLElement | null
-}
-
 export const getPostRepliesElements = (postRepliesContainers: HTMLElement[]): PostReplyElements[] => {
   return postRepliesContainers.map(replyContainer => ({
     id: replyContainer.dataset.num!,
@@ -52,17 +46,6 @@ export const getPostRepliesElements = (postRepliesContainers: HTMLElement[]): Po
     replyBodyContainer: replyContainer.querySelector<HTMLElement>(REPLIES.BODY_CONTAINER)!,
     replyPostControlsContainer: replyContainer.querySelector<HTMLElement>(REPLIES.POST_CONTROLS_CONTAINER)
   }))
-}
-
-export interface PrivateMessagesElements {
-  userMessagesElements: Array<{
-    author: string
-    userContainer: HTMLElement
-    userContent: HTMLElement
-  }>
-  author: string
-  title: HTMLElement
-  contentContainer: HTMLElement
 }
 
 export const getPrivateMessagesElements = (): PrivateMessagesElements => {
@@ -80,16 +63,6 @@ export const getPrivateMessagesElements = (): PrivateMessagesElements => {
   }
 }
 
-export interface ReportElements {
-  reportElements: Array<{
-    buttonContainer: HTMLElement
-    commentContainer: HTMLElement
-    comment: string
-    id: number
-  }>
-  title: HTMLElement
-}
-
 export const getReportsElements = (): ReportElements => {
   const reportsContainer = document.querySelector<HTMLElement>(REPORTS.REPORTS_CONTAINER)!
   return {
@@ -104,27 +77,6 @@ export const getReportsElements = (): ReportElements => {
     }),
     title: document.querySelector<HTMLElement>(REPORTS.TITLE)!
   }
-}
-
-interface CloneElements {
-  mainContainer: HTMLElement
-  contentContainer: HTMLElement
-  clonesHeader?: string
-  cantTouchThis: boolean
-  currentQueriesText: string
-  clonesList: Array<{
-    href: string
-    nick: string
-    text: string
-    badge: CloneBadge | undefined
-  }>
-}
-
-type CloneBadgeType = 'b' | 'p' | 'd' | (string & {})
-
-interface CloneBadge {
-  text: string
-  twBg: string
 }
 
 const getCloneBadge = (clone: HTMLElement): CloneBadge | undefined => {
@@ -178,17 +130,6 @@ export const getClonesElements = (): CloneElements => {
       }
     })
   }
-}
-
-export interface FavoritesElements {
-  token: string
-  buttonsContainer: HTMLElement
-  tableHeaderRow: HTMLTableRowElement
-  tableFooterRowCell: HTMLTableColElement
-  tableRows: Array<{
-    id: string
-    row: HTMLTableRowElement
-  }>
 }
 
 export const getFavoritesElements = (): FavoritesElements => ({
@@ -263,13 +204,6 @@ const toggleIgnoreThread = async ({ isIgnored, threadId, token }: { threadId: st
   if (!data) throw new Error('Ocurrió un error al marcar/desmarcar el hilo como ignorado.')
 }
 
-const FROM_SECTIONS = {
-  FAVORITES: 'foro/favoritos',
-  IGNORED: 'foro/ignorados'
-} as const
-
-type FromSection = (typeof FROM_SECTIONS)[keyof typeof FROM_SECTIONS]
-
 const getNewToken = async (fromSection: FromSection) => {
   const response = await fetch(`https://www.mediavida.com/${fromSection}`)
 
@@ -285,13 +219,6 @@ const getNewToken = async (fromSection: FromSection) => {
   return token
 }
 
-interface SectionActionsParams {
-  threadId: string
-  token: string
-  toggle: boolean
-  fromSection: FromSection
-}
-
 const getPinnedThreadsAction = async (params: SectionActionsParams) => {
   const SECTION_ACTIONS: Record<FromSection, () => Promise<void>> = {
     [FROM_SECTIONS.FAVORITES]: () => toggleFavoriteThread({ isFavorite: params.toggle, ...params }),
@@ -300,17 +227,28 @@ const getPinnedThreadsAction = async (params: SectionActionsParams) => {
   await SECTION_ACTIONS[params.fromSection]()
 }
 
+const getSectionFromType = (type: ThreadListType) => {
+  const FROM_SECTION_TYPES: Record<ThreadListType, FromSection> = {
+    [THREAD_LIST_TYPES.FAVORITES]: FROM_SECTIONS.FAVORITES,
+    [THREAD_LIST_TYPES.IGNORED]: FROM_SECTIONS.IGNORED
+  } as const
+
+  return FROM_SECTION_TYPES[type]
+}
+
 export const removePinnedThreads = async ({
   items,
   token,
-  fromSection,
+  type,
   retries = 0
 }: {
   items: string[]
   token: string
-  fromSection: FromSection
+  type: ThreadListType
   retries?: number
 }): Promise<void> => {
+  const fromSection = getSectionFromType(type)
+
   const results = await Promise.allSettled(
     items.map(async threadId => {
       await getPinnedThreadsAction({ threadId, token, toggle: false, fromSection })
@@ -323,15 +261,6 @@ export const removePinnedThreads = async ({
 
   if (rejectedValues.length && retries < 3) {
     const newToken = await getNewToken(fromSection)
-    await removePinnedThreads({ items: rejectedValues, fromSection, token: newToken, retries: retries + 1 })
+    await removePinnedThreads({ items: rejectedValues, type, token: newToken, retries: retries + 1 })
   }
-}
-
-export const getSectionFromType = (type: ThreadListType) => {
-  const FROM_SECTION_TYPES: Record<ThreadListType, FromSection> = {
-    [THREAD_LIST_TYPES.FAVORITES]: FROM_SECTIONS.FAVORITES,
-    [THREAD_LIST_TYPES.IGNORED]: FROM_SECTIONS.IGNORED
-  } as const
-
-  return FROM_SECTION_TYPES[type]
 }
