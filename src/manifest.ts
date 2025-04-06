@@ -25,9 +25,41 @@ const allowedUrls = ['https://www.mediavida.com/*', 'https://www.chollometro.com
 const sharedManifest: SharedManifest = {
   content_scripts: [
     {
-      js: ['src/entries/contentScript/primary/main.ts'],
-      css: ['src/entries/contentScript/primary/premium-styles.css'],
-      matches: allowedUrls,
+      js: ['src/entries/contentScript/global/main.ts'],
+      css: ['src/entries/contentScript/global/premium-styles.css'],
+      matches: ['https://www.mediavida.com/*'],
+      exclude_matches: ['https://www.mediavida.com/embed/*'],
+      all_frames: true
+    },
+    {
+      js: ['src/entries/contentScript/sections/thread.tsx'],
+      // Threads urls like /foro/feda/1234567
+      matches: ['https://www.mediavida.com/foro/*/*'],
+      all_frames: true
+    },
+    {
+      js: ['src/entries/contentScript/sections/favorites-list.tsx'],
+      matches: ['https://www.mediavida.com/foro/favoritos*'],
+      all_frames: true
+    },
+    {
+      js: ['src/entries/contentScript/sections/ignored-list.tsx'],
+      matches: ['https://www.mediavida.com/foro/ignorados*'],
+      all_frames: true
+    },
+    {
+      js: ['src/entries/contentScript/sections/private-messages.tsx'],
+      matches: ['https://www.mediavida.com/mensajes/*'],
+      all_frames: true
+    },
+    {
+      js: ['src/entries/contentScript/sections/reports.tsx'],
+      matches: ['https://www.mediavida.com/foro/reportes.php*'],
+      all_frames: true
+    },
+    {
+      js: ['src/entries/contentScript/sections/clones.tsx'],
+      matches: ['https://www.mediavida.com/usuarios/clones.php*'],
       all_frames: true
     }
   ],

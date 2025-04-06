@@ -13,17 +13,6 @@ export const URLS = {
   GEMINI_CREATE_API_KEY: 'https://aistudio.google.com/app/apikey?hl=es-419'
 } as const
 
-export const PATH_REGEXP = {
-  BLACKLIST: /^\/embed\/.*$/,
-  THREAD: /^\/foro\/[^/]+\/[^/]+$/,
-  PRIVATE_MESSAGES: /^\/mensajes(\/.*)?$/,
-  PROFILE: /^\/id(\/.*)?$/,
-  REPORTS: /^\/foro\/reportes\.php(\?.*)?$/,
-  CLONES: /^\/usuarios\/clones\.php(\?.*)?$/,
-  FAVORITES: /^\/foro\/favoritos/,
-  IGNORED: /^\/foro\/ignorados/
-} satisfies Record<string, RegExp>
-
 export const STORAGE_KEYS = {
   STYLES_CONFIG: 'stylesConfig',
   GLOBAL_CONFIG: 'globalConfig'
@@ -99,17 +88,6 @@ export const DEFAULT_GLOBAL_CONFIG: GlobalConfig = {
   userNotes: [],
   highlightedUsers: []
 }
-
-export const MODULES = {
-  THREAD: 'thread',
-  PRIVATE_MESSAGES: 'private-messages',
-  REPORTS: 'reports',
-  CLONES: 'clones',
-  FAVORITES: 'favorites',
-  IGNORED: 'ignored'
-} as const
-
-export type Module = (typeof MODULES)[keyof typeof MODULES]
 
 export const THREAD_LIST_TYPES = {
   FAVORITES: 'favoritos',

@@ -24,7 +24,7 @@ export const stylesConfigSchema = z.object({
   ultraWideEnabled: z.boolean()
 })
 
-type StylesConfig = z.infer<typeof stylesConfigSchema>
+export type StylesConfig = z.infer<typeof stylesConfigSchema>
 
 export const getStylesConfig = () =>
   getStoredProperty<StylesConfig>(STORAGE_KEYS.STYLES_CONFIG, {
@@ -34,9 +34,3 @@ export const getStylesConfig = () =>
   })
 
 export const setStylesConfig = (value: StylesConfig) => setStoredProperty(STORAGE_KEYS.STYLES_CONFIG, value)
-
-export const getAllStorageConfigs = () =>
-  Promise.all([getStylesConfig(), getGlobalConfig()]).then(([stylesConfig, globalConfig]) => ({
-    [STORAGE_KEYS.STYLES_CONFIG]: stylesConfig,
-    [STORAGE_KEYS.GLOBAL_CONFIG]: globalConfig
-  }))
