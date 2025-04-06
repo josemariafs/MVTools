@@ -1,5 +1,5 @@
 import '@/entries/enableDevHmr'
-import '@/entries/contentScript/global.css'
+import '@/entries/contentScript/content-script.css'
 
 import { renderApp } from '@/entries/contentScript/utils/render'
 import { PinnedThreads } from '@/features/pinned-threads'

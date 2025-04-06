@@ -1,5 +1,5 @@
 import '@/entries/enableDevHmr'
-import '@/entries/popup/global.css'
+import '@/entries/popup/popup.css'
 
 import { Suspense } from '@suspensive/react'
 import ReactDOM from 'react-dom/client'
