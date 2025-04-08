@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { getStoredProperty, setStoredProperty } from '@/services/storage'
+import { BROWSER_STORAGE_KEYS } from '@/types/storage'
 
 export const globalConfigSchema = z.object({
   geminiApiKey: z.string(),
@@ -12,13 +13,6 @@ export const globalConfigSchema = z.object({
 
 export type GlobalConfig = z.infer<typeof globalConfigSchema>
 export type UserNote = GlobalConfig['userNotes'][number]
-
-export const BROWSER_STORAGE_KEYS = {
-  STYLES_CONFIG: 'stylesConfig',
-  GLOBAL_CONFIG: 'globalConfig'
-} as const
-
-export type BrowserStorageKey = (typeof BROWSER_STORAGE_KEYS)[keyof typeof BROWSER_STORAGE_KEYS]
 
 export const getGlobalConfig = () =>
   getStoredProperty<GlobalConfig>(BROWSER_STORAGE_KEYS.GLOBAL_CONFIG, {

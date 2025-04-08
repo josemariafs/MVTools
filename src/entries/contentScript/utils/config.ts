@@ -1,14 +1,8 @@
 import browser from 'webextension-polyfill'
 import type { ZodSchema } from 'zod'
 
-import {
-  BROWSER_STORAGE_KEYS,
-  type BrowserStorageKey,
-  type GlobalConfig,
-  globalConfigSchema,
-  type StylesConfig,
-  stylesConfigSchema
-} from '@/services/config'
+import { type GlobalConfig, globalConfigSchema, type StylesConfig, stylesConfigSchema } from '@/services/config'
+import { BROWSER_STORAGE_KEYS, type BrowserStorageKey } from '@/types/storage'
 import { devLog } from '@/utils/logging'
 
 interface StorageSetupParams<T> {
