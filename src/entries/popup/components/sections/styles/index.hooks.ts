@@ -6,7 +6,8 @@ import { BROWSER_STORAGE_KEYS, getStylesConfig, setStylesConfig, stylesConfigSch
 
 export const stylesConfigQueryOptions = queryOptions({
   queryKey: [BROWSER_STORAGE_KEYS.STYLES_CONFIG],
-  queryFn: getStylesConfig
+  queryFn: getStylesConfig,
+  staleTime: Infinity
 })
 
 const useMutateStylesConfig = () => useMutate(stylesConfigQueryOptions.queryKey, setStylesConfig)

@@ -5,7 +5,8 @@ import { BROWSER_STORAGE_KEYS, getGlobalConfig, setGlobalConfig } from '@/servic
 
 export const globalConfigQueryOptions = queryOptions({
   queryKey: [BROWSER_STORAGE_KEYS.GLOBAL_CONFIG],
-  queryFn: getGlobalConfig
+  queryFn: getGlobalConfig,
+  staleTime: Infinity
 })
 
 export const useGlobalConfig = () => useSuspenseQuery(globalConfigQueryOptions)
