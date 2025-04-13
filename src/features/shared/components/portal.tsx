@@ -9,16 +9,17 @@ interface Props extends PropsWithChildren {
   root?: HTMLElement
   where?: InsertPosition
   styles?: Partial<CSSStyleDeclaration>
+  title?: string
 }
 
-export const Portal = ({ children, root, where, styles }: Props) => {
+export const Portal = ({ children, root, where, styles, title }: Props) => {
   const { cssPaths } = useShadowRoot()
   const { theme } = useTheme()
   const [appRoot, setAppRoot] = useState<HTMLElement | null>(null)
 
   useEffect(() => {
     if (!root) return
-    renderContent({ cssPaths, render: setAppRoot, container: root, where, styles })
+    renderContent({ cssPaths, render: setAppRoot, container: root, where, styles, title })
   }, [root])
 
   useEffect(() => {

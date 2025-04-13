@@ -40,17 +40,20 @@ export const renderContent = async ({
   where = 'beforeend',
   container = document.body,
   styles,
-  cssPaths
+  cssPaths,
+  title
 }: {
   cssPaths: string[]
   render: (appRoot: HTMLElement, shadowRoot: ShadowRoot) => void
   container?: HTMLElement
   where?: InsertPosition
   styles?: Partial<CSSStyleDeclaration>
+  title?: string
 }) => {
   const appContainer = document.createElement('div')
   const appRoot = document.createElement('body')
   Object.assign(appContainer.style, styles)
+  title && appContainer.setAttribute('title', title)
 
   const shadowRoot = appContainer.attachShadow({
     mode: import.meta.env.MODE === 'development' ? 'open' : 'closed'

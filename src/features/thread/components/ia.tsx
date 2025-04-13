@@ -27,6 +27,7 @@ export const IA = () => {
         root={postButtonsContainer}
         where='afterbegin'
         styles={{ listStyle: 'none', float: 'left', padding: '0', position: 'relative', marginRight: '2px' }}
+        title='Resumir post'
       >
         <AiButton
           id={id}
