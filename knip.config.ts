@@ -4,6 +4,7 @@ export default {
   entry: [
     'src/entries/contentScript/global/*.{ts,tsx}',
     'src/entries/contentScript/sections/*.{ts,tsx}',
+    'src/entries/contentScript/injected/*.{ts,tsx}',
     'src/entries/popup/*.{ts,tsx}',
     'src/entries/background/*.{ts,tsx}'
   ],

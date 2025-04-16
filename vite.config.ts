@@ -6,6 +6,7 @@ import zipPack from 'vite-plugin-zip-pack'
 
 import pkg from './package.json'
 import { getManifest } from './src/manifest'
+import { scriptFilePaths } from './src/types/file-assets'
 
 export type Browser = 'chrome' | 'firefox' | undefined
 
@@ -40,7 +41,10 @@ export default defineConfig(({ mode }) => {
       react(),
       webExtension({
         manifest: getManifest(browser),
-        useDynamicUrlWebAccessibleResources: false
+        useDynamicUrlWebAccessibleResources: false,
+        additionalInputs: {
+          scripts: scriptFilePaths
+        }
       }),
       shouldZip &&
         zipPack({
