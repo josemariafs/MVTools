@@ -9,9 +9,32 @@ Herramientas adicionales y mejoras para la web [www.mediavida.com](https://www.m
 
 Esta versión (v3.0.0) representa una reescritura utilizando un stack tecnológico moderno basado en React 19, Vite, TypeScript y Tailwind CSS, desarrollada originalmente por `@josemariafs` y mantenida/evolucionada en este fork.
 
+MVTools es una extensión de navegador diseñada para mejorar la experiencia de usuario en el foro de Mediavida, ofreciendo herramientas adicionales para la navegación, organización de contenido, gestión de usuarios y más.
+
 ## Funcionalidades
 
-TBA
+### Mejoras de Hilos y Reportes
+* Integración con IA para análisis de contenido
+
+### Sistema de Gestión de Usuarios
+* Funcionalidad para ignorar usuarios
+* Sistema de notas de usuario
+* Resaltado de usuarios
+
+### Organización de Contenido
+* Gestión mejorada de hilos favoritos e ignorados
+* Interfaz mejorada de mensajes privados
+
+### Extensiones del Sitio
+* Integración con Chollometro.com
+* Herramientas de moderación (reportes, clones)
+* Mejoras globales del sitio
+
+### Interfaz de Usuario
+* Interfaz emergente para configuraciones y acciones rápidas
+* Estilo consistente con mediavida.com
+* Diseño responsivo para varios tamaños de pantalla
+* Cumplimiento de accesibilidad
 
 ## Stack Tecnológico Principal
 
@@ -31,7 +54,7 @@ TBA
 
 **Requisitos Previos:**
 
-* Node.js (v2 o superior)
+* Node.js (v22 o superior)
 * pnpm (Instálalo con `npm install -g pnpm` si no lo tienes)
 
 **Pasos:**
@@ -110,9 +133,27 @@ Cuando quieras generar la versión final de la extensión lista para ser publica
     ```bash
     pnpm build:firefox
     ```
-  
+
 Estos comandos generan un build **optimizado y minificado** en la carpeta `dist/`, adecuado para subir a las tiendas de extensiones (Chrome Web Store, Complementos de Mozilla) o para distribución manual.
 
+## Contribución
+
+Si deseas contribuir a MVTools, aquí hay algunas formas de hacerlo:
+
+### Reportar Problemas
+* Utiliza el [sistema de issues](https://github.com/Aleksnako/MVTools/issues) para reportar bugs
+* Incluye pasos detallados para reproducir el problema
+* Menciona tu navegador y versión de la extensión
+
+### Sugerir Mejoras
+* Las sugerencias para mejorar la extensión son bienvenidas
+* Describe claramente el caso de uso y los beneficios de tu sugerencia
+
+### Contribuir Código
+* Haz fork del repositorio y crea una rama para tu contribución
+* Sigue las convenciones de código existentes
+* Asegúrate de que tu código pase las comprobaciones de linting (`pnpm lint`)
+* Envía un pull request con una descripción clara de los cambios
 
 ## Scripts Útiles
 
@@ -153,3 +194,7 @@ Este proyecto utiliza `pnpm patch` para aplicar correcciones locales a las sigui
 2.  Eliminar las entradas correspondientes del campo `pnpm.patchedDependencies` en `package.json`.
 3.  Eliminar los archivos `.patch` asociados de la carpeta `patches/` del proyecto.
 4.  Ejecutar `pnpm install` de nuevo.
+
+## Licencia
+
+Este proyecto está licenciado bajo la [Licencia MIT](LICENSE) - consulta el archivo LICENSE para más detalles.

@@ -32,6 +32,11 @@ export const StylesSection = () => {
         <form className='space-y-2.5'>
           <form.AppField
             name='premiumEnabled'
+            listeners={{
+              onChange: ({ value }) => {
+                !value && form.setFieldValue('premiumBgDisabled', false)
+              }
+            }}
             children={field => (
               <field.FormItem className='flex items-center justify-between space-y-0'>
                 <field.FormLabel>
@@ -52,7 +57,15 @@ export const StylesSection = () => {
                   <MVPremiumLabel label='Quitar fondo' />
                 </field.FormLabel>
                 <field.FormControl>
-                  <field.FormSwitch onCheckedChange={() => form.handleSubmit()} />
+                  <form.Subscribe
+                    selector={state => state.values.premiumEnabled}
+                    children={premiumEnabled => (
+                      <field.FormSwitch
+                        disabled={!premiumEnabled}
+                        onCheckedChange={() => form.handleSubmit()}
+                      />
+                    )}
+                  />
                 </field.FormControl>
               </field.FormItem>
             )}

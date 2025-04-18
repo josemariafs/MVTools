@@ -19,7 +19,7 @@ type UpgradeTaskKey = keyof UpgradeTasks
 export const getPerformedUpgradeTasks = async () => {
   const fromVersion = await getMigratedFromVersion()
   return await getStoredProperty<UpgradeTasks>(BROWSER_STORAGE_KEYS.PERFORMED_UPGRADE_TASKS, {
-    migrateFromLocalStorage: semver.gt(fromVersion, '3.0.0')
+    migrateFromLocalStorage: semver.gte(fromVersion, '3.0.0')
   })
 }
 export const setPerformedUpgradeTask = async (upgradeTask: UpgradeTaskKey, finished: boolean) => {

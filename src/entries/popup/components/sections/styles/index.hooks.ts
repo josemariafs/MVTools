@@ -11,16 +11,8 @@ export const useStylesConfigForm = () => {
     validators: {
       onSubmit: stylesConfigSchema
     },
-    onSubmit: ({ value: { premiumBgDisabled, premiumEnabled, ...rest }, formApi }) => {
-      mutate({
-        ...rest,
-        premiumEnabled,
-        premiumBgDisabled: !premiumEnabled ? false : premiumBgDisabled
-      })
-
-      if (!premiumEnabled) {
-        formApi.setFieldValue('premiumBgDisabled', false)
-      }
+    onSubmit: ({ value }) => {
+      mutate(value)
     }
   })
 }

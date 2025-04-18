@@ -14,14 +14,15 @@ export const globalConfigSchema = z.object({
 export type GlobalConfig = z.infer<typeof globalConfigSchema>
 export type UserNote = GlobalConfig['userNotes'][number]
 
-export const getGlobalConfig = () =>
-  getStoredProperty<GlobalConfig>(BROWSER_STORAGE_KEYS.GLOBAL_CONFIG, {
-    geminiApiKey: '',
-    ignoredUsers: [],
-    showIgnoredUsers: false,
-    userNotes: [],
-    highlightedUsers: []
-  })
+export const DEFAULT_GLOBAL_CONFIG: GlobalConfig = {
+  geminiApiKey: '',
+  ignoredUsers: [],
+  showIgnoredUsers: false,
+  userNotes: [],
+  highlightedUsers: []
+}
+
+export const getGlobalConfig = () => getStoredProperty<GlobalConfig>(BROWSER_STORAGE_KEYS.GLOBAL_CONFIG, DEFAULT_GLOBAL_CONFIG)
 export const setGlobalConfig = (value: GlobalConfig) => setStoredProperty(BROWSER_STORAGE_KEYS.GLOBAL_CONFIG, value)
 
 export const stylesConfigSchema = z.object({
@@ -32,11 +33,12 @@ export const stylesConfigSchema = z.object({
 
 export type StylesConfig = z.infer<typeof stylesConfigSchema>
 
-export const getStylesConfig = () =>
-  getStoredProperty<StylesConfig>(BROWSER_STORAGE_KEYS.STYLES_CONFIG, {
-    premiumEnabled: false,
-    premiumBgDisabled: false,
-    ultraWideEnabled: false
-  })
+export const DEFAULT_STYLES_CONFIG: StylesConfig = {
+  premiumEnabled: false,
+  premiumBgDisabled: false,
+  ultraWideEnabled: false
+}
+
+export const getStylesConfig = () => getStoredProperty<StylesConfig>(BROWSER_STORAGE_KEYS.STYLES_CONFIG, DEFAULT_STYLES_CONFIG)
 
 export const setStylesConfig = (value: StylesConfig) => setStoredProperty(BROWSER_STORAGE_KEYS.STYLES_CONFIG, value)

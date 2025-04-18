@@ -1,9 +1,6 @@
-import { queryOptions, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 
-import { getPerformedUpgradeTasks, type UpgradeTasks, upgradeTasksSchema } from '@/services/upgrades'
-import { BROWSER_STORAGE_KEYS } from '@/types/storage'
-import { setupStorageListener } from '@/utils/storage'
+import { getPerformedUpgradeTasks } from '@/services/upgrades'
 
 export const isMigratedFromLocalStorageQueryOptions = queryOptions({
   queryKey: ['migratedFromLocalStorage'],
@@ -14,21 +11,4 @@ export const isMigratedFromLocalStorageQueryOptions = queryOptions({
   staleTime: Infinity
 })
 
-export const useIsMigratedFromLocalStorage = () => {
-  const queryClient = useQueryClient()
-
-  useEffect(() => {
-    const unsubscribe = setupStorageListener<UpgradeTasks>({
-      storageKey: BROWSER_STORAGE_KEYS.PERFORMED_UPGRADE_TASKS,
-      schema: upgradeTasksSchema,
-      logPrefix: 'Performed upgrade tasks',
-      onChangeCb: () => queryClient.invalidateQueries()
-    })
-
-    return () => {
-      unsubscribe()
-    }
-  }, [queryClient])
-
-  return useSuspenseQuery(isMigratedFromLocalStorageQueryOptions)
-}
+export const useIsMigratedFromLocalStorage = () => useSuspenseQuery(isMigratedFromLocalStorageQueryOptions)
