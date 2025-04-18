@@ -35,6 +35,7 @@ const sharedManifest: SharedManifest = {
       js: ['src/entries/contentScript/sections/thread.tsx'],
       // Threads urls like /foro/feda/1234567
       matches: ['https://www.mediavida.com/foro/*/*'],
+      exclude_matches: ['https://www.mediavida.com/foro/*/nuevo-hilo*'],
       all_frames: true
     },
     {
@@ -61,6 +62,11 @@ const sharedManifest: SharedManifest = {
       js: ['src/entries/contentScript/sections/clones.tsx'],
       matches: ['https://www.mediavida.com/usuarios/clones.php*'],
       all_frames: true
+    },
+    {
+      js: ['src/entries/contentScript/sections/chollometro.tsx'],
+      matches: ['https://www.chollometro.com/ofertas/*'],
+      all_frames: true
     }
   ],
   icons: {
@@ -76,7 +82,7 @@ const sharedManifest: SharedManifest = {
   permissions: ['storage', 'tabs', 'scripting'],
   web_accessible_resources: [
     {
-      resources: ['images/*'],
+      resources: ['images/*', 'icons/*'],
       matches: allowedUrls
     }
   ]

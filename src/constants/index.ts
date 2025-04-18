@@ -61,5 +61,20 @@ export const CSS_SELECTORS = {
     TABLE_HEADER_ROW: '#tablatemas > thead > tr',
     TABLE_BODY_ROW: '#tablatemas > tbody > tr',
     TABLE_FOOTER_ROW_CELL: '#tablatemas > tfoot > tr > td'
+  },
+  CHOLLOMETRO: {
+    MAIN_CONTAINER: 'main[id="main"]',
+    THREAD_TITLE: 'h1.thread-title',
+    THREAD_PRICE: 'span.thread-price',
+    VOUCHER_INPUT: 'div.voucher input',
+    DESCRIPTION: 'div[data-t="description"]',
+    GET_DEAL_BUTTON: 'a[data-t="getDeal"]',
+    DEAL_IMG: 'picture.height--all-full img'
+  },
+  NEW_THREAD: {
+    TITLE: '#cabecera',
+    CATEGORY: '#tag',
+    DESCRIPTION: '#cuerpo',
+    OTHER_CATEGORY_OPTION: 'option[value="204"]'
   }
 } as const

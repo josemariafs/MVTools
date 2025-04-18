@@ -1,9 +1,24 @@
 import browser from 'webextension-polyfill'
 
-import type { ScriptFile } from '@/types/file-assets'
+import type { ScriptArgObjects, ScriptFileObject, ScriptKey } from '@/types/content-script-assets'
 
-export const initScript = ({ tabId, file, debugMessage }: { tabId: number; file: ScriptFile; debugMessage: string }) =>
-  browser.scripting
+export const initScriptFile = async <T extends ScriptKey>({
+  tabId,
+  file,
+  args,
+  debugMessage
+}: {
+  tabId: number
+  file: ScriptFileObject<T>
+  args: ScriptArgObjects[T]
+  debugMessage: string
+}) => {
+  await browser.scripting.executeScript({
+    target: { tabId },
+    args: [args],
+    func: (args: ScriptArgObjects[T]) => Object.assign(self, args)
+  })
+  await browser.scripting
     .executeScript({
       target: { tabId },
       files: [`${file.path}.js`]
@@ -11,6 +26,7 @@ export const initScript = ({ tabId, file, debugMessage }: { tabId: number; file:
     .then(() => {
       console.debug(debugMessage)
     })
+}
 
 export const updatePopupBadge = ({ pendingUpgrade }: { pendingUpgrade: boolean }) => {
   if ('setBadgeText' in browser.action) {

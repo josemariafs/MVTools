@@ -6,7 +6,7 @@ import zipPack from 'vite-plugin-zip-pack'
 
 import pkg from './package.json'
 import { getManifest } from './src/manifest'
-import { scriptFilePaths } from './src/types/file-assets'
+import { scriptFilePaths } from './src/types/content-script-assets'
 
 export type Browser = 'chrome' | 'firefox' | undefined
 

@@ -4,26 +4,28 @@ import browser from 'webextension-polyfill'
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
-import {
-  useIsMigratedFromLocalStorage,
-  useMutateIsMigratedFromLocalStorage
-} from '@/entries/popup/hooks/use-is-migrated-from-local-storage'
-import { SCRIPT_FILES } from '@/types/file-assets'
-import { initScript, updatePopupBadge } from '@/utils/browser-extension'
+import { NotInterestedButton } from '@/entries/popup/components/panels/migrate-from-local-storage/not-interested-button'
+import { useGlobalConfig } from '@/entries/popup/hooks/use-global-config'
+import { useIsMigratedFromLocalStorage } from '@/entries/popup/hooks/use-is-migrated-from-local-storage'
+import { useStylesConfig } from '@/entries/popup/hooks/use-styles-config'
+import { SCRIPT_FILES } from '@/types/content-script-assets'
+import { initScriptFile } from '@/utils/background'
 
 export const MigrateFromLocalStoragePanel = () => {
+  const { data: globalConfig } = useGlobalConfig()
+  const { data: stylesConfig } = useStylesConfig()
   const { data: isMigratedFromLocalStorage } = useIsMigratedFromLocalStorage()
-  const { mutate } = useMutateIsMigratedFromLocalStorage()
-
-  const handleNotInterestedClick = useCallback(() => {
-    mutate(true)
-    updatePopupBadge({ pendingUpgrade: false })
-  }, [])
 
   const handleMigrateClick = useCallback(async () => {
-    const tab = await browser.tabs.create({ url: 'https://www.mediavida.com' })
+    const tab = await browser.tabs.create({ url: 'https://www.mediavida.com', active: false })
     if (!tab.id) return
-    await initScript({ tabId: tab.id, file: SCRIPT_FILES.MIGRATE_FROM_LOCAL_STORAGE, debugMessage: 'Migrating from local storage' })
+
+    await initScriptFile({
+      tabId: tab.id,
+      file: SCRIPT_FILES.MIGRATE_FROM_LOCAL_STORAGE,
+      args: { globalConfig, stylesConfig },
+      debugMessage: 'Migrating from local storage'
+    })
   }, [])
 
   if (isMigratedFromLocalStorage) return null
@@ -37,12 +39,7 @@ export const MigrateFromLocalStoragePanel = () => {
         <span>Al pulsar el botón migrar, se abrirá una página de Mediavida y copiará la configuración guardada en la extensión.</span>
         <div className='space-x-1.5'>
           <Button onClick={handleMigrateClick}>Migrar</Button>
-          <Button
-            variant='secondary'
-            onClick={handleNotInterestedClick}
-          >
-            No me interesa
-          </Button>
+          <NotInterestedButton />
         </div>
       </AlertDescription>
     </Alert>

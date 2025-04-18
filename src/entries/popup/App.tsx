@@ -1,7 +1,7 @@
 import { Suspense } from '@suspensive/react'
 
-import { MigrateFromLocalStoragePanel } from '@/entries/popup/components/migrate-from-local-storage-panel'
 import { NewPopupButton } from '@/entries/popup/components/new-popup-button'
+import { MigrateFromLocalStoragePanel } from '@/entries/popup/components/panels/migrate-from-local-storage'
 import { GlobalConfigSection } from '@/entries/popup/components/sections/global-config'
 import { StylesSection } from '@/entries/popup/components/sections/styles'
 

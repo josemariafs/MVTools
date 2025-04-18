@@ -1,8 +1,14 @@
 import browser from 'webextension-polyfill'
 
-import { getGlobalConfig, getStylesConfig, setGlobalConfig, setStylesConfig } from '@/services/config'
-import { setPerformedUpgradeTask, UPGRADE_TASKS } from '@/services/upgrades'
+import { type GlobalConfig, setGlobalConfig, setStylesConfig, type StylesConfig } from '@/services/config'
 import { MESSAGE_TYPES, type MigratedFromLocalStoragePayload } from '@/types/event-messages'
+
+interface ScriptWindow {
+  globalConfig: GlobalConfig
+  stylesConfig: StylesConfig
+}
+
+const injectedArgs = window as unknown as ScriptWindow
 
 interface NotedUser {
   nickname: string
@@ -44,14 +50,14 @@ const oldLocalStorageValues: OldLocalStorageValues = {
   geminiApiKey: getOldLocalStorageValue<string>(OLD_LOCAL_STORAGE_KEYS.GEMINI_API_KEY, '')
 }
 
-const [globalConfig, stylesConfig] = await Promise.all([getGlobalConfig(), getStylesConfig()])
+const { globalConfig, stylesConfig } = injectedArgs
 const newGlobalConfig = structuredClone(globalConfig)
 const mappedOldNotes = oldLocalStorageValues.notedUsers
   .filter(user => user.nickname && user.note)
   .map(user => ({ username: user.nickname, note: user.note }))
-newGlobalConfig.userNotes = mergeAndDeduplicate(newGlobalConfig.userNotes, mappedOldNotes, 'username')
-newGlobalConfig.ignoredUsers = mergeAndDeduplicate(newGlobalConfig.ignoredUsers, oldLocalStorageValues.ignoredUsers)
-newGlobalConfig.highlightedUsers = mergeAndDeduplicate(newGlobalConfig.highlightedUsers, oldLocalStorageValues.highlightedUsers)
+newGlobalConfig.userNotes = mergeAndDeduplicate(globalConfig.userNotes, mappedOldNotes, 'username')
+newGlobalConfig.ignoredUsers = mergeAndDeduplicate(globalConfig.ignoredUsers, oldLocalStorageValues.ignoredUsers)
+newGlobalConfig.highlightedUsers = mergeAndDeduplicate(globalConfig.highlightedUsers, oldLocalStorageValues.highlightedUsers)
 newGlobalConfig.showIgnoredUsers ||= oldLocalStorageValues.showIgnoredUsers
 newGlobalConfig.geminiApiKey ||= oldLocalStorageValues.geminiApiKey
 
@@ -65,7 +71,7 @@ try {
   await Promise.all([
     setGlobalConfig(newGlobalConfig),
     setStylesConfig(newStylesConfig),
-    setPerformedUpgradeTask(UPGRADE_TASKS.MIGRATED_FROM_LOCAL_STORAGE, true)
+    browser.runtime.sendMessage<MigratedFromLocalStoragePayload>({ type: MESSAGE_TYPES.MIGRATED_FROM_LOCAL_STORAGE, migrated: true })
   ])
   console.debug('Migration from local storage completed')
   removeOldLocalStorageValues()
@@ -75,10 +81,9 @@ try {
   await Promise.all([
     setGlobalConfig(globalConfig),
     setStylesConfig(stylesConfig),
-    setPerformedUpgradeTask(UPGRADE_TASKS.MIGRATED_FROM_LOCAL_STORAGE, false)
+    browser.runtime.sendMessage<MigratedFromLocalStoragePayload>({ type: MESSAGE_TYPES.MIGRATED_FROM_LOCAL_STORAGE, migrated: false })
   ])
 } finally {
-  browser.runtime.sendMessage<MigratedFromLocalStoragePayload>({ type: MESSAGE_TYPES.MIGRATED_FROM_LOCAL_STORAGE, migrated: true })
   close()
 }
 
