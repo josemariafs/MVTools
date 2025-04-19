@@ -97,12 +97,14 @@ export const Form = () => {
           getKey={item => item.username}
           onDelete={handleDelete}
           renderItem={item => (
-            <div className='flex w-full justify-between pr-3'>
-              <span>{item.username}</span>
-              <Tooltip>
-                <TooltipTrigger className='w-full max-w-28 truncate'>{item.note}</TooltipTrigger>
-                <TooltipContent className='w-48 text-balance text-left'>{item.note}</TooltipContent>
-              </Tooltip>
+            <div className='table w-full table-fixed pr-3'>
+              <span className='table-cell'>{item.username}</span>
+              <span className='table-cell'>
+                <Tooltip>
+                  <TooltipTrigger className='max-w-full truncate text-left'>{item.note}</TooltipTrigger>
+                  <TooltipContent className='max-w-56 text-balance text-left'>{item.note}</TooltipContent>
+                </Tooltip>
+              </span>
             </div>
           )}
         />
