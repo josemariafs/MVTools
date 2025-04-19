@@ -6,6 +6,8 @@ import { asyncValidator } from '@/utils/zod'
 
 const commonSchema = z.string().trim()
 
+export const noteSchema = commonSchema.nonempty('Introduce una nota').max(100, 'La nota debe tener como máximo 100 caracteres')
+
 export const getAnnotatedUsersSchema = (data: GlobalConfig) =>
   z.object({
     username: commonSchema
@@ -16,5 +18,5 @@ export const getAnnotatedUsersSchema = (data: GlobalConfig) =>
         'El usuario ya está en la lista de anotados'
       )
       .superRefine(asyncValidator(checkUser)),
-    note: commonSchema.nonempty('Introduce una nota')
+    note: noteSchema
   })

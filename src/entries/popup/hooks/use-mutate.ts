@@ -16,9 +16,10 @@ export const useMutate = <T>(queryKey: QueryKey, mutationFn: MutationFunction<vo
   })
 
   const mutatePartial = useCallback(
-    (partial: Partial<T>) => {
+    (partial: Partial<T> | ((oldData: T) => Partial<T>)) => {
       const oldData = queryClient.getQueryData<T>(queryKey)!
-      mutation.mutate({ ...oldData, ...partial })
+      const newPartial = typeof partial === 'function' ? partial(oldData) : partial
+      mutation.mutate({ ...oldData, ...newPartial })
     },
     [mutation.mutate, queryClient, queryKey]
   )

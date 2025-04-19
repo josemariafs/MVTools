@@ -142,7 +142,7 @@ export const FormFieldWithIcon: React.FC<FormFieldWithIconProps> = ({ className,
   )
 }
 
-export const FormInput = ({ className, ...props }: Omit<InputProps, 'value' | 'onChange'>) => {
+export const FormInput = (props: Omit<InputProps, 'value' | 'onChange'>) => {
   const field = useFieldContext<string>()
 
   return (

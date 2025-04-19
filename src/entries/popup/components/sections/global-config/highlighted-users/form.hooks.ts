@@ -14,7 +14,7 @@ export const useHighlightedUsersForm = () => {
       onSubmitAsync: getHighlightedUsersSchema(data)
     },
     onSubmit: ({ value: { highlightedUser }, formApi }) => {
-      mutatePartial({ highlightedUsers: [...data.highlightedUsers, highlightedUser] })
+      mutatePartial(oldData => ({ highlightedUsers: [...oldData.highlightedUsers, highlightedUser.trim()] }))
       formApi.reset()
     }
   })

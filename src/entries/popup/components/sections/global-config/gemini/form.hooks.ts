@@ -15,8 +15,8 @@ export const useGeminiForm = () => {
     validators: {
       onSubmitAsync: geminiFormSchema
     },
-    onSubmit: ({ value }) => {
-      mutatePartial(value)
+    onSubmit: ({ value: { geminiApiKey } }) => {
+      mutatePartial({ geminiApiKey: geminiApiKey.trim() })
     }
   })
 }

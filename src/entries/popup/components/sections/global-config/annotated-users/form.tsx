@@ -3,7 +3,7 @@ import { type FormEvent, useCallback } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { EditNoteForm } from '@/entries/popup/components/sections/global-config/annotated-users/edit-note-form'
 import { useAnnotatedUsersForm } from '@/entries/popup/components/sections/global-config/annotated-users/form.hooks'
 import { UserList } from '@/entries/popup/components/sections/global-config/user-list'
 import { useGlobalConfig, useMutateGlobalConfig } from '@/entries/popup/hooks/use-global-config'
@@ -96,14 +96,15 @@ export const Form = () => {
           users={data.userNotes}
           getKey={item => item.username}
           onDelete={handleDelete}
-          renderItem={item => (
-            <div className='table w-full table-fixed pr-3'>
-              <span className='table-cell'>{item.username}</span>
-              <span className='table-cell'>
-                <Tooltip>
-                  <TooltipTrigger className='max-w-full truncate text-left'>{item.note}</TooltipTrigger>
-                  <TooltipContent className='max-w-56 text-balance text-left'>{item.note}</TooltipContent>
-                </Tooltip>
+          itemClassName='items-stretch [&>svg]:mt-3.5 [&>button]:mt-1.5'
+          renderItem={({ note, username }) => (
+            <div className='flex w-full items-stretch'>
+              <span className='w-full pt-2'>{username}</span>
+              <span className='mr-4 w-full'>
+                <EditNoteForm
+                  note={note}
+                  username={username}
+                />
               </span>
             </div>
           )}

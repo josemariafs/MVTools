@@ -17,7 +17,7 @@ export const ShowIgnoredUsersSwitch = () => {
       >
         Ver mensajes ignorados
       </Label>
-      <div className='flex w-full items-center gap-5'>
+      <div className='ml-px flex w-full items-center gap-5'>
         <Switch
           id='showIgnoredUsers'
           checked={data.showIgnoredUsers}

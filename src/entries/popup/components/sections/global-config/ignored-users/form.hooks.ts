@@ -14,7 +14,7 @@ export const useIgnoredUsersForm = () => {
       onSubmitAsync: getIgnoredUsersSchema(data)
     },
     onSubmit: ({ value: { ignoredUser }, formApi }) => {
-      mutatePartial({ ignoredUsers: [...data.ignoredUsers, ignoredUser] })
+      mutatePartial(oldData => ({ ignoredUsers: [...oldData.ignoredUsers, ignoredUser.trim()] }))
       formApi.reset()
     }
   })

@@ -34,7 +34,7 @@ export const Notes = () => {
         container={appRoot}
         side='bottom'
         dark
-        className='max-w-96 text-balance text-left text-base'
+        className='max-w-72 text-pretty text-base'
       >
         {userNote}
       </TooltipContent>
