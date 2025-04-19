@@ -12,7 +12,7 @@ export const upgradeTasksSchema = z.object({
   migrateFromLocalStorage: z.boolean()
 })
 
-export type UpgradeTasks = z.infer<typeof upgradeTasksSchema>
+type UpgradeTasks = z.infer<typeof upgradeTasksSchema>
 
 type UpgradeTaskKey = keyof UpgradeTasks
 
