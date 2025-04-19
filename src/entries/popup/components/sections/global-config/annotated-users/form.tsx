@@ -38,7 +38,7 @@ export const Form = () => {
         selector={state => state.isValid}
         children={isValid => (
           <Label
-            className={cn('min-w-28 pt-1', !isValid && 'text-destructive')}
+            className={cn('min-w-28 max-w-28 pt-1', !isValid && 'text-destructive')}
             htmlFor='username'
           >
             Añadir notas a usuario

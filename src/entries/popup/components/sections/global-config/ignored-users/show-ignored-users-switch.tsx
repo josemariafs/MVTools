@@ -13,7 +13,7 @@ export const ShowIgnoredUsersSwitch = () => {
     <div className='flex w-full gap-2.5 pb-2.5 pt-2'>
       <Label
         htmlFor='showIgnoredUsers'
-        className='min-w-28'
+        className='min-w-28 max-w-28'
       >
         Ver mensajes ignorados
       </Label>
