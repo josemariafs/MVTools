@@ -8,7 +8,7 @@ const commonSchema = z.string().trim()
 
 export const noteSchema = commonSchema.nonempty('Introduce una nota').max(100, 'La nota debe tener como máximo 100 caracteres')
 
-export const getAnnotatedUsersSchema = (data: GlobalConfig) =>
+export const getSyncAnnotatedUsersSchema = (data: GlobalConfig) =>
   z.object({
     username: commonSchema
       .toLowerCase()
@@ -16,7 +16,11 @@ export const getAnnotatedUsersSchema = (data: GlobalConfig) =>
       .refine(
         value => !data.userNotes.some(({ username }) => username.toLowerCase() === value),
         'El usuario ya está en la lista de anotados'
-      )
-      .superRefine(asyncValidator(checkUser)),
+      ),
     note: noteSchema
   })
+
+export const asyncAnnotatedUsersSchema = z.object({
+  username: commonSchema.superRefine(asyncValidator(checkUser)),
+  note: z.string()
+})

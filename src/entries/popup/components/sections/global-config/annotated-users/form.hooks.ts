@@ -1,7 +1,11 @@
-import { getAnnotatedUsersSchema } from '@/entries/popup/components/sections/global-config/annotated-users/schema'
+import {
+  asyncAnnotatedUsersSchema,
+  getSyncAnnotatedUsersSchema
+} from '@/entries/popup/components/sections/global-config/annotated-users/schema'
 import { useAppForm } from '@/entries/popup/hooks/use-form'
 import { useGlobalConfig, useMutateGlobalConfig } from '@/entries/popup/hooks/use-global-config'
 import type { UserNote } from '@/services/config'
+import { checkSchemaOnSubmitAsync } from '@/utils/zod'
 
 export const useAnnotatedUsersForm = () => {
   const { data } = useGlobalConfig()
@@ -12,7 +16,8 @@ export const useAnnotatedUsersForm = () => {
       note: ''
     },
     validators: {
-      onSubmitAsync: getAnnotatedUsersSchema(data)
+      onSubmit: getSyncAnnotatedUsersSchema(data),
+      onSubmitAsync: checkSchemaOnSubmitAsync(asyncAnnotatedUsersSchema)
     },
     onSubmit: ({ value, formApi }) => {
       const trimmedValues: UserNote = {

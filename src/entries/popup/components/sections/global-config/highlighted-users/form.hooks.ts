@@ -1,6 +1,10 @@
-import { getHighlightedUsersSchema } from '@/entries/popup/components/sections/global-config/highlighted-users/schema'
+import {
+  asyncHighlightedUsersSchema,
+  getSyncHighlightedUsersSchema
+} from '@/entries/popup/components/sections/global-config/highlighted-users/schema'
 import { useAppForm } from '@/entries/popup/hooks/use-form'
 import { useGlobalConfig, useMutateGlobalConfig } from '@/entries/popup/hooks/use-global-config'
+import { checkSchemaOnSubmitAsync } from '@/utils/zod'
 
 export const useHighlightedUsersForm = () => {
   const { data } = useGlobalConfig()
@@ -11,7 +15,8 @@ export const useHighlightedUsersForm = () => {
       highlightedUser: ''
     },
     validators: {
-      onSubmitAsync: getHighlightedUsersSchema(data)
+      onSubmit: getSyncHighlightedUsersSchema(data),
+      onSubmitAsync: checkSchemaOnSubmitAsync(asyncHighlightedUsersSchema)
     },
     onSubmit: ({ value: { highlightedUser }, formApi }) => {
       mutatePartial(oldData => ({ highlightedUsers: [...oldData.highlightedUsers, highlightedUser.trim()] }))
