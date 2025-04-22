@@ -1,8 +1,5 @@
 import { CSS_SELECTORS, HTML_ATTRIBUTES } from '@/constants'
 import {
-  type CloneBadge,
-  type CloneBadgeType,
-  type CloneElements,
   type FavoritesElements,
   FROM_SECTIONS,
   type FromSection,
@@ -15,7 +12,7 @@ import {
   type ThreadListType
 } from '@/types/media-vida'
 
-const { POSTS, REPLIES, PRIVATE_MESSAGES, REPORTS, CLONES, FAVOURITES } = CSS_SELECTORS
+const { POSTS, REPLIES, PRIVATE_MESSAGES, REPORTS, FAVOURITES } = CSS_SELECTORS
 const { DATA_AUTOR } = HTML_ATTRIBUTES
 
 export const getPostsElements = (): PostElements[] => {
@@ -76,59 +73,6 @@ export const getReportsElements = (): ReportElements => {
       }
     }),
     title: document.querySelector<HTMLElement>(REPORTS.TITLE)!
-  }
-}
-
-const getCloneBadge = (clone: HTMLElement): CloneBadge | undefined => {
-  const type = clone.querySelector(CLONES.CLONE_BADGE)?.textContent as CloneBadgeType | undefined
-  if (type == null) return
-
-  const BADGE_TYPES: Record<CloneBadgeType, CloneBadge> = {
-    b: {
-      text: 'BANNED',
-      twBg: 'bg-[#af2727]'
-    },
-    p: {
-      text: 'Sanción activa',
-      twBg: 'bg-[#34588f]'
-    },
-    d: {
-      text: 'Cuenta desactivada',
-      twBg: 'bg-[#2d2d2d]'
-    },
-    unknown: {
-      text: 'Desconocido',
-      twBg: 'bg-[#2d2d2d]'
-    }
-  } as const
-
-  return BADGE_TYPES[type] ?? BADGE_TYPES.unknown
-}
-
-export const getClonesElements = (): CloneElements => {
-  const mainContainer = document.querySelector<HTMLElement>(CLONES.MAIN_CONTAINER)!
-  const contentContainer = mainContainer.querySelector<HTMLElement>(CLONES.CONTENT_CONTAINER)!
-  const boxContainers = Array.from<HTMLElement>(mainContainer.querySelectorAll<HTMLElement>(CLONES.BOX_CONTAINER))
-  const currentQueriesText = boxContainers[0]?.innerText ?? contentContainer.innerText
-
-  return {
-    mainContainer,
-    contentContainer,
-    currentQueriesText,
-    cantTouchThis: currentQueriesText.includes("Can't touch this"),
-    clonesHeader: boxContainers[1]?.querySelector(CLONES.HEADER)?.innerText,
-    clonesList: Array.from<HTMLElement>(mainContainer.querySelectorAll(CLONES.LIST)).map(clone => {
-      const anchor = clone.querySelector(CLONES.CLONE_ANCHOR)!
-      const badge = getCloneBadge(clone)
-      const nick = anchor.textContent!
-      const textWithoutNick = clone.innerText.trim().replace(nick, '')
-      return {
-        href: anchor.href,
-        nick,
-        text: badge ? textWithoutNick.slice(0, -1) : textWithoutNick,
-        badge: getCloneBadge(clone)
-      }
-    })
   }
 }
 

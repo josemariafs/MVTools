@@ -40,27 +40,6 @@ export interface ReportElements {
   title: HTMLElement
 }
 
-export interface CloneElements {
-  mainContainer: HTMLElement
-  contentContainer: HTMLElement
-  clonesHeader?: string
-  cantTouchThis: boolean
-  currentQueriesText: string
-  clonesList: Array<{
-    href: string
-    nick: string
-    text: string
-    badge: CloneBadge | undefined
-  }>
-}
-
-export type CloneBadgeType = 'b' | 'p' | 'd' | (string & {})
-
-export interface CloneBadge {
-  text: string
-  twBg: string
-}
-
 export interface FavoritesElements {
   token: string
   buttonsContainer: HTMLElement
