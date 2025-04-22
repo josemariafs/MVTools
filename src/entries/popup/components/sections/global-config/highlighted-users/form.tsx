@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button'
 import { useHighlightedUsersForm } from '@/entries/popup/components/sections/global-config/highlighted-users/form.hooks'
 import { UserList } from '@/entries/popup/components/sections/global-config/user-list'
 import { useGlobalConfig, useMutateGlobalConfig } from '@/entries/popup/hooks/use-global-config'
+import { checkUserSchema, getUsernameSchema } from '@/entries/popup/services/validation'
+import { checkSchemaOnFieldValidatorAsync } from '@/utils/zod'
 
 export const Form = () => {
   const form = useHighlightedUsersForm()
@@ -26,6 +28,10 @@ export const Form = () => {
     <form onSubmit={handleSubmit}>
       <form.AppField
         name='highlightedUser'
+        validators={{
+          onChange: getUsernameSchema(data, 'highlightedUsers'),
+          onSubmitAsync: checkSchemaOnFieldValidatorAsync(checkUserSchema)
+        }}
         children={field => (
           <field.FormItem className='flex w-full gap-2.5 space-y-0'>
             <field.FormLabel className='min-w-28 pt-2.5'>Destacar usuario</field.FormLabel>

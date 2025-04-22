@@ -7,8 +7,10 @@ import { EditNoteForm } from '@/entries/popup/components/sections/global-config/
 import { useAnnotatedUsersForm } from '@/entries/popup/components/sections/global-config/annotated-users/form.hooks'
 import { UserList } from '@/entries/popup/components/sections/global-config/user-list'
 import { useGlobalConfig, useMutateGlobalConfig } from '@/entries/popup/hooks/use-global-config'
+import { checkUserSchema, getUsernameSchema, noteSchema } from '@/entries/popup/services/validation'
 import type { UserNote } from '@/services/config'
 import { cn } from '@/utils/tailwind'
+import { checkSchemaOnFieldValidatorAsync } from '@/utils/zod'
 
 export const Form = () => {
   const form = useAnnotatedUsersForm()
@@ -50,6 +52,10 @@ export const Form = () => {
           <div className='flex w-full gap-2'>
             <form.AppField
               name='username'
+              validators={{
+                onChange: getUsernameSchema(data, 'userNotes'),
+                onSubmitAsync: checkSchemaOnFieldValidatorAsync(checkUserSchema)
+              }}
               children={field => (
                 <field.FormItem className='w-full'>
                   <field.FormControl className='w-full'>
@@ -64,6 +70,7 @@ export const Form = () => {
             />
             <form.AppField
               name='note'
+              validators={{ onChange: noteSchema }}
               children={field => (
                 <field.FormItem className='w-full'>
                   <field.FormControl className='w-full'>

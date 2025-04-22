@@ -4,6 +4,8 @@ import { type FormEvent, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { URLS } from '@/constants'
 import { useGeminiForm } from '@/entries/popup/components/sections/global-config/gemini/form.hooks'
+import { geminiFormSchema } from '@/entries/popup/services/validation'
+import { checkSchemaOnFieldValidatorAsync } from '@/utils/zod'
 
 export const Form = () => {
   const form = useGeminiForm()
@@ -21,6 +23,7 @@ export const Form = () => {
     >
       <form.AppField
         name='geminiApiKey'
+        validators={{ onSubmitAsync: checkSchemaOnFieldValidatorAsync(geminiFormSchema) }}
         children={field => (
           <field.FormItem className='flex w-full gap-2.5 space-y-0'>
             <field.FormLabel className='min-w-28 pt-2.5'>Gemini API Key</field.FormLabel>

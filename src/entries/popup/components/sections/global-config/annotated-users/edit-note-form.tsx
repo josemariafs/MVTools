@@ -2,6 +2,7 @@ import { type FormEvent, type KeyboardEvent, useCallback, useRef } from 'react'
 
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useForm } from '@/entries/popup/components/sections/global-config/annotated-users/edit-note-form.hooks'
+import { noteSchema } from '@/entries/popup/services/validation'
 import type { UserNote } from '@/services/config'
 import { cn } from '@/utils/tailwind'
 
@@ -27,6 +28,7 @@ export const EditNoteForm = ({ note, username }: UserNote) => {
   return (
     <form.AppField
       name='note'
+      validators={{ onChange: noteSchema }}
       children={field => (
         <field.FormItem className='w-full'>
           <field.FormControl className='w-full'>
