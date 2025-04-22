@@ -3,11 +3,12 @@ import type { InjectDealScriptPayload } from '@/types/event-messages'
 
 const { TITLE, DESCRIPTION, CATEGORY, OTHER_CATEGORY_OPTION } = CSS_SELECTORS.NEW_THREAD
 
-interface ScriptWindow {
-  deal: InjectDealScriptPayload['deal']
-}
+type ScriptWindow = Window &
+  typeof globalThis & {
+    deal: InjectDealScriptPayload['deal']
+  }
 
-const { deal } = window as unknown as ScriptWindow
+const { deal } = window as ScriptWindow
 const { title, price, link, description, dealImgUrl, voucher } = deal
 
 const titleInput = document.querySelector<HTMLInputElement>(TITLE)

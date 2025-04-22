@@ -3,12 +3,13 @@ import browser from 'webextension-polyfill'
 import { type GlobalConfig, setGlobalConfig, setStylesConfig, type StylesConfig } from '@/services/config'
 import { MESSAGE_TYPES, type MigratedFromLocalStoragePayload } from '@/types/event-messages'
 
-interface ScriptWindow {
-  globalConfig: GlobalConfig
-  stylesConfig: StylesConfig
-}
+type ScriptWindow = Window &
+  typeof globalThis & {
+    globalConfig: GlobalConfig
+    stylesConfig: StylesConfig
+  }
 
-const injectedArgs = window as unknown as ScriptWindow
+const { globalConfig, stylesConfig } = window as ScriptWindow
 
 interface NotedUser {
   nickname: string
@@ -50,7 +51,6 @@ const oldLocalStorageValues: OldLocalStorageValues = {
   geminiApiKey: getOldLocalStorageValue<string>(OLD_LOCAL_STORAGE_KEYS.GEMINI_API_KEY, '')
 }
 
-const { globalConfig, stylesConfig } = injectedArgs
 const newGlobalConfig = structuredClone(globalConfig)
 const mappedOldNotes = oldLocalStorageValues.notedUsers
   .filter(user => user.nickname && user.note)
