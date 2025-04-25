@@ -63,27 +63,29 @@ const secondForm = allForms.length > 1 ? allForms[1]! : null
 if (secondForm?.parentNode) {
   const showIpsIsEnabled = window.localStorage.getItem('showIpsWithoutClons') === 'true'
   const newFieldset = document.createElement('fieldset')
-  const checkbox = newFieldset.querySelector<HTMLInputElement>('#show-all-ips')
-  if (checkbox) {
-    checkbox.addEventListener('change', () => {
-      window.localStorage.setItem('showIpsWithoutClons', checkbox.checked.toString())
-    })
-  }
+
   newFieldset.innerHTML = `
     <div style=" background: rgba(0, 0, 0, 0.5) !important; width: max-content; padding: 0 25px; border-radius: 0 0 0 10px; height: 40px; float: left;">
         <div class="control-label" style="margin-bottom: 20px;">
-            <h4>Mostrar IPs sin clones <br> <a href="https://www.mediavida.com/foro/mediavida/estilos-mv7-581940#8" target="_blank">MV Premium</a></h4>
+            <h4>Mostrar IPs sin clones</h4>
         </div>
         <div class="control-input">
             <label class="switch" for="show-all-ips">
                 <input type="checkbox" id="show-all-ips" ${showIpsIsEnabled ? 'checked' : ''}>
                 <div class="slider round"></div>
             </label>
-            <a href="#!" class="tooltipAnchorConfig" data-tooltip="[SOLO ADMINS] Muestra todas las ips del usuario aunque no tengan clones coincidentes. ">?</a>
         </div>
     </div>
     <div style=" background: rgba(0, 0, 0, 0.5) !important; width: max-content; padding: 0 25px; border-radius: 0 0 10px 0; height: 40px; float: left;">
         </div>
 `
   secondForm.insertAdjacentElement('afterend', newFieldset)
+
+  const checkbox = newFieldset.querySelector<HTMLInputElement>('#show-all-ips')
+  if (checkbox) {
+    checkbox.addEventListener('change', () => {
+      window.localStorage.setItem('showIpsWithoutClons', checkbox.checked.toString())
+      location.reload()
+    })
+  }
 }
