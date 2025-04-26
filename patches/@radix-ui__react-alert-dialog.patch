@@ -1,0 +1,32 @@
+diff --git a/dist/index.js b/dist/index.js
+index 083f20c2e2b7b2d8d0afde30f1bd09be18fac5c4..0484be91b9b4fca4c3aa8e63e479206e8d7f9d30 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -182,9 +182,8 @@ Alternatively, you can use your own component as a description by assigning it a
+ 
+ For more information, see https://radix-ui.com/primitives/docs/components/alert-dialog`;
+   React.useEffect(() => {
+-    const hasDescription = document.getElementById(
+-      contentRef.current?.getAttribute("aria-describedby")
+-    );
++    const describedById = contentRef.current?.getAttribute('aria-describedby');
++    const hasDescription = contentRef.current?.querySelector(`[id="${describedById}"]`);
+     if (!hasDescription) console.warn(MESSAGE);
+   }, [MESSAGE, contentRef]);
+   return null;
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 5d24e756ab9bfdeacb9196d84794f1525eeafdb6..78500cab960c936d2b4a9ee9ca3a317fee5d53f4 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -129,9 +129,8 @@ Alternatively, you can use your own component as a description by assigning it a
+ 
+ For more information, see https://radix-ui.com/primitives/docs/components/alert-dialog`;
+   React.useEffect(() => {
+-    const hasDescription = document.getElementById(
+-      contentRef.current?.getAttribute("aria-describedby")
+-    );
++    const describedById = contentRef.current?.getAttribute('aria-describedby');
++    const hasDescription = contentRef.current?.querySelector(`[id="${describedById}"]`);
+     if (!hasDescription) console.warn(MESSAGE);
+   }, [MESSAGE, contentRef]);
+   return null;
