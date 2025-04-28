@@ -8,8 +8,17 @@ export const FIREFOX_ADDON_ID = '{unknown}' // Replace with the UUID of the exte
 export const AI_MIN_POST_LENGTH = 350
 
 export const URLS = {
+  MEDIAVIDA: 'https://www.mediavida.com',
+  CHOLLOMETRO: 'https://www.chollometro.com',
   GEMINI_CREATE_API_KEY: 'https://aistudio.google.com/app/apikey?hl=es-419'
 } as const
+
+export const ALLOWED_URLS = {
+  MEDIAVIDA: `${URLS.MEDIAVIDA}/*`,
+  CHOLLOMETRO: `${URLS.CHOLLOMETRO}/*`
+} as const
+
+export const ALL_ALLOWED_URLS = Object.values(ALLOWED_URLS)
 
 export const HTML_ATTRIBUTES = {
   DATA_AUTOR: 'data-autor'
