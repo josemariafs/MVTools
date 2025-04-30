@@ -4,6 +4,7 @@ import browser from 'webextension-polyfill'
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
+import { URLS } from '@/constants'
 import { NotInterestedButton } from '@/entries/popup/components/panels/migrate-from-local-storage/not-interested-button'
 import { useGlobalConfig } from '@/entries/popup/hooks/use-global-config'
 import { useIsMigratedFromLocalStorage } from '@/entries/popup/hooks/use-is-migrated-from-local-storage'
@@ -17,7 +18,7 @@ export const MigrateFromLocalStoragePanel = () => {
   const { data: isMigratedFromLocalStorage } = useIsMigratedFromLocalStorage()
 
   const handleMigrateClick = useCallback(async () => {
-    const tab = await browser.tabs.create({ url: 'https://www.mediavida.com', active: false })
+    const tab = await browser.tabs.create({ url: URLS.MEDIAVIDA, active: false })
     if (!tab.id) return
 
     await initScriptFile({

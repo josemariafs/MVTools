@@ -1,5 +1,6 @@
 import browser from 'webextension-polyfill'
 
+import { URLS } from '@/constants'
 import { getPerformedUpgradeTasks, setMigratedFromVersion, setPerformedUpgradeTask, UPGRADE_TASKS } from '@/services/upgrades'
 import { SCRIPT_FILES } from '@/types/content-script-assets'
 import {
@@ -39,7 +40,7 @@ browser.runtime.onMessage.addListener(async message => {
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Needed to explicitly check
   if (type === MESSAGE_TYPES.INJECT_DEAL_SCRIPT) {
     const { deal } = InjectDealScriptPayloadSchema.parse(message)
-    const tab = await browser.tabs.create({ url: 'https://www.mediavida.com/foro/club-hucha/nuevo-hilo' })
+    const tab = await browser.tabs.create({ url: `${URLS.MEDIAVIDA}/foro/club-hucha/nuevo-hilo` })
     await initScriptFile({
       tabId: tab.id!,
       file: SCRIPT_FILES.FILL_NEW_DEAL_THREAD,

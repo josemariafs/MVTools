@@ -90,7 +90,7 @@ export const getFavoritesElements = (): FavoritesElements => ({
 })
 
 export const checkUser = async (nick: string) => {
-  const response = await fetch('https://www.mediavida.com/usuarios/action/joincheck.php', {
+  const response = await fetch(`${URLS.MEDIAVIDA}/usuarios/action/joincheck.php`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -111,7 +111,7 @@ export const checkUser = async (nick: string) => {
 const toggleFavoriteThread = async ({ isFavorite, threadId, token }: { threadId: string; isFavorite: boolean; token: string }) => {
   const todo = isFavorite ? 'fav' : 'delfav'
 
-  const response = await fetch('https://www.mediavida.com/foro/action/topic_fav.php', {
+  const response = await fetch(`${URLS.MEDIAVIDA}/foro/action/topic_fav.php`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -131,7 +131,7 @@ const toggleFavoriteThread = async ({ isFavorite, threadId, token }: { threadId:
 const toggleIgnoreThread = async ({ isIgnored, threadId, token }: { threadId: string; isIgnored: boolean; token: string }) => {
   const action = isIgnored ? 'ignore' : 'unignore'
 
-  const response = await fetch('https://www.mediavida.com/foro/action/topic_ignore.php', {
+  const response = await fetch(`${URLS.MEDIAVIDA}/foro/action/topic_ignore.php`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -149,7 +149,7 @@ const toggleIgnoreThread = async ({ isIgnored, threadId, token }: { threadId: st
 }
 
 const getNewToken = async (fromSection: FromSection) => {
-  const response = await fetch(`https://www.mediavida.com/${fromSection}`)
+  const response = await fetch(`${URLS.MEDIAVIDA}/${fromSection}`)
 
   if (!response.ok) {
     throw new Error('Ocurrió un error al obtener el nuevo token.')

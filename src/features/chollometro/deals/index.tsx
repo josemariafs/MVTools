@@ -29,7 +29,7 @@ export const Deals = () => {
         onClick={handleClick}
       >
         <img
-          src={browser.runtime.getURL('icons/mvlogo.png')}
+          src={browser.runtime.getURL('shared/icons/mvlogo.png')}
           alt='Media Vida Logo'
           className='size-5'
         />
