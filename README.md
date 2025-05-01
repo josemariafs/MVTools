@@ -1,4 +1,4 @@
-# MVTools v3.0.0
+# MVTools v3.1.0
 
 [![Mediavida](https://img.shields.io/badge/Target-Mediavida.com-orange)](https://www.mediavida.com)
 [![Repo](https://img.shields.io/badge/GitHub-Repo-blue)](https://github.com/Aleksnako/MVTools)
@@ -42,7 +42,7 @@ MVTools es una extensión de navegador diseñada para mejorar la experiencia de 
 * **Bundler:** Vite con `@samrum/vite-plugin-web-extension`
 * **Gestor de Paquetes:** pnpm
 * **UI:** Radix UI Primitives + shadcn/ui (implícito) + Tailwind CSS
-* **Estado/Datos:** TanStack Query (Server State) + TanStack Store (Client State?) + Zod (Validación)
+* **Estado/Datos:** TanStack Query (Async State) + TanStack Store (Global State) + Zod (Validación)
 * **Formularios:** TanStack Form
 * **APIs Extensión:** `webextension-polyfill`
 * **Iconos:** Lucide Icons
