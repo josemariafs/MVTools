@@ -2,11 +2,11 @@ import { z } from 'zod'
 
 export const MESSAGE_TYPES = {
   MIGRATED_FROM_LOCAL_STORAGE: 'migratedFromLocalStorage',
-  INJECT_DEAL_SCRIPT: 'injectDealScript'
+  DEAL: 'deal'
 } as const
 
 export const DefaultEventListenerPayloadSchema = z.object({
-  type: z.enum([MESSAGE_TYPES.MIGRATED_FROM_LOCAL_STORAGE, MESSAGE_TYPES.INJECT_DEAL_SCRIPT])
+  type: z.enum([MESSAGE_TYPES.MIGRATED_FROM_LOCAL_STORAGE])
 })
 
 export const MigratedFromLocalStoragePayloadSchema = DefaultEventListenerPayloadSchema.extend({
@@ -16,16 +16,17 @@ export const MigratedFromLocalStoragePayloadSchema = DefaultEventListenerPayload
 
 export type MigratedFromLocalStoragePayload = z.infer<typeof MigratedFromLocalStoragePayloadSchema>
 
-export const InjectDealScriptPayloadSchema = z.object({
-  type: z.literal(MESSAGE_TYPES.INJECT_DEAL_SCRIPT),
-  deal: z.object({
-    title: z.string(),
-    price: z.string(),
-    link: z.string(),
-    description: z.string(),
-    dealImgUrl: z.string(),
-    voucher: z.string().optional()
-  })
+export interface Deal {
+  title: string
+  price: string
+  link: string
+  description: string
+  dealImgUrl: string
+  voucher?: string
+}
+
+export const DealPayloadSchema = z.object({
+  type: z.literal(MESSAGE_TYPES.DEAL)
 })
 
-export type InjectDealScriptPayload = z.infer<typeof InjectDealScriptPayloadSchema>
+export type DealPayload = z.infer<typeof DealPayloadSchema>
