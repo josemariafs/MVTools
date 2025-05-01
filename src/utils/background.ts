@@ -37,3 +37,9 @@ export const updatePopupBadge = ({ pendingUpgrade }: { pendingUpgrade: boolean }
     browser.action.setBadgeBackgroundColor({ color: pendingUpgrade ? '#FF0000' : '#00FF00' })
   }
 }
+
+export const getActiveTab = async () => {
+  const [activeTab] = await browser.tabs.query({ active: true, lastFocusedWindow: true })
+  if (!activeTab) throw new Error('No active tab found')
+  return activeTab
+}

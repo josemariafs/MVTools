@@ -1,11 +1,11 @@
 import { CSS_SELECTORS } from '@/constants'
-import type { InjectDealScriptPayload } from '@/types/event-messages'
+import type { Deal } from '@/types/event-messages'
 
 const { TITLE, DESCRIPTION, CATEGORY, OTHER_CATEGORY_OPTION } = CSS_SELECTORS.NEW_THREAD
 
 type ScriptWindow = Window &
   typeof globalThis & {
-    deal: InjectDealScriptPayload['deal']
+    deal: Deal
   }
 
 const { deal } = window as ScriptWindow

@@ -2,7 +2,7 @@
 import type { AdditionalInput } from '@samrum/vite-plugin-web-extension'
 
 import type { GlobalConfig, StylesConfig } from '@/services/config'
-import type { InjectDealScriptPayload } from '@/types/event-messages'
+import type { Deal } from '@/types/event-messages'
 
 import { ALLOWED_URLS } from '../constants'
 
@@ -14,7 +14,7 @@ export interface ScriptArgObjects {
     stylesConfig: StylesConfig
   }
   FILL_NEW_DEAL_THREAD: {
-    deal: InjectDealScriptPayload['deal']
+    deal: Deal
   }
 }
 

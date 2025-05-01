@@ -1,4 +1,4 @@
-import { CSS_SELECTORS, HTML_ATTRIBUTES } from '@/constants'
+import { CSS_SELECTORS, HTML_ATTRIBUTES, URLS } from '@/constants'
 import {
   type FavoritesElements,
   FROM_SECTIONS,
