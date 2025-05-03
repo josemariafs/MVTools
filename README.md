@@ -1,9 +1,9 @@
-# MVTools v3.1.1
+# MVTools v3.2.0
 
 [![Mediavida](https://img.shields.io/badge/Target-Mediavida.com-orange)](https://www.mediavida.com)
 [![Repo](https://img.shields.io/badge/GitHub-Repo-blue)](https://github.com/josemariafs/MVTools)
 ![Tech Stack](https://img.shields.io/badge/Stack-React_19_/_Vite_/_TS-brightgreen)
-[![Version](https://img.shields.io/badge/Version-3.1.1-blue)](package.json)
+[![Version](https://img.shields.io/badge/Version-3.2.0-blue)](package.json)
 
 Herramientas adicionales y mejoras para la web [www.mediavida.com](https://www.mediavida.com).
 
@@ -20,7 +20,7 @@ MVTools es una extensión de navegador diseñada para mejorar la experiencia de 
 * Resaltado de usuarios
 
 ### Organización de Contenido
-* Gestión mejorada de hilos favoritos e ignorados
+* Gestión mejorada de hilos favoritos, ignorados y marcados
 * Interfaz mejorada de mensajes privados
 
 ### Extensiones del Sitio
