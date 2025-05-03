@@ -4,7 +4,7 @@ import { type MouseEvent, useCallback } from 'react'
 import { toast } from 'sonner'
 
 import { SearchInput } from '@/components/ui/search-input'
-import { useMarkers } from '@/features/markers/hooks/useMarkers'
+import { useMarkers } from '@/features/markers/hooks/use-markers'
 import { RemoveItemsButton } from '@/features/shared/components/remove-items-button'
 import { modifyBookmarkedPosts } from '@/services/media-vida'
 import type { MarkerPost } from '@/types/media-vida'

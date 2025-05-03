@@ -2,7 +2,7 @@ import type { Table } from '@tanstack/react-table'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-import { useMarkers } from '@/features/markers/hooks/useMarkers'
+import { useMarkers } from '@/features/markers/hooks/use-markers'
 import type { MarkerPost } from '@/types/media-vida'
 import { cn } from '@/utils/tailwind'
 

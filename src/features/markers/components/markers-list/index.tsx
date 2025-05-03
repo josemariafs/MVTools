@@ -4,7 +4,7 @@ import { BottomControlPanel } from '@/features/markers/components/markers-list/b
 import { MarkersTable } from '@/features/markers/components/markers-list/markers-table'
 import { columns } from '@/features/markers/components/markers-list/table-data'
 import { TopControlPanel } from '@/features/markers/components/markers-list/top-control-panel'
-import { useMarkers } from '@/features/markers/hooks/useMarkers'
+import { useMarkers } from '@/features/markers/hooks/use-markers'
 import { Portal } from '@/features/shared/components/portal'
 import { useShadowRoot } from '@/features/shared/hooks/use-shadow-root'
 import { useUserPreferences } from '@/features/shared/hooks/use-user-preferences'

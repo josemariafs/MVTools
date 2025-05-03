@@ -2,7 +2,7 @@ import { List } from 'lucide-react'
 import { useCallback } from 'react'
 
 import { Toggle } from '@/components/ui/toggle'
-import { useMarkers } from '@/features/markers/hooks/useMarkers'
+import { useMarkers } from '@/features/markers/hooks/use-markers'
 import { Portal } from '@/features/shared/components/portal'
 import { useUserPreferences } from '@/features/shared/hooks/use-user-preferences'
 import { cn } from '@/utils/tailwind'
