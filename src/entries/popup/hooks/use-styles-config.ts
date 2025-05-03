@@ -1,6 +1,6 @@
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 
-import { useMutate } from '@/entries/popup/hooks/use-mutate'
+import { useMutate } from '@/hooks/use-mutate'
 import { getStylesConfig, setStylesConfig } from '@/services/config'
 import { BROWSER_STORAGE_KEYS } from '@/types/storage'
 
