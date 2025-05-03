@@ -65,6 +65,11 @@ const sharedManifest: SharedManifest = {
       js: ['src/entries/contentScript/sections/chollometro.tsx'],
       matches: [`${URLS.CHOLLOMETRO}/ofertas/*`],
       all_frames: true
+    },
+    {
+      js: ['src/entries/contentScript/sections/markers.tsx'],
+      matches: [`${URLS.MEDIAVIDA}/id/*/marcadores*`],
+      all_frames: true
     }
   ],
   icons: {

@@ -40,5 +40,15 @@ export const DEFAULT_STYLES_CONFIG: StylesConfig = {
 }
 
 export const getStylesConfig = () => getStoredProperty<StylesConfig>(BROWSER_STORAGE_KEYS.STYLES_CONFIG, DEFAULT_STYLES_CONFIG)
-
 export const setStylesConfig = (value: StylesConfig) => setStoredProperty(BROWSER_STORAGE_KEYS.STYLES_CONFIG, value)
+
+export interface UserPreferences {
+  markersListMode: boolean
+}
+
+export const DEFAULT_USER_PREFERENCES: UserPreferences = {
+  markersListMode: false
+}
+
+export const getUserPreferences = () => getStoredProperty<UserPreferences>(BROWSER_STORAGE_KEYS.USER_PREFERENCES, DEFAULT_USER_PREFERENCES)
+export const setUserPreferences = (value: UserPreferences) => setStoredProperty(BROWSER_STORAGE_KEYS.USER_PREFERENCES, value)

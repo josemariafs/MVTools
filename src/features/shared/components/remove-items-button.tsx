@@ -13,25 +13,25 @@ import {
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { usePinnedThreads } from '@/features/pinned-threads/hooks/use-pinned-threads'
 import { usePreventDataScrollLocked } from '@/features/pinned-threads/hooks/use-prevent-data-scroll-locked'
 import { useShadowRoot } from '@/features/shared/hooks/use-shadow-root'
 import { buttonVariants, cn } from '@/utils/tailwind'
 
 interface ButtonProps {
-  onSubmit: (e: MouseEvent<HTMLButtonElement>) => Promise<void>
-  items: string[]
-  isSubmitting: boolean
+  onClick: (e: MouseEvent<HTMLButtonElement>) => Promise<void>
+  disabled: boolean
+  submitting: boolean
+  type: string
+  className?: string
 }
 
-export const SubmitButton = ({ onSubmit, items, isSubmitting }: ButtonProps) => {
+export const RemoveItemsButton = ({ onClick, disabled, submitting, type, className }: ButtonProps) => {
   const [open, setOpen] = useState(false)
-  const { type } = usePinnedThreads()
   usePreventDataScrollLocked(open)
   const { appRoot } = useShadowRoot()
 
-  const handleSubmit = useCallback(async (e: MouseEvent<HTMLButtonElement>) => {
-    await onSubmit(e)
+  const handleClick = useCallback(async (e: MouseEvent<HTMLButtonElement>) => {
+    await onClick(e)
     setOpen(false)
   }, [])
 
@@ -47,9 +47,10 @@ export const SubmitButton = ({ onSubmit, items, isSubmitting }: ButtonProps) => 
             'flex gap-1 rounded-[3px] bg-red-800 px-[12px] py-[5px] h-[32px] text-[#ecedef] border border-solid border-red-600 items-center justify-center',
             'hover:bg-red-950 hover:border-red-800',
             'disabled:pointer-events-none disabled:opacity-50',
-            'shadow-[0 2px 0 rgba(0,0,0,.03)]'
+            'shadow-[0 2px 0 rgba(0,0,0,.03)]',
+            className
           ])}
-          disabled={!items.length}
+          disabled={disabled}
         >
           <Trash2 size={14} /> Eliminar {type}
         </Button>
@@ -63,12 +64,12 @@ export const SubmitButton = ({ onSubmit, items, isSubmitting }: ButtonProps) => 
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isSubmitting}>Cancelar</AlertDialogCancel>
+          <AlertDialogCancel disabled={submitting}>Cancelar</AlertDialogCancel>
           <AlertDialogAction
-            onClick={handleSubmit}
+            onClick={handleClick}
             className={buttonVariants({ variant: 'destructive' })}
           >
-            Si, Eliminar {type} {isSubmitting && <Loader2 className='animate-spin' />}
+            Si, Eliminar {type} {submitting && <Loader2 className='animate-spin' />}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
