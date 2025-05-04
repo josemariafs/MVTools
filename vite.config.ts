@@ -16,6 +16,7 @@ export default defineConfig(({ mode }) => {
   const browser = (env.BROWSER ?? 'chrome') as Browser
   const shouldZip = env.ZIP === 'true'
   const extensionVersion = pkg.version
+  console.debug(`Building version ${extensionVersion} for ${browser} browser`)
 
   return {
     base: '',
