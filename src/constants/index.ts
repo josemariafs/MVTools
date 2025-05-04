@@ -3,7 +3,7 @@
 // The ID must be unique and in the format of a UUID.
 // More info: https://extensionworkshop.com/documentation/develop/extensions-and-the-add-on-id/
 
-export const FIREFOX_ADDON_ID = '{unknown}' // Replace with the UUID of the extension
+export const FIREFOX_ADDON_ID = 'random@id.fake' // Replace with the UUID of the extension
 
 export const AI_MIN_POST_LENGTH = 350
 

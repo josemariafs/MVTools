@@ -1,9 +1,9 @@
-# MVTools v3.2.0
+# MVTools v3.2.1
 
 [![Mediavida](https://img.shields.io/badge/Target-Mediavida.com-orange)](https://www.mediavida.com)
 [![Repo](https://img.shields.io/badge/GitHub-Repo-blue)](https://github.com/josemariafs/MVTools)
 ![Tech Stack](https://img.shields.io/badge/Stack-React_19_/_Vite_/_TS-brightgreen)
-[![Version](https://img.shields.io/badge/Version-3.2.0-blue)](package.json)
+[![Version](https://img.shields.io/badge/Version-3.2.1-blue)](package.json)
 
 Herramientas adicionales y mejoras para la web [www.mediavida.com](https://www.mediavida.com).
 

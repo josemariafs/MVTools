@@ -1,6 +1,6 @@
 {
   "name": "mv-tools",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "displayName": "MVTools",
   "author": "josemariafs",
   "description": "Additional tools for www.mediavida.com",
@@ -11,9 +11,9 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "build:firefox": "BROWSER=firefox vite build",
+    "build:firefox": "cross-env BROWSER=firefox vite build",
     "watch": "vite build --mode development --minify false --watch",
-    "watch:firefox": "BROWSER=firefox vite build --mode development --minify false --watch",
+    "watch:firefox": "cross-env BROWSER=firefox vite build --mode development --minify false --watch",
     "dev": "vite",
     "serve": "web-ext run -t chromium --start-url \"https://www.mediavida.com\" --source-dir ./dist/ --chromium-profile=./chromium-profile/ --profile-create-if-missing --keep-profile-changes",
     "serve:firefox": "web-ext run --start-url \"https://www.mediavida.com\"  --source-dir ./dist/ --firefox-profile=./firefox-profile/ --profile-create-if-missing --keep-profile-changes",
@@ -72,6 +72,7 @@
     "@types/webextension-polyfill": "0.12.2",
     "@vitejs/plugin-react": "^4.4.1",
     "autoprefixer": "^10.4.21",
+    "cross-env": "^7.0.3",
     "eslint": "^9.25.1",
     "eslint-config-love": "^119.0.0",
     "eslint-config-prettier": "^10.1.2",
