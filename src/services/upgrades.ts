@@ -4,6 +4,8 @@ import { z } from 'zod'
 import { getStoredProperty, setStoredProperty } from '@/services/storage'
 import { BROWSER_STORAGE_KEYS } from '@/types/storage'
 
+import pkg from '../../package.json'
+
 export const UPGRADE_TASKS = {
   MIGRATED_FROM_LOCAL_STORAGE: 'migrateFromLocalStorage'
 } as const
@@ -28,11 +30,7 @@ export const setPerformedUpgradeTask = async (upgradeTask: UpgradeTaskKey, finis
   await setStoredProperty(BROWSER_STORAGE_KEYS.PERFORMED_UPGRADE_TASKS, tasks)
 }
 
-type ExtensionVersion = `${string}.${string}.${string}`
-
-const DEFAULT_EXTENSION_VERSION: ExtensionVersion = '0.0.0'
-
-const getMigratedFromVersion = () => getStoredProperty(BROWSER_STORAGE_KEYS.EXTENSION_MIGRATED_FROM_VERSION, DEFAULT_EXTENSION_VERSION)
+const getMigratedFromVersion = () => getStoredProperty(BROWSER_STORAGE_KEYS.EXTENSION_MIGRATED_FROM_VERSION, pkg.version)
 export const setMigratedFromVersion = async (version: string) => {
   await setStoredProperty(BROWSER_STORAGE_KEYS.EXTENSION_MIGRATED_FROM_VERSION, version)
 }

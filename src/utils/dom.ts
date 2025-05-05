@@ -3,26 +3,6 @@ import browser from 'webextension-polyfill'
 import type { CssClassName } from '@/types/media-vida'
 import { isHTMLElement } from '@/utils/asserts'
 
-const loadedStyles = new Map<string, Promise<string>>()
-
-const loadStyle = async (cssPath: string): Promise<string> => {
-  if (loadedStyles.has(cssPath)) {
-    return await loadedStyles.get(cssPath)!
-  }
-
-  const loadPromise: Promise<string> = fetch(cssPath).then(response => response.text())
-
-  loadedStyles.set(cssPath, loadPromise)
-  return await loadPromise
-}
-
-const applyStyleToShadow = async (cssPath: string, shadowRoot: ShadowRoot): Promise<void> => {
-  const styleText: string = await loadStyle(browser.runtime.getURL(cssPath))
-  const styleSheet: CSSStyleSheet = new CSSStyleSheet()
-  styleSheet.replaceSync(styleText)
-  shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, styleSheet]
-}
-
 export const appendSonnerStyles = (shadowRoot: ShadowRoot) => {
   document.head.querySelectorAll('style').forEach(styleEl => {
     if (styleEl.textContent?.includes('[data-sonner-toaster]')) {
@@ -40,20 +20,17 @@ export const renderContent = async ({
   where = 'beforeend',
   container = document.body,
   styles,
-  cssPaths,
-  title
+  cssPaths
 }: {
   cssPaths: string[]
   render: (appRoot: HTMLElement, shadowRoot: ShadowRoot) => void
   container?: HTMLElement
   where?: InsertPosition
   styles?: Partial<CSSStyleDeclaration>
-  title?: string
 }) => {
   const appContainer = document.createElement('div')
   const appRoot = document.createElement('body')
   Object.assign(appContainer.style, styles)
-  title && appContainer.setAttribute('title', title)
 
   const shadowRoot = appContainer.attachShadow({
     mode: import.meta.env.MODE === 'development' ? 'open' : 'closed'
@@ -63,8 +40,13 @@ export const renderContent = async ({
     const { addViteStyleTarget } = await import('@samrum/vite-plugin-web-extension/client')
     await addViteStyleTarget(shadowRoot)
   } else {
-    const stylePromises = cssPaths.map(cssPath => applyStyleToShadow(cssPath, shadowRoot))
-    await Promise.all(stylePromises)
+    cssPaths.forEach(cssPath => {
+      const cssUrl = browser.runtime.getURL(cssPath)
+      const styleEl = document.createElement('link')
+      styleEl.setAttribute('rel', 'stylesheet')
+      styleEl.setAttribute('href', cssUrl)
+      shadowRoot.appendChild(styleEl)
+    })
   }
 
   shadowRoot.appendChild(appRoot)

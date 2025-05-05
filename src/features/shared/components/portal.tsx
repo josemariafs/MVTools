@@ -7,21 +7,20 @@ import { renderContent } from '@/utils/dom'
 import { cn } from '@/utils/tailwind'
 
 interface Props extends PropsWithChildren {
-  root?: HTMLElement
+  root?: HTMLElement | null
   where?: InsertPosition
   styles?: Partial<CSSStyleDeclaration>
   className?: string
-  title?: string
 }
 
-export const Portal = ({ children, root, where, styles, className, title }: Props) => {
+export const Portal = ({ children, root, where, styles, className }: Props) => {
   const { cssPaths } = useShadowRoot()
   const { theme } = useTheme()
   const [appRoot, setAppRoot] = useState<HTMLElement | null>(null)
 
   useEffect(() => {
     if (!root) return
-    renderContent({ cssPaths, render: setAppRoot, container: root, where, styles, title })
+    renderContent({ cssPaths, render: setAppRoot, container: root, where, styles })
   }, [root])
 
   useLayoutEffect(() => {

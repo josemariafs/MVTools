@@ -3,7 +3,7 @@
 // The ID must be unique and in the format of a UUID.
 // More info: https://extensionworkshop.com/documentation/develop/extensions-and-the-add-on-id/
 
-export const FIREFOX_ADDON_ID = '{unknown}' // Replace with the UUID of the extension
+export const FIREFOX_ADDON_ID = 'random@id.fake' // Replace with the UUID of the extension
 
 export const AI_MIN_POST_LENGTH = 350
 
@@ -27,6 +27,9 @@ export const HTML_ATTRIBUTES = {
 } as const
 
 export const CSS_SELECTORS = {
+  GLOBAL: {
+    TOKEN: '#token'
+  },
   POSTS: {
     MAIN_CONTAINER: `[${HTML_ATTRIBUTES.DATA_AUTOR}]`,
     COMMENT_CONTAINER: '.post-contents',
@@ -87,5 +90,18 @@ export const CSS_SELECTORS = {
     CATEGORY: '#tag',
     DESCRIPTION: '#cuerpo',
     OTHER_CATEGORY_OPTION: 'option[value="204"]'
+  },
+  MARKERS: {
+    POST_CONTAINER: '.wpx',
+    POST: '[id^="post-"]',
+    THREAD_ANCHOR: '.post-meta > h1 > a',
+    POST_CONTENT: '.post-contents',
+    MARKED_DATE: '.post-meta > span',
+    POST_AUTHOR_URL: '.post-meta > a.autor',
+    BOTTOM_PANEL_CONTAINER: '#bottompanel > div',
+    NAV_BUTTONS_CONTAINER: '.cf.mpad',
+    NEXT_PAGE_BUTTON: 'a[title="Siguiente"]',
+    PREVIOUS_PAGE_BUTTON: 'a[title="Anterior"]',
+    BETWEEN_PAGE_BUTTON: 'ul.pg > li'
   }
 } as const

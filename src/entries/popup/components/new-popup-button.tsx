@@ -14,10 +14,11 @@ export const NewPopupButton = () => {
   const handleNewWindowClick = () => {
     const width = Math.max(outerWidth + 20, document.documentElement.scrollWidth + 39)
     const height = Math.max(outerHeight + 20, document.documentElement.scrollHeight + 39)
+    const popupUrl = browser.runtime.getURL('src/entries/popup/index.html')
 
     browser.windows.create({
       type: 'popup',
-      url: 'src/entries/popup/index.html',
+      url: popupUrl,
       top: window!.top! + 90,
       left: window!.left! + window!.width! - width - 15,
       height,

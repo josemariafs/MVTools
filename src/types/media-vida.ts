@@ -51,6 +51,42 @@ export interface FavoritesElements {
   }>
 }
 
+export interface MarkerPost {
+  thread: {
+    id: string
+    title: string
+  }
+  post: {
+    id: string
+    content: string
+    url: string
+    markedDate: string
+    author: {
+      name: string
+      url: string
+    }
+  }
+}
+
+export interface MarkerBottomPanel {
+  hasPanel: boolean
+  prevButtonHref?: string
+  nextButtonHref?: string
+  betweenButtons: Array<{
+    href?: string
+    text: string
+    isCurrent: boolean
+  }>
+}
+
+export interface MarkersElements {
+  navButtonsContainer: HTMLElement | null
+  postsContainer: HTMLElement | null
+  token: string
+  posts: MarkerPost[]
+  bottomPanel?: MarkerBottomPanel
+}
+
 export const FROM_SECTIONS = {
   FAVORITES: 'foro/favoritos',
   IGNORED: 'foro/ignorados'
