@@ -1,5 +1,5 @@
 import { Check, ChevronsUpDown, Loader2 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
@@ -19,18 +19,21 @@ export const ModelSelect = () => {
     isLoading,
     isPlaceholderData
   } = useGeminiModels(globalConfig.geminiApiKey, {
-    select: models => {
-      const currentModel = models.find(model => model.name === globalConfig.geminiModel)
-      return {
-        geminiModels: models.toSorted((a, b) => {
-          if (a.name === currentModel?.name) return -1
-          if (b.name === currentModel?.name) return 1
-          return 0
-        }),
-        currentModel
-      }
-    }
+    select: models => ({
+      all: models,
+      current: models.find(model => model.name === globalConfig.geminiModel)
+    })
   })
+
+  useEffect(() => {
+    if (open && globalConfig.geminiModel) {
+      setTimeout(() => {
+        const selectedItem = document.querySelector(`[cmdk-item][data-value="${globalConfig.geminiModel}"]`)
+        selectedItem && selectedItem.scrollIntoView({ block: 'center' })
+      }, 10)
+    }
+  }, [open, globalConfig.geminiModel])
+
   return (
     <div className='flex w-full items-center gap-2.5'>
       <Label
@@ -54,7 +57,7 @@ export const ModelSelect = () => {
             className='w-full justify-between truncate px-3'
           >
             <div className='flex w-full items-center gap-2.5 truncate'>
-              <span className='flex-1 truncate text-left'>{models?.currentModel?.displayName ?? globalConfig.geminiModel}</span>
+              <span className='flex-1 truncate text-left'>{models?.current?.displayName ?? globalConfig.geminiModel}</span>
               {isLoading && (
                 <Loader2
                   size={16}
@@ -71,7 +74,7 @@ export const ModelSelect = () => {
             <CommandEmpty>No Models found.</CommandEmpty>
             <CommandList className='h-[230px]'>
               <CommandGroup>
-                {models?.geminiModels.map(model => (
+                {models?.all.map(model => (
                   <Tooltip
                     key={model.name}
                     delayDuration={0}
