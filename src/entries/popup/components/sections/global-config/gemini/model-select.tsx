@@ -31,7 +31,6 @@ export const ModelSelect = () => {
       }
     }
   })
-
   return (
     <div className='flex w-full items-center gap-2.5'>
       <Label
@@ -70,7 +69,7 @@ export const ModelSelect = () => {
           <Command loop>
             <CommandInput placeholder='Busca Modelos...' />
             <CommandEmpty>No Models found.</CommandEmpty>
-            <CommandList className='h-[var(--cmdk-list-height)]'>
+            <CommandList className='h-[230px]'>
               <CommandGroup>
                 {models?.geminiModels.map(model => (
                   <Tooltip
