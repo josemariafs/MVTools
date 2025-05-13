@@ -61,3 +61,7 @@ export const checkSchemaOnFormValidatorAsync =
   <TFormData>(schema: ZodSchema<TFormData>): FormValidateAsyncFn<TFormData> =>
   ({ value }) =>
     checkSchemaOnValidatorAsync({ schema, value, validationSource: 'form' })
+
+export function getEnumValues<T extends Record<string, unknown>>(obj: T) {
+  return Object.values(obj) as [(typeof obj)[keyof T]]
+}
