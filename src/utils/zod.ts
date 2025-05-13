@@ -4,7 +4,7 @@ export const asyncValidator =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- We need to handle any async function
   <T>(asyncFn: (value: T) => Promise<any>, needsValue = false) =>
     async (value: T, ctx: RefinementCtx) => {
-      if (needsValue && value == null) return z.NEVER
+      if (needsValue && (value == null || value === '')) return z.NEVER
 
       try {
         await asyncFn(value)
