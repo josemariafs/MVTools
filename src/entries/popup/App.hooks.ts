@@ -1,6 +1,6 @@
 import { globalConfigQueryOptions } from '@/entries/popup/hooks/use-global-config'
+import { useStorageListener } from '@/entries/popup/hooks/use-storage-listener'
 import { stylesConfigQueryOptions } from '@/entries/popup/hooks/use-styles-config'
-import { useStorageListener } from '@/entries/popup/hooks/useStorageListener'
 import { globalConfigSchema, stylesConfigSchema } from '@/services/config'
 import { upgradeTasksSchema } from '@/services/upgrades'
 import { BROWSER_STORAGE_KEYS } from '@/types/storage'
