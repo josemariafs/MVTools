@@ -7,7 +7,7 @@ import { asyncValidator } from '@/utils/zod'
 
 const commonSchema = z.string().trim()
 const commonUsernameSchema = commonSchema.toLowerCase().nonempty('Introduce un nick de usuario')
-export const geminiFormSchema = z.string().superRefine(asyncValidator(checkApiKey, true))
+export const geminiApiKeySchema = z.string().superRefine(asyncValidator(checkApiKey, true))
 export const checkUserSchema = commonSchema.superRefine(asyncValidator(checkUser))
 export const noteSchema = commonSchema.nonempty('Introduce una nota').max(100, 'La nota debe tener como máximo 100 caracteres')
 export const getUsernameSchema = (data: GlobalConfig, field: StringArrayFieldKeys | ObjectArrayFieldKeys) => {

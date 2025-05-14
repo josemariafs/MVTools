@@ -18,8 +18,8 @@ interface Props {
 
 // eslint-disable-next-line complexity -- We need to handle different states
 export const AiMessage = ({ action, comment, id, maxCommentLength = 0, renderAsHtml = false, className }: Props) => {
-  const apiKey = useGlobalConfigStore(state => state.geminiApiKey)
-  const { data: analyzedComment, isFetching, isError, error } = useAnalyzeComment({ action, apiKey, comment, id })
+  const { apiKey, model } = useGlobalConfigStore(state => ({ apiKey: state.geminiApiKey, model: state.geminiModel }))
+  const { data: analyzedComment, isFetching, isError, error } = useAnalyzeComment({ action, apiKey, model, comment, id })
   const [isClosed, setIsClosed] = useState(false)
 
   const text = useMemo(() => {

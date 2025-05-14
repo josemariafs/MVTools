@@ -1,51 +1,37 @@
 import { queryOptions, useQueries, useQuery } from '@tanstack/react-query'
 
-import { type Action, analyzeComment, type AnalyzeCommentParams } from '@/services/gemini'
+import { analyzeComment, type AnalyzeCommentParams } from '@/services/gemini'
 
-interface QueryOptionsParams extends AnalyzeCommentParams {
+interface AnalyzeCommentQueryOptionsParams extends AnalyzeCommentParams {
   id: string | number
 }
 
-const analyzeCommentQueryOptions = <T>({ id, apiKey, action, comment }: QueryOptionsParams) =>
+const analyzeCommentQueryOptions = <T>({ id, apiKey, model, action, comment }: AnalyzeCommentQueryOptionsParams) =>
   queryOptions<string, Error, T>({
-    // eslint-disable-next-line @tanstack/query/exhaustive-deps -- We only need to pass the id and action as a dependency
-    queryKey: ['analyze-comment', id, action],
-    queryFn: () => analyzeComment({ comment, action, apiKey }),
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps -- We don't need to add comment here as it is identified by the id
+    queryKey: ['analyze-comment', id, model, action],
+    queryFn: () => analyzeComment({ comment, action, apiKey, model }),
     enabled: false
   })
 
 type AnalyzeCommentQueryOptions<T> = Partial<ReturnType<typeof analyzeCommentQueryOptions<T>>>
 
-interface Props<T> {
-  action: Action
-  apiKey: string
-  comment: string
-  id: string | number
+interface UseAnalyzeCommentParams<T> extends AnalyzeCommentQueryOptionsParams {
   options?: AnalyzeCommentQueryOptions<T>
 }
 
-export const useAnalyzeComment = <T = string>({ action, apiKey, comment, id, options }: Props<T>) => {
-  const defaultOptions = analyzeCommentQueryOptions<T>({ apiKey, id, comment, action })
+export const useAnalyzeComment = <T = string>({ action, apiKey, model, comment, id, options }: UseAnalyzeCommentParams<T>) => {
+  const defaultOptions = analyzeCommentQueryOptions<T>({ apiKey, model, id, comment, action })
   return useQuery({ ...defaultOptions, ...options })
 }
 
-interface Comment {
-  comment: string
-  id: string | number
-  action: Action
+interface UseAnalyzeCommentsParams<T> extends Pick<UseAnalyzeCommentParams<T>, 'apiKey' | 'model' | 'options'> {
+  comments: Array<Pick<UseAnalyzeCommentParams<T>, 'comment' | 'id' | 'action'>>
 }
 
-export const useAnalyzeComments = <T = string>({
-  apiKey,
-  comments,
-  options
-}: {
-  apiKey: string
-  comments: Comment[]
-  options?: AnalyzeCommentQueryOptions<T>
-}) => {
+export const useAnalyzeComments = <T = string>({ apiKey, model, comments, options }: UseAnalyzeCommentsParams<T>) => {
   const queries = comments.map(({ comment, id, action }) => {
-    const defaultOptions = analyzeCommentQueryOptions<T>({ apiKey, id, comment, action })
+    const defaultOptions = analyzeCommentQueryOptions<T>({ apiKey, model, id, comment, action })
     return { ...defaultOptions, ...options }
   })
 
