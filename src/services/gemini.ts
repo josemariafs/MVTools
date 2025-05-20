@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI, GoogleGenerativeAIFetchError } from '@google/generative-ai'
+import { ClientError, GoogleGenAI, type ListModelsConfig } from '@google/genai'
 
 import { RULES } from '@/constants/templates'
 
@@ -9,7 +9,25 @@ export const ACTIONS = {
 
 export type Action = (typeof ACTIONS)[keyof typeof ACTIONS]
 
-const DEFAULT_MODEL = 'gemini-1.5-pro'
+export const DEFAULT_MODEL = 'gemini-2.0-flash-lite'
+
+const ERROR_MESSAGES = {
+  400: 'La API Key no es válida',
+  429: 'Se ha alcanzado el límite de uso de la API Key',
+  404: 'El modelo no existe o no es accesible con la API Key proporcionada'
+} as const
+
+type ErrorMessageKey = keyof typeof ERROR_MESSAGES
+
+const isDocumentedErrorCode = (status: number): status is ErrorMessageKey => Object.keys(ERROR_MESSAGES).includes(status.toString())
+
+const getClientError = (error: unknown, defaultMessage: string): ClientError => {
+  let errorMessage = { message: defaultMessage, code: 500 }
+  if (error instanceof ClientError) {
+    errorMessage = isDocumentedErrorCode(error.code) ? { message: ERROR_MESSAGES[error.code], code: error.code } : errorMessage
+  }
+  return new ClientError(errorMessage)
+}
 
 const getCommentPrompt = (action: Action, comment?: string) => {
   if (action === ACTIONS.RULES) {
@@ -22,34 +40,46 @@ const getCommentPrompt = (action: Action, comment?: string) => {
   return `Resúmeme el siguiente texto en un máximo de 2 frases: ${comment}`
 }
 
-export const analyzeComment = async ({ comment, action, apiKey }: { comment: string; action: Action; apiKey: string }) => {
+export interface AnalyzeCommentParams {
+  comment: string
+  action: Action
+  apiKey: string
+  model: string
+}
+
+export const analyzeComment = async ({ comment, action, apiKey, model }: AnalyzeCommentParams) => {
   try {
-    const genAI = new GoogleGenerativeAI(apiKey)
-    const model = genAI.getGenerativeModel({ model: DEFAULT_MODEL })
-    const prompt = getCommentPrompt(action, comment)
-    const result = await model.generateContent([prompt])
-    return result.response.text()
+    const genAI = new GoogleGenAI({ apiKey })
+    const response = await genAI.models.generateContent({ model, contents: getCommentPrompt(action, comment) })
+    return response.text ?? 'No se ha podido analizar el comentario. Por favor, inténtalo de nuevo.'
   } catch (error) {
-    let errorMessage = 'Ha habido un error al intentar analizar el comentario. Por favor, inténtalo de nuevo.'
-    if (error instanceof GoogleGenerativeAIFetchError) {
-      errorMessage = error.status === 429 ? 'Se ha alcanzado el límite de uso de la API Key' : errorMessage
-    }
-    throw new Error(errorMessage)
+    throw getClientError(error, 'Ha habido un error al intentar analizar el comentario. Por favor, inténtalo de nuevo.')
   }
 }
 
-export type AnalyzeCommentParams = Parameters<typeof analyzeComment>[0]
+export const getModels = async (apiKey: string, config?: ListModelsConfig) => {
+  try {
+    const genAI = new GoogleGenAI({ apiKey })
+    const pager = await genAI.models.list({ config: { pageSize: 1000, ...config } })
+    const models = pager.page
+    // If the page size is 1, we asume that is for checking the API Key
+    if (config?.pageSize === 1) return models
+
+    while (pager.hasNextPage()) {
+      const nextPage = await pager.nextPage()
+      models.push(...nextPage)
+    }
+
+    return models
+  } catch (error) {
+    throw getClientError(error, 'No se ha podido obtener la lista de modelos. Por favor, inténtalo de nuevo.')
+  }
+}
 
 export const checkApiKey = async (apiKey: string) => {
   try {
-    const genAI = new GoogleGenerativeAI(apiKey)
-    const model = genAI.getGenerativeModel({ model: DEFAULT_MODEL })
-    await model.generateContent(['Test'])
+    await getModels(apiKey, { pageSize: 1 })
   } catch (error) {
-    let errorMessage = 'No se ha podido validar la API Key. Por favor, inténtalo de nuevo.'
-    if (error instanceof GoogleGenerativeAIFetchError) {
-      errorMessage = error.status === 400 ? 'La API Key no es válida' : errorMessage
-    }
-    throw new Error(errorMessage)
+    throw getClientError(error, 'No se ha podido validar la API Key. Por favor, inténtalo de nuevo.')
   }
 }

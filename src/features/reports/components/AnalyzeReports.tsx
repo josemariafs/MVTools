@@ -12,10 +12,11 @@ import { cn } from '@/utils/tailwind'
 
 export const AnalyzeReports = () => {
   const { appRoot } = useShadowRoot()
-  const apiKey = useGlobalConfigStore(state => state.geminiApiKey)
+  const { apiKey, model } = useGlobalConfigStore(state => ({ apiKey: state.geminiApiKey, model: state.geminiModel }))
   const { reportElements } = useReport()
   const { pending, refetch } = useAnalyzeComments({
     apiKey,
+    model,
     comments: reportElements.map(({ comment, id }) => ({ comment, id, action: ACTIONS.RULES }))
   })
 

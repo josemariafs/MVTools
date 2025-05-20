@@ -1,0 +1,526 @@
+diff --git a/dist/genai.d.ts b/dist/genai.d.ts
+index f6c7f64529ccad2dd3df0ad39fd02d59f168fb52..e958f789ed8258505f8a9c02d478b3617d7df5cd 100644
+--- a/dist/genai.d.ts
++++ b/dist/genai.d.ts
+@@ -23,6 +23,38 @@ export declare enum ActivityHandling {
+ export declare interface ActivityStart {
+ }
+ 
++// @public
++export class ApiError extends Error {
++    constructor({ code, details, message, status }: ApiErrorResponse['error'], stackTrace?: string);
++    // (undocumented)
++    code: ApiErrorResponse['error']['code'];
++    // (undocumented)
++    details: ApiErrorResponse['error']['details'];
++    // (undocumented)
++    name: string;
++    // (undocumented)
++    status: ApiErrorResponse['error']['status'];
++}
++
++// @public (undocumented)
++export type ApiErrorResponse = {
++    error: {
++        code: number;
++        message: string;
++        status?: string;
++        details?: Array<{
++            "@type": string;
++            reason?: string;
++            domain?: string;
++            metadata?: {
++                service?: string;
++            };
++            locale?: string;
++            message?: string;
++        }>;
++    };
++};
++
+ /** Optional. Adapter size for tuning. */
+ export declare enum AdapterSize {
+     ADAPTER_SIZE_UNSPECIFIED = "ADAPTER_SIZE_UNSPECIFIED",
+@@ -585,6 +617,11 @@ export declare interface CitationMetadata {
+     citations?: Citation[];
+ }
+ 
++// @public
++export class ClientError extends ApiError {
++    constructor(response: ApiErrorResponse['error'], stackTrace?: string);
++}
++
+ /** Result of executing the [ExecutableCode]. Always follows a `part` containing the [ExecutableCode]. */
+ export declare interface CodeExecutionResult {
+     /** Required. Outcome of the code execution. */
+@@ -4017,6 +4054,11 @@ export declare interface SendMessageParameters {
+     config?: GenerateContentConfig;
+ }
+ 
++// @public
++export class ServerError extends ApiError {
++    constructor(response: ApiErrorResponse['error'], stackTrace?: string);
++}
++
+ /**
+  Represents a connection to the API.
+ 
+diff --git a/dist/index.js b/dist/index.js
+index c6319c660251f99a32b290d03ecd0f44b7a51771..ddb0a8cd755cf72c4d565859de64fdeea1c3adc6 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -3062,33 +3062,43 @@ const LIBRARY_LABEL = `google-genai-sdk/${SDK_VERSION}`;
+ const VERTEX_AI_API_DEFAULT_VERSION = 'v1beta1';
+ const GOOGLE_AI_API_DEFAULT_VERSION = 'v1beta';
+ const responseLineRE = /^data: (.*)(?:\n\n|\r\r|\r\n\r\n)/;
++/**
++ * Base interface for the API error response.
++ */
++class ApiError extends Error {
++    constructor({code, details, message, status}, stackTrace) {
++        super(message, {cause: stackTrace});
++        this.code = code;
++        this.status = status;
++        this.details = details;
++        this.name = 'ApiError';
++    }
++}
+ /**
+  * Client errors raised by the GenAI API.
+  */
+-class ClientError extends Error {
+-    constructor(message, stackTrace) {
++class ClientError extends ApiError {
++    constructor(response, stackTrace) {
+         if (stackTrace) {
+-            super(message, { cause: stackTrace });
++            super(response, stackTrace);
+         }
+         else {
+-            super(message, { cause: new Error().stack });
++            super(response, new Error().stack);
+         }
+-        this.message = message;
+         this.name = 'ClientError';
+     }
+ }
+ /**
+  * Server errors raised by the GenAI API.
+  */
+-class ServerError extends Error {
+-    constructor(message, stackTrace) {
++class ServerError extends ApiError {
++    constructor(response, stackTrace) {
+         if (stackTrace) {
+-            super(message, { cause: stackTrace });
++            super(response, stackTrace);
+         }
+         else {
+-            super(message, { cause: new Error().stack });
++            super(response, new Error().stack);
+         }
+-        this.message = message;
+         this.name = 'ServerError';
+     }
+ }
+@@ -3384,16 +3394,12 @@ class ApiClient {
+                         const chunkJson = JSON.parse(chunkString);
+                         if ('error' in chunkJson) {
+                             const errorJson = JSON.parse(JSON.stringify(chunkJson['error']));
+-                            const status = errorJson['status'];
+                             const code = errorJson['code'];
+-                            const errorMessage = `got status: ${status}. ${JSON.stringify(chunkJson)}`;
+                             if (code >= 400 && code < 500) {
+-                                const clientError = new ClientError(errorMessage);
+-                                throw clientError;
++                                throw new ClientError(errorJson);
+                             }
+                             else if (code >= 500 && code < 600) {
+-                                const serverError = new ServerError(errorMessage);
+-                                throw serverError;
++                                throw new ServerError(errorJson);
+                             }
+                         }
+                     }
+@@ -3539,7 +3545,7 @@ class ApiClient {
+ async function throwErrorIfNotOK(response) {
+     var _a;
+     if (response === undefined) {
+-        throw new ServerError('response is undefined');
++        throw new ServerError({message: 'response is undefined', code: 500});
+     }
+     if (!response.ok) {
+         const status = response.status;
+@@ -3559,14 +3565,12 @@ async function throwErrorIfNotOK(response) {
+         }
+         const errorMessage = `got status: ${status} ${statusText}. ${JSON.stringify(errorBody)}`;
+         if (status >= 400 && status < 500) {
+-            const clientError = new ClientError(errorMessage);
+-            throw clientError;
++            throw new ClientError(errorBody.error);
+         }
+         else if (status >= 500 && status < 600) {
+-            const serverError = new ServerError(errorMessage);
+-            throw serverError;
++            throw new ServerError(errorBody.error);;
+         }
+-        throw new Error(errorMessage);
++        throw new Error(errorBody.error.message);
+     }
+ }
+ 
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 65526737af785358f300f81d03f45a191e95419e..7239f8b4e91b8a568ce115d850f5ae2455328a0f 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -3060,33 +3060,45 @@ const LIBRARY_LABEL = `google-genai-sdk/${SDK_VERSION}`;
+ const VERTEX_AI_API_DEFAULT_VERSION = 'v1beta1';
+ const GOOGLE_AI_API_DEFAULT_VERSION = 'v1beta';
+ const responseLineRE = /^data: (.*)(?:\n\n|\r\r|\r\n\r\n)/;
++
++/**
++ * Base interface for the API error response.
++ */
++class ApiError extends Error {
++    constructor({code, details, message, status}, stackTrace) {
++        super(message, {cause: stackTrace});
++        this.code = code;
++        this.status = status;
++        this.details = details;
++        this.name = 'ApiError';
++    }
++}
++
+ /**
+  * Client errors raised by the GenAI API.
+  */
+-class ClientError extends Error {
+-    constructor(message, stackTrace) {
++class ClientError extends ApiError {
++    constructor(response, stackTrace) {
+         if (stackTrace) {
+-            super(message, { cause: stackTrace });
++            super(response, stackTrace);
+         }
+         else {
+-            super(message, { cause: new Error().stack });
++            super(response, new Error().stack);
+         }
+-        this.message = message;
+         this.name = 'ClientError';
+     }
+ }
+ /**
+  * Server errors raised by the GenAI API.
+  */
+-class ServerError extends Error {
+-    constructor(message, stackTrace) {
++class ServerError extends ApiError {
++    constructor(response, stackTrace) {
+         if (stackTrace) {
+-            super(message, { cause: stackTrace });
++            super(response, stackTrace);
+         }
+         else {
+-            super(message, { cause: new Error().stack });
++            super(response, new Error().stack);
+         }
+-        this.message = message;
+         this.name = 'ServerError';
+     }
+ }
+@@ -3382,16 +3394,12 @@ class ApiClient {
+                         const chunkJson = JSON.parse(chunkString);
+                         if ('error' in chunkJson) {
+                             const errorJson = JSON.parse(JSON.stringify(chunkJson['error']));
+-                            const status = errorJson['status'];
+                             const code = errorJson['code'];
+-                            const errorMessage = `got status: ${status}. ${JSON.stringify(chunkJson)}`;
+                             if (code >= 400 && code < 500) {
+-                                const clientError = new ClientError(errorMessage);
+-                                throw clientError;
++                                throw new ClientError(errorJson);
+                             }
+                             else if (code >= 500 && code < 600) {
+-                                const serverError = new ServerError(errorMessage);
+-                                throw serverError;
++                                throw new ServerError(errorJson);
+                             }
+                         }
+                     }
+@@ -3537,7 +3545,7 @@ class ApiClient {
+ async function throwErrorIfNotOK(response) {
+     var _a;
+     if (response === undefined) {
+-        throw new ServerError('response is undefined');
++        throw new ServerError({message: 'response is undefined', code: 500});
+     }
+     if (!response.ok) {
+         const status = response.status;
+@@ -3557,14 +3565,12 @@ async function throwErrorIfNotOK(response) {
+         }
+         const errorMessage = `got status: ${status} ${statusText}. ${JSON.stringify(errorBody)}`;
+         if (status >= 400 && status < 500) {
+-            const clientError = new ClientError(errorMessage);
+-            throw clientError;
++            throw new ClientError(errorBody.error);
+         }
+         else if (status >= 500 && status < 600) {
+-            const serverError = new ServerError(errorMessage);
+-            throw serverError;
++            throw new ServerError(errorBody.error);
+         }
+-        throw new Error(errorMessage);
++        throw new Error(errorBody.error.message);
+     }
+ }
+ 
+@@ -10652,5 +10658,5 @@ class GoogleGenAI {
+     }
+ }
+ 
+-export { ActivityHandling, AdapterSize, AuthType, BlockedReason, Caches, Chat, Chats, ComputeTokensResponse, ControlReferenceType, CountTokensResponse, CreateFileResponse, DeleteCachedContentResponse, DeleteFileResponse, DeleteModelResponse, DynamicRetrievalConfigMode, EmbedContentResponse, EndSensitivity, FeatureSelectionPreference, FileSource, FileState, Files, FinishReason, FunctionCallingConfigMode, FunctionResponse, GenerateContentResponse, GenerateContentResponsePromptFeedback, GenerateContentResponseUsageMetadata, GenerateImagesResponse, GenerateVideosResponse, GoogleGenAI, HarmBlockMethod, HarmBlockThreshold, HarmCategory, HarmProbability, HarmSeverity, HttpResponse, ImagePromptLanguage, JobState, Language, ListCachedContentsResponse, ListFilesResponse, ListModelsResponse, ListTuningJobsResponse, Live, LiveClientToolResponse, LiveSendToolResponseParameters, LiveServerMessage, MaskReferenceMode, MediaModality, MediaResolution, Modality, Mode, Models, Operations, Outcome, PagedItem, Pager, PersonGeneration, ReplayResponse, SafetyFilterLevel, Session, StartSensitivity, SubjectReferenceType, TrafficType, TurnCoverage, Type, createModelContent, createPartFromBase64, createPartFromCodeExecutionResult, createPartFromExecutableCode, createPartFromFunctionCall, createPartFromFunctionResponse, createPartFromText, createPartFromUri, createUserContent, setDefaultBaseUrls };
++export { ActivityHandling, AdapterSize, AuthType, BlockedReason, Caches, Chat, Chats, ComputeTokensResponse, ControlReferenceType, CountTokensResponse, CreateFileResponse, DeleteCachedContentResponse, DeleteFileResponse, DeleteModelResponse, DynamicRetrievalConfigMode, EmbedContentResponse, EndSensitivity, FeatureSelectionPreference, FileSource, FileState, Files, FinishReason, FunctionCallingConfigMode, FunctionResponse, GenerateContentResponse, GenerateContentResponsePromptFeedback, GenerateContentResponseUsageMetadata, GenerateImagesResponse, GenerateVideosResponse, GoogleGenAI, HarmBlockMethod, HarmBlockThreshold, HarmCategory, HarmProbability, HarmSeverity, HttpResponse, ImagePromptLanguage, JobState, Language, ListCachedContentsResponse, ListFilesResponse, ListModelsResponse, ListTuningJobsResponse, Live, LiveClientToolResponse, LiveSendToolResponseParameters, LiveServerMessage, MaskReferenceMode, MediaModality, MediaResolution, Modality, Mode, Models, Operations, Outcome, PagedItem, Pager, PersonGeneration, ReplayResponse, SafetyFilterLevel, Session, StartSensitivity, SubjectReferenceType, TrafficType, TurnCoverage, Type, createModelContent, createPartFromBase64, createPartFromCodeExecutionResult, createPartFromExecutableCode, createPartFromFunctionCall, createPartFromFunctionResponse, createPartFromText, createPartFromUri, createUserContent, setDefaultBaseUrls, ClientError, ServerError };
+ //# sourceMappingURL=index.mjs.map
+diff --git a/dist/node/node.d.ts b/dist/node/node.d.ts
+index 1aa8b82dd20051bbc941a6ad07f4a7cb9d55d704..b6334db602d9d5a1ef3b24edd54e84a1b81c0fb9 100644
+--- a/dist/node/node.d.ts
++++ b/dist/node/node.d.ts
+@@ -23,6 +23,38 @@ export declare enum ActivityHandling {
+ export declare interface ActivityStart {
+ }
+ 
++// @public
++export class ApiError extends Error {
++    constructor({ code, details, message, status }: ApiErrorResponse['error'], stackTrace?: string);
++    // (undocumented)
++    code: ApiErrorResponse['error']['code'];
++    // (undocumented)
++    details: ApiErrorResponse['error']['details'];
++    // (undocumented)
++    name: string;
++    // (undocumented)
++    status: ApiErrorResponse['error']['status'];
++}
++
++// @public (undocumented)
++export type ApiErrorResponse = {
++    error: {
++        code: number;
++        message: string;
++        status?: string;
++        details?: Array<{
++            "@type": string;
++            reason?: string;
++            domain?: string;
++            metadata?: {
++                service?: string;
++            };
++            locale?: string;
++            message?: string;
++        }>;
++    };
++};
++
+ /** Optional. Adapter size for tuning. */
+ export declare enum AdapterSize {
+     ADAPTER_SIZE_UNSPECIFIED = "ADAPTER_SIZE_UNSPECIFIED",
+@@ -585,6 +617,11 @@ export declare interface CitationMetadata {
+     citations?: Citation[];
+ }
+ 
++// @public
++export class ClientError extends ApiError {
++    constructor(response: ApiErrorResponse['error'], stackTrace?: string);
++}
++
+ /** Result of executing the [ExecutableCode]. Always follows a `part` containing the [ExecutableCode]. */
+ export declare interface CodeExecutionResult {
+     /** Required. Outcome of the code execution. */
+@@ -4029,6 +4066,11 @@ export declare interface SendMessageParameters {
+     config?: GenerateContentConfig;
+ }
+ 
++// @public
++export class ServerError extends ApiError {
++    constructor(response: ApiErrorResponse['error'], stackTrace?: string);
++}
++
+ /**
+  Represents a connection to the API.
+ 
+diff --git a/dist/web/index.mjs b/dist/web/index.mjs
+index 98db670a0403d1fedabf937e2266092b09882680..faab641d70cdb0cd0d7734aadb6ad2b28e221fad 100644
+--- a/dist/web/index.mjs
++++ b/dist/web/index.mjs
+@@ -9233,33 +9233,40 @@ const LIBRARY_LABEL = `google-genai-sdk/${SDK_VERSION}`;
+ const VERTEX_AI_API_DEFAULT_VERSION = 'v1beta1';
+ const GOOGLE_AI_API_DEFAULT_VERSION = 'v1beta';
+ const responseLineRE = /^data: (.*)(?:\n\n|\r\r|\r\n\r\n)/;
++class ApiError extends Error {
++    constructor({code, details, message, status}, stackTrace) {
++        super(message, {cause: stackTrace});
++        this.code = code;
++        this.status = status;
++        this.details = details;
++        this.name = 'ApiError';
++    }
++}
+ /**
+  * Client errors raised by the GenAI API.
+  */
+-class ClientError extends Error {
+-    constructor(message, stackTrace) {
++class ClientError extends ApiError {
++    constructor(response, stackTrace) {
+         if (stackTrace) {
+-            super(message, { cause: stackTrace });
++            super(response, stackTrace);
+         }
+         else {
+-            super(message, { cause: new Error().stack });
++            super(response, new Error().stack);
+         }
+-        this.message = message;
+         this.name = 'ClientError';
+     }
+ }
+ /**
+  * Server errors raised by the GenAI API.
+  */
+-class ServerError extends Error {
+-    constructor(message, stackTrace) {
++class ServerError extends ApiError {
++    constructor(response, stackTrace) {
+         if (stackTrace) {
+-            super(message, { cause: stackTrace });
++            super(response, stackTrace);
+         }
+         else {
+-            super(message, { cause: new Error().stack });
++            super(response, new Error().stack);
+         }
+-        this.message = message;
+         this.name = 'ServerError';
+     }
+ }
+@@ -9555,16 +9562,12 @@ class ApiClient {
+                         const chunkJson = JSON.parse(chunkString);
+                         if ('error' in chunkJson) {
+                             const errorJson = JSON.parse(JSON.stringify(chunkJson['error']));
+-                            const status = errorJson['status'];
+                             const code = errorJson['code'];
+-                            const errorMessage = `got status: ${status}. ${JSON.stringify(chunkJson)}`;
+                             if (code >= 400 && code < 500) {
+-                                const clientError = new ClientError(errorMessage);
+-                                throw clientError;
++                                throw new ClientError(errorJson);
+                             }
+                             else if (code >= 500 && code < 600) {
+-                                const serverError = new ServerError(errorMessage);
+-                                throw serverError;
++                                throw new ServerError(errorJson);
+                             }
+                         }
+                     }
+@@ -9710,7 +9713,7 @@ class ApiClient {
+ async function throwErrorIfNotOK(response) {
+     var _a;
+     if (response === undefined) {
+-        throw new ServerError('response is undefined');
++        throw new ServerError({message: 'response is undefined', code: 500});
+     }
+     if (!response.ok) {
+         const status = response.status;
+@@ -9730,14 +9733,12 @@ async function throwErrorIfNotOK(response) {
+         }
+         const errorMessage = `got status: ${status} ${statusText}. ${JSON.stringify(errorBody)}`;
+         if (status >= 400 && status < 500) {
+-            const clientError = new ClientError(errorMessage);
+-            throw clientError;
++            throw new ClientError(errorBody.error);
+         }
+         else if (status >= 500 && status < 600) {
+-            const serverError = new ServerError(errorMessage);
+-            throw serverError;
++            throw new ServerError(errorBody.error);
+         }
+-        throw new Error(errorMessage);
++        throw new Error(errorBody.error.message);
+     }
+ }
+ 
+@@ -10713,5 +10714,5 @@ class GoogleGenAI {
+     }
+ }
+ 
+-export { ActivityHandling, AdapterSize, AuthType, BlockedReason, Caches, Chat, Chats, ComputeTokensResponse, ControlReferenceType, CountTokensResponse, CreateFileResponse, DeleteCachedContentResponse, DeleteFileResponse, DeleteModelResponse, DynamicRetrievalConfigMode, EmbedContentResponse, EndSensitivity, FeatureSelectionPreference, FileSource, FileState, Files, FinishReason, FunctionCallingConfigMode, FunctionResponse, GenerateContentResponse, GenerateContentResponsePromptFeedback, GenerateContentResponseUsageMetadata, GenerateImagesResponse, GenerateVideosResponse, GoogleGenAI, HarmBlockMethod, HarmBlockThreshold, HarmCategory, HarmProbability, HarmSeverity, HttpResponse, ImagePromptLanguage, JobState, Language, ListCachedContentsResponse, ListFilesResponse, ListModelsResponse, ListTuningJobsResponse, Live, LiveClientToolResponse, LiveSendToolResponseParameters, LiveServerMessage, MaskReferenceMode, MediaModality, MediaResolution, Modality, Mode, Models, Operations, Outcome, PagedItem, Pager, PersonGeneration, ReplayResponse, SafetyFilterLevel, Session, StartSensitivity, SubjectReferenceType, TrafficType, TurnCoverage, Type, createModelContent, createPartFromBase64, createPartFromCodeExecutionResult, createPartFromExecutableCode, createPartFromFunctionCall, createPartFromFunctionResponse, createPartFromText, createPartFromUri, createUserContent, setDefaultBaseUrls };
++export { ActivityHandling, AdapterSize, AuthType, BlockedReason, Caches, Chat, Chats, ComputeTokensResponse, ControlReferenceType, CountTokensResponse, CreateFileResponse, DeleteCachedContentResponse, DeleteFileResponse, DeleteModelResponse, DynamicRetrievalConfigMode, EmbedContentResponse, EndSensitivity, FeatureSelectionPreference, FileSource, FileState, Files, FinishReason, FunctionCallingConfigMode, FunctionResponse, GenerateContentResponse, GenerateContentResponsePromptFeedback, GenerateContentResponseUsageMetadata, GenerateImagesResponse, GenerateVideosResponse, GoogleGenAI, HarmBlockMethod, HarmBlockThreshold, HarmCategory, HarmProbability, HarmSeverity, HttpResponse, ImagePromptLanguage, JobState, Language, ListCachedContentsResponse, ListFilesResponse, ListModelsResponse, ListTuningJobsResponse, Live, LiveClientToolResponse, LiveSendToolResponseParameters, LiveServerMessage, MaskReferenceMode, MediaModality, MediaResolution, Modality, Mode, Models, Operations, Outcome, PagedItem, Pager, PersonGeneration, ReplayResponse, SafetyFilterLevel, Session, StartSensitivity, SubjectReferenceType, TrafficType, TurnCoverage, Type, createModelContent, createPartFromBase64, createPartFromCodeExecutionResult, createPartFromExecutableCode, createPartFromFunctionCall, createPartFromFunctionResponse, createPartFromText, createPartFromUri, createUserContent, setDefaultBaseUrls, ClientError, ServerError };
+ //# sourceMappingURL=index.mjs.map
+diff --git a/dist/web/web.d.ts b/dist/web/web.d.ts
+index 28791a1807dc7690056cde551553d6701304edb1..4969f8cfe43097cb8ee451ca3d24b80e3431f53f 100644
+--- a/dist/web/web.d.ts
++++ b/dist/web/web.d.ts
+@@ -23,6 +23,38 @@ export declare enum ActivityHandling {
+ export declare interface ActivityStart {
+ }
+ 
++// @public
++export class ApiError extends Error {
++    constructor({ code, details, message, status }: ApiErrorResponse['error'], stackTrace?: string);
++    // (undocumented)
++    code: ApiErrorResponse['error']['code'];
++    // (undocumented)
++    details: ApiErrorResponse['error']['details'];
++    // (undocumented)
++    name: string;
++    // (undocumented)
++    status: ApiErrorResponse['error']['status'];
++}
++
++// @public (undocumented)
++export type ApiErrorResponse = {
++    error: {
++        code: number;
++        message: string;
++        status?: string;
++        details?: Array<{
++            "@type": string;
++            reason?: string;
++            domain?: string;
++            metadata?: {
++                service?: string;
++            };
++            locale?: string;
++            message?: string;
++        }>;
++    };
++};
++
+ /** Optional. Adapter size for tuning. */
+ export declare enum AdapterSize {
+     ADAPTER_SIZE_UNSPECIFIED = "ADAPTER_SIZE_UNSPECIFIED",
+@@ -585,6 +617,11 @@ export declare interface CitationMetadata {
+     citations?: Citation[];
+ }
+ 
++// @public
++export class ClientError extends ApiError {
++    constructor(response: ApiErrorResponse['error'], stackTrace?: string);
++}
++
+ /** Result of executing the [ExecutableCode]. Always follows a `part` containing the [ExecutableCode]. */
+ export declare interface CodeExecutionResult {
+     /** Required. Outcome of the code execution. */
+@@ -4022,6 +4059,11 @@ export declare interface SendMessageParameters {
+     config?: GenerateContentConfig;
+ }
+ 
++// @public
++export class ServerError extends ApiError {
++    constructor(response: ApiErrorResponse['error'], stackTrace?: string);
++}
++
+ /**
+  Represents a connection to the API.
+ 

@@ -1,6 +1,8 @@
+import { dequal } from 'dequal'
+
 import { globalConfigQueryOptions } from '@/entries/popup/hooks/use-global-config'
+import { useStorageListener } from '@/entries/popup/hooks/use-storage-listener'
 import { stylesConfigQueryOptions } from '@/entries/popup/hooks/use-styles-config'
-import { useStorageListener } from '@/entries/popup/hooks/useStorageListener'
 import { globalConfigSchema, stylesConfigSchema } from '@/services/config'
 import { upgradeTasksSchema } from '@/services/upgrades'
 import { BROWSER_STORAGE_KEYS } from '@/types/storage'
@@ -11,9 +13,8 @@ export const useStorageListeners = () => {
     schema: upgradeTasksSchema,
     logPrefix: 'Performed upgrade tasks',
     onChangeCb: (queryClient, newTasks, oldTasks) => {
-      // Checking if the migrateFromLocalStorage task has changed, which means that all storage data has been migrated,
-      // so we invalidate all queries to set the new data
-      const hasChanged = newTasks?.migrateFromLocalStorage !== oldTasks?.migrateFromLocalStorage
+      // Checking if the upgrade tasks have changed, which means we have to invalidate all queries to set the new data
+      const hasChanged = !dequal(newTasks, oldTasks)
       hasChanged && queryClient.invalidateQueries()
     }
   })

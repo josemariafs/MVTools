@@ -19,8 +19,8 @@ interface Props {
 }
 
 export const AiButton = ({ action, comment, id, maxCommentLength, button }: Props) => {
-  const apiKey = useGlobalConfigStore(state => state.geminiApiKey)
-  const { refetch, isFetching } = useAnalyzeComment({ action, apiKey, comment, id })
+  const { apiKey, model } = useGlobalConfigStore(state => ({ apiKey: state.geminiApiKey, model: state.geminiModel }))
+  const { refetch, isFetching } = useAnalyzeComment({ action, apiKey, model, comment, id })
   const isVisible = !!apiKey && (maxCommentLength ? comment.length > maxCommentLength : true)
 
   const handleClick = () => {

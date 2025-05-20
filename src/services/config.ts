@@ -1,10 +1,12 @@
 import { z } from 'zod'
 
+import { DEFAULT_MODEL } from '@/services/gemini'
 import { getStoredProperty, setStoredProperty } from '@/services/storage'
 import { BROWSER_STORAGE_KEYS } from '@/types/storage'
 
 export const globalConfigSchema = z.object({
   geminiApiKey: z.string(),
+  geminiModel: z.string(),
   ignoredUsers: z.array(z.string()),
   showIgnoredUsers: z.boolean(),
   userNotes: z.array(z.object({ username: z.string(), note: z.string() })),
@@ -16,6 +18,7 @@ export type UserNote = GlobalConfig['userNotes'][number]
 
 export const DEFAULT_GLOBAL_CONFIG: GlobalConfig = {
   geminiApiKey: '',
+  geminiModel: DEFAULT_MODEL,
   ignoredUsers: [],
   showIgnoredUsers: false,
   userNotes: [],
