@@ -221,8 +221,8 @@
 
     #content {
         background-position-y: 0;
-        background: url('chrome-extension://__MSG_@@extension_id__/mediavida/images/bg.jpg'), url('/mediavida/images/bg.jpg'), no-repeat fixed 100% 100%;
-        background-size: cover;
+        background: url('chrome-extension://__MSG_@@extension_id__/mediavida/images/bg.jpg') 0% 0% fixed, url(../../../../../mediavida/images/bg.jpg), 100% 100% fixed no-repeat;
+        background-size: fixed;
     }
 
     /* Main Table */

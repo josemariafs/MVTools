@@ -1,4 +1,4 @@
-import { ClientError, GoogleGenAI, type ListModelsConfig } from '@google/genai'
+import { GoogleGenAI, type ListModelsConfig } from '@google/genai'
 
 import { RULES } from '@/constants/templates'
 
@@ -21,12 +21,22 @@ type ErrorMessageKey = keyof typeof ERROR_MESSAGES
 
 const isDocumentedErrorCode = (status: number): status is ErrorMessageKey => Object.keys(ERROR_MESSAGES).includes(status.toString())
 
-const getClientError = (error: unknown, defaultMessage: string): ClientError => {
-  let errorMessage = { message: defaultMessage, code: 500 }
-  if (error instanceof ClientError) {
-    errorMessage = isDocumentedErrorCode(error.code) ? { message: ERROR_MESSAGES[error.code], code: error.code } : errorMessage
+interface CustomError extends Error {
+  code?: number;
+}
+
+const getCustomError = (error: unknown, defaultMessage: string): CustomError => {
+  const customError = new Error(defaultMessage) as CustomError;
+  
+  if (error instanceof Error) {
+    const status = (error as any).status || (error as any).code;
+    if (status && isDocumentedErrorCode(status)) {
+      customError.message = ERROR_MESSAGES[status];
+      customError.code = status;
+    }
   }
-  return new ClientError(errorMessage)
+  
+  return customError;
 }
 
 const getCommentPrompt = (action: Action, comment?: string) => {
@@ -53,7 +63,7 @@ export const analyzeComment = async ({ comment, action, apiKey, model }: Analyze
     const response = await genAI.models.generateContent({ model, contents: getCommentPrompt(action, comment) })
     return response.text ?? 'No se ha podido analizar el comentario. Por favor, inténtalo de nuevo.'
   } catch (error) {
-    throw getClientError(error, 'Ha habido un error al intentar analizar el comentario. Por favor, inténtalo de nuevo.')
+    throw getCustomError(error, 'Ha habido un error al intentar analizar el comentario. Por favor, inténtalo de nuevo.')
   }
 }
 
@@ -72,7 +82,7 @@ export const getModels = async (apiKey: string, config?: ListModelsConfig) => {
 
     return models
   } catch (error) {
-    throw getClientError(error, 'No se ha podido obtener la lista de modelos. Por favor, inténtalo de nuevo.')
+    throw getCustomError(error, 'No se ha podido obtener la lista de modelos. Por favor, inténtalo de nuevo.')
   }
 }
 
@@ -80,6 +90,6 @@ export const checkApiKey = async (apiKey: string) => {
   try {
     await getModels(apiKey, { pageSize: 1 })
   } catch (error) {
-    throw getClientError(error, 'No se ha podido validar la API Key. Por favor, inténtalo de nuevo.')
+    throw getCustomError(error, 'No se ha podido validar la API Key. Por favor, inténtalo de nuevo.')
   }
 }
