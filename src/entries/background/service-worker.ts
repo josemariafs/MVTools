@@ -1,27 +1,21 @@
 import browser from 'webextension-polyfill'
 
-import { ALLOWED_URLS, URLS } from '@/constants'
+import { runRawgReleaseDayCheck, wireRawgReleaseListeners } from '@/entries/background/rawg-release-alarms'
+import { wireSteamHandlers } from '@/entries/background/steam-handlers'
 import { DEFAULT_GLOBAL_CONFIG, getGlobalConfig, setGlobalConfig } from '@/services/config'
 import { getPerformedUpgradeTasks, setMigratedFromVersion, setPerformedUpgradeTask, UPGRADE_TASK_IDS } from '@/services/upgrades'
-import { SCRIPT_FILES } from '@/types/content-script-assets'
-import {
-  type Deal,
-  type DealPayload,
-  DefaultEventListenerPayloadSchema,
-  MESSAGE_TYPES,
-  MigratedFromLocalStoragePayloadSchema
-} from '@/types/event-messages'
-import { getActiveTab, initScriptFile, updatePopupBadge } from '@/utils/background'
+import { MigratedFromLocalStoragePayloadSchema } from '@/types/event-messages'
 import { devLog } from '@/utils/logging'
+
+wireRawgReleaseListeners()
+wireSteamHandlers()
 
 browser.runtime.onInstalled.addListener(async ({ reason, previousVersion }) => {
   if (reason === 'update' && previousVersion) await setMigratedFromVersion(previousVersion)
 
   const upgradeTasks = await getPerformedUpgradeTasks()
   const unfinishedTasks = upgradeTasks.filter(({ migrated }) => !migrated)
-  const { manual = [], auto = [] } = Object.groupBy(unfinishedTasks, item => item.type)
-
-  updatePopupBadge({ pendingUpgrade: Boolean(manual.length) })
+  const { auto = [] } = Object.groupBy(unfinishedTasks, item => item.type)
 
   for (const task of auto) {
     if (task.id === UPGRADE_TASK_IDS.UPDATE_GLOBAL_CONFIG) {
@@ -36,45 +30,28 @@ browser.runtime.onInstalled.addListener(async ({ reason, previousVersion }) => {
     }
   }
 
+  void runRawgReleaseDayCheck()
+
   console.debug(`Extension has been ${reason}ed`)
 })
 
-browser.runtime.onMessage.addListener(async message => {
-  const validMessage = DefaultEventListenerPayloadSchema.safeParse(message)
-  if (!validMessage.success) {
-    console.error('Invalid message received:', message)
-    return
+/**
+ * IMPORTANTE: en webextension-polyfill, varios listeners pueden registrarse para
+ * `runtime.onMessage`; el polyfill se queda con la PRIMERA promesa que resuelve.
+ * Si este listener fuese `async` devolvería `Promise<undefined>` para todos los
+ * mensajes que no le competen (Steam, etc.), ganando la carrera y descartando
+ * la respuesta del listener correcto. Por eso debe ser SÍNCRONO y sólo devolver
+ * una promesa cuando va a responder al mensaje en cuestión.
+ */
+browser.runtime.onMessage.addListener(message => {
+  if (message === 'mvtools-rawg-cache-updated') {
+    void runRawgReleaseDayCheck()
+    return undefined
   }
-
-  const { type } = validMessage.data
-
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Needed to explicitly check
-  if (type === MESSAGE_TYPES.MIGRATED_FROM_LOCAL_STORAGE) {
-    const { migrated } = MigratedFromLocalStoragePayloadSchema.parse(message)
-    await setPerformedUpgradeTask(UPGRADE_TASK_IDS.MIGRATED_FROM_LOCAL_STORAGE, migrated)
-    updatePopupBadge({ pendingUpgrade: !migrated })
-  }
+  const migrated = MigratedFromLocalStoragePayloadSchema.safeParse(message)
+  if (!migrated.success) return undefined
+  return (async () => {
+    await setPerformedUpgradeTask(UPGRADE_TASK_IDS.MIGRATED_FROM_LOCAL_STORAGE, migrated.data.migrated)
+    void runRawgReleaseDayCheck()
+  })()
 })
-
-chrome.webRequest.onErrorOccurred.addListener(
-  async details => {
-    const url = new URL(details.url)
-    const finalLink = url.searchParams.get('url')
-    if (!finalLink) {
-      console.error('No link found in request:', details)
-      return
-    }
-
-    const activeTab = await getActiveTab()
-    const deal = await browser.tabs.sendMessage<DealPayload, Deal>(activeTab.id!, { type: MESSAGE_TYPES.DEAL })
-
-    const newDealThreadTab = await browser.tabs.create({ url: `${URLS.MEDIAVIDA}/foro/club-hucha/nuevo-hilo` })
-    await initScriptFile({
-      tabId: newDealThreadTab.id!,
-      file: SCRIPT_FILES.FILL_NEW_DEAL_THREAD,
-      args: { deal: { ...deal, link: finalLink } },
-      debugMessage: 'Filling new deal thread'
-    })
-  },
-  { urls: [ALLOWED_URLS.CHOLLOMETRO_BACKEND] }
-)

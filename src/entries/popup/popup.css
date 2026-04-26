@@ -1,6 +1,18 @@
 @import '@/global.css';
 
+/* El popup de acción de MV3 no tiene un viewport fiable: 100vh puede ser 0 o ridículo, y el
+   panel colapsa a un cuadro mínimo (a menudo negro con tema oscuro). Mínimos explícitos. */
 @layer base {
+    html, body, #app {
+        box-sizing: border-box;
+        min-width: 500px;
+        min-height: 600px;
+    }
+
+    html, body {
+        margin: 0;
+    }
+
     body {
         @apply bg-background text-foreground;
     }

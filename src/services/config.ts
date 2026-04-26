@@ -1,3 +1,4 @@
+import browser from 'webextension-polyfill'
 import { z } from 'zod'
 
 import { DEFAULT_MODEL } from '@/services/gemini'
@@ -7,6 +8,8 @@ import { BROWSER_STORAGE_KEYS } from '@/types/storage'
 export const globalConfigSchema = z.object({
   geminiApiKey: z.string(),
   geminiModel: z.string(),
+  /** API key de [RAWG](https://rawg.io/apidocs) — calendario de lanzamientos (Épica 1) */
+  rawgApiKey: z.string(),
   ignoredUsers: z.array(z.string()),
   showIgnoredUsers: z.boolean(),
   userNotes: z.array(z.object({ username: z.string(), note: z.string() })),
@@ -19,13 +22,25 @@ export type UserNote = GlobalConfig['userNotes'][number]
 export const DEFAULT_GLOBAL_CONFIG: GlobalConfig = {
   geminiApiKey: '',
   geminiModel: DEFAULT_MODEL,
+  rawgApiKey: '',
   ignoredUsers: [],
   showIgnoredUsers: false,
   userNotes: [],
   highlightedUsers: []
 }
 
-export const getGlobalConfig = () => getStoredProperty<GlobalConfig>(BROWSER_STORAGE_KEYS.GLOBAL_CONFIG, DEFAULT_GLOBAL_CONFIG)
+export const getGlobalConfig = async (): Promise<GlobalConfig> => {
+  const { [BROWSER_STORAGE_KEYS.GLOBAL_CONFIG]: raw } = await browser.storage.sync.get(BROWSER_STORAGE_KEYS.GLOBAL_CONFIG)
+  const merged = { ...DEFAULT_GLOBAL_CONFIG, ...((raw as Partial<GlobalConfig> | undefined) ?? {}) }
+  const parsed = globalConfigSchema.safeParse(merged)
+  if (!parsed.success) {
+    // .parse() rompía el popup (pantalla negra) si el almacenamiento tenía claves
+    // faltantes, null o tipos inesperados tras añadir campos (p. ej. rawgApiKey).
+    console.warn('[MV Tools] Config global inválida, usando valores por defecto', parsed.error.flatten())
+    return { ...DEFAULT_GLOBAL_CONFIG }
+  }
+  return parsed.data
+}
 export const setGlobalConfig = (value: GlobalConfig) => setStoredProperty(BROWSER_STORAGE_KEYS.GLOBAL_CONFIG, value)
 
 export const stylesConfigSchema = z.object({

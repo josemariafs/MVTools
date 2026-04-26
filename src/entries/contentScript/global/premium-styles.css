@@ -283,7 +283,8 @@ img:after {
 
 .mvAdminTools #main form {
     padding: var(--mv-padding-xxlarge) !important;
-    background: var(--mv-bg-modal) !important;
+    /* Opaco: el wallpaper de #content no debe filtrarse en formularios */
+    background: #1e2226 !important;
 }
 
 .mvAdminTools #main .box {
@@ -312,7 +313,7 @@ img:after {
 }
 
 .mvAdminTools #main .box div {
-    background: var(--mv-admin-box-bg) !important;
+    background: #1e2226 !important;
     float: left;
     display: flex;
     padding: 7px;
@@ -326,7 +327,7 @@ img:after {
 .mvAdminTools #main .box h4 {
     position: absolute;
     margin-top: -35px;
-    background: var(--mv-admin-box-header);
+    background: #3a4045;
     width: 500px;
     padding: var(--mv-padding-small) var(--mv-padding-xlarge);
     margin-left: -0.6%;
@@ -340,7 +341,7 @@ img:after {
 }
 
 .eqcol.busted {
-    background: var(--mv-admin-box-bg) !important;
+    background: #1e2226 !important;
 }
 
 .mvpremium .c-side .b-side .actions a {
@@ -353,7 +354,7 @@ img:after {
 }
 
 .mvAdminTools .pairs {
-    background: var(--mv-bg-modal);
+    background: #1e2226;
     padding: var(--mv-padding-xlarge);
     border: 1px #5b5b5b solid;
     margin: var(--mv-margin-medium);
@@ -543,8 +544,319 @@ ul[role="tablist"] li {
     margin-bottom: var(--mv-margin-xxlarge);
 }
 
+/* Admin (foro, clones, etc.): quitar wallpaper fijo para legibilidad */
+.mvpremium.mvAdminTools #content {
+    background: #101213 !important;
+    background-image: none !important;
+}
+
+/*
+ * Admin noticias (slider, cola): body.mvNewsAdminUI (news-admin-ui.ts).
+ * No tocar #content: el wallpaper mvpremium sigue en márgenes; opacidad solo en #main y en formularios.
+ */
+body.mvNewsAdminUI {
+    --mv-news-text: #e9e9e9;
+    --mv-news-label: #b9c8ce;
+    --mv-news-panel: #1e2226;
+    --mv-news-border: #2e3438;
+    --mv-news-input-bg: #2a3035;
+    --mv-news-input-border: #3d454c;
+    --mv-news-input-focus: #fb8500;
+    --mv-news-pad: 28px;
+    --mv-news-radius: 12px;
+}
+
+/* #main transparente: no tapa el wallpaper de #content a ancho completo */
+body.mvNewsAdminUI #main {
+    background: transparent;
+    box-shadow: none;
+    border-radius: var(--mv-news-radius);
+    padding: 24px 0 40px;
+    box-sizing: border-box;
+}
+
+/* Cabecera con las pestañas (En cola / Descartadas / Slider): respiro vertical */
+body.mvNewsAdminUI #main > h1,
+body.mvNewsAdminUI #main > h2,
+body.mvNewsAdminUI #content > h1,
+body.mvNewsAdminUI #content > h2 {
+    margin: 0 0 18px;
+}
+
+body.mvNewsAdminUI #main ul[role="tablist"],
+body.mvNewsAdminUI #content ul[role="tablist"] {
+    gap: 8px;
+    margin-bottom: 22px;
+    padding: 0;
+}
+
+body.mvNewsAdminUI #main ul[role="tablist"] li,
+body.mvNewsAdminUI #content ul[role="tablist"] li {
+    margin-right: 0;
+}
+
+/* Panel principal del formulario (la "cajita" oscura) */
+body.mvNewsAdminUI #main form,
+body.mvNewsAdminUI #main .box,
+body.mvNewsAdminUI #main .eqcol,
+body.mvNewsAdminUI #main .sp,
+body.mvNewsAdminUI .pairs,
+body.mvNewsAdminUI #content > form,
+body.mvNewsAdminUI #content .eqcol,
+body.mvNewsAdminUI #content .sp,
+body.mvNewsAdminUI #content .box {
+    background: var(--mv-news-panel) !important;
+    border: 1px solid var(--mv-news-border) !important;
+    border-radius: var(--mv-news-radius);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+    padding: var(--mv-news-pad) !important;
+}
+
+body.mvNewsAdminUI #main .box div,
+body.mvNewsAdminUI #content .box div {
+    background: var(--mv-news-panel) !important;
+}
+
+/* Cada par "label + input" se separa del siguiente */
+body.mvNewsAdminUI #main form > div,
+body.mvNewsAdminUI #main form > p,
+body.mvNewsAdminUI #main form fieldset > div,
+body.mvNewsAdminUI #content form > div,
+body.mvNewsAdminUI #content form > p,
+body.mvNewsAdminUI #content form fieldset > div {
+    margin-bottom: 18px;
+}
+
+/* Etiquetas: separación del campo y un toque de tipografía */
+body.mvNewsAdminUI #main label,
+body.mvNewsAdminUI #content label,
+body.mvNewsAdminUI .control-label {
+    color: var(--mv-news-label) !important;
+    display: inline-block;
+    margin-bottom: 6px;
+    font-size: var(--mv-font-size-medium, 14px);
+    letter-spacing: 0.2px;
+}
+
+/* Inputs / textareas / selects con padding y foco visible */
+body.mvNewsAdminUI #main input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="file"]),
+body.mvNewsAdminUI #content input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="file"]),
+body.mvNewsAdminUI #main textarea,
+body.mvNewsAdminUI #content textarea,
+body.mvNewsAdminUI #main select,
+body.mvNewsAdminUI #content select {
+    background: var(--mv-news-input-bg) !important;
+    color: var(--mv-news-text) !important;
+    border: 1px solid var(--mv-news-input-border) !important;
+    border-radius: 8px !important;
+    padding: 10px 12px !important;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+body.mvNewsAdminUI #main input:focus,
+body.mvNewsAdminUI #content input:focus,
+body.mvNewsAdminUI #main textarea:focus,
+body.mvNewsAdminUI #content textarea:focus,
+body.mvNewsAdminUI #main select:focus,
+body.mvNewsAdminUI #content select:focus {
+    outline: none !important;
+    border-color: var(--mv-news-input-focus) !important;
+    box-shadow: 0 0 0 3px rgba(251, 133, 0, 0.18) !important;
+}
+
+body.mvNewsAdminUI #main textarea,
+body.mvNewsAdminUI #content textarea {
+    min-height: 96px;
+    resize: vertical;
+}
+
+/* Texto auxiliar (p. ej. "https://www.mediavida.com" bajo URL del enlace) */
+body.mvNewsAdminUI #main small,
+body.mvNewsAdminUI #content small,
+body.mvNewsAdminUI #main .help,
+body.mvNewsAdminUI #content .help {
+    display: inline-block;
+    margin-top: 4px;
+    color: #7e8a92 !important;
+    font-size: 12px;
+}
+
+/* Botón principal: aire alrededor */
+body.mvNewsAdminUI #main button[type="submit"],
+body.mvNewsAdminUI #content button[type="submit"],
+body.mvNewsAdminUI #main input[type="submit"],
+body.mvNewsAdminUI #content input[type="submit"] {
+    margin-top: 12px;
+    padding: 10px 22px !important;
+    border-radius: 8px !important;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
 .MvPremiumCSSWithoutBG #content {
     background: #101213 !important;
+}
+
+/*
+ * Wallpaper de mvpremium en admin noticias.
+ * Se aplica también si el usuario tiene MvPremiumCSSWithoutBG (que sobreescribe con !important),
+ * por eso se duplica con dos selectores del mismo peso para asegurar prioridad por orden.
+ */
+html body.mvNewsAdminUI #content,
+html body.mvpremium.mvNewsAdminUI #content,
+html body.mvpremium.MvPremiumCSSWithoutBG.mvNewsAdminUI #content {
+    background-position-y: 0 !important;
+    background: url('chrome-extension://__MSG_@@extension_id__/mediavida/images/bg.jpg') 0% 0% fixed, url(../../../../../mediavida/images/bg.jpg), 100% 100% fixed no-repeat !important;
+    background-size: fixed !important;
+}
+
+/*
+ * Perfil /id/...: bloque “Motivo de baneo” (clase mvProfileBanLegible). profile-ban-panel.ts añade
+ * en body .mvToolsProfileBan cuando hay bloque, para ajuste de apilado (menú mod vs. cajetín).
+ */
+.mvProfileBanLegible {
+    background: rgba(12, 14, 16, 0.94) !important;
+    padding: 16px 20px !important;
+    margin: 0 0 18px;
+    border-radius: 10px;
+    border: 1px solid #3a4048;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+    color: #e9e9e9 !important;
+    position: relative;
+    z-index: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Con bloque de baneo, el cajetín no debe quedar “encima” del desplegable del mod (mismo hilo: orden DOM). */
+.mvpremium.mvToolsProfileBan .mvProfileBanLegible {
+    z-index: 0 !important;
+}
+
+/* Escudo y menú: subir toda la cabecera o la tira con .btn-group por encima de #main. */
+.mvpremium.mvToolsProfileBan #header {
+    position: relative !important;
+    z-index: 5000 !important;
+}
+
+.mvpremium.mvToolsProfileBan #main .btn-group,
+.mvpremium.mvToolsProfileBan #main .btn-toolbar {
+    position: relative !important;
+    z-index: 200 !important;
+}
+
+.mvpremium.mvToolsProfileBan #main .btn-group.open,
+.mvpremium.mvToolsProfileBan #main .btn-toolbar.open {
+    z-index: 300 !important;
+}
+
+/* Fila con escudo: a veces el menú cuelga de .pull-right sin .btn-group. */
+.mvpremium.mvToolsProfileBan #main .pull-right:has(> ul.dropdown-menu) {
+    position: relative !important;
+    z-index: 250 !important;
+}
+
+.mvpremium ul.dropdown-menu,
+.mvpremium .dropdown-menu {
+    z-index: 10000 !important;
+}
+
+/* Enlaces generales del bloque (autor, etc.) */
+.mvpremium .mvProfileBanLegible a:not(.mvProfileBanAction),
+.mvProfileBanLegible a:not(.mvProfileBanAction) {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+    font-weight: 500;
+}
+
+/* Filas: texto | acciones (inyectado en profile-ban-panel.ts) */
+.mvProfileBanLayout {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px 28px;
+    width: 100%;
+}
+
+.mvProfileBanText {
+    flex: 1 1 200px;
+    min-width: 0;
+}
+
+.mvProfileBanActions {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    min-width: 200px;
+    max-width: 100%;
+    margin-left: auto;
+}
+
+/*
+ * Mismo aspecto que #mv-ops-last-filters label.mv-ops-opt (ops-last.ts: filtros "Mostrar solo filas").
+ * Texto claro #e9e9e9 sobre chip oscuro, no naranja sobre blanco.
+ */
+.mvProfileBanLegible a.mvProfileBanAction {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+    padding: 6px 12px;
+    min-height: 34px;
+    background: rgba(255, 255, 255, 0.04) !important;
+    color: #e9e9e9 !important;
+    text-decoration: none !important;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.2px;
+    border: 1px solid #3d454c !important;
+    border-radius: 6px !important;
+    user-select: none;
+    text-shadow: none;
+    box-shadow: none;
+    transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
+    cursor: pointer;
+}
+
+.mvpremium .mvProfileBanLegible a.mvProfileBanAction:hover,
+.mvpremium .mvProfileBanLegible a.mvProfileBanAction:focus-visible,
+.mvProfileBanLegible a.mvProfileBanAction:hover,
+.mvProfileBanLegible a.mvProfileBanAction:focus-visible {
+    background: rgba(251, 133, 0, 0.1) !important;
+    color: #e9e9e9 !important;
+    border-color: #fb8500 !important;
+    text-decoration: none !important;
+    outline: none;
+}
+
+.mvpremium .mvProfileBanLegible a.mvProfileBanAction:focus-visible,
+.mvProfileBanLegible a.mvProfileBanAction:focus-visible {
+    outline: 1px solid #fb8500;
+    outline-offset: 1px;
+}
+
+@media (max-width: 640px) {
+    .mvProfileBanLayout {
+        flex-direction: column;
+    }
+
+    .mvProfileBanActions {
+        width: 100%;
+        min-width: 0;
+        margin-left: 0;
+    }
+}
+
+.mvpremium .mvProfileBanLegible,
+.mvProfileBanLegible {
+    line-height: 1.45;
 }
 
 #notes {

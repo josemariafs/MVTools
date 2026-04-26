@@ -14,6 +14,7 @@ import { DefaultQueryClientProvider } from '@/providers/query-client-provider'
 import { ThemeProvider } from '@/providers/theme-provider'
 
 import App from './App'
+import { PopupErrorBoundary } from './PopupErrorBoundary'
 
 defaultQueryClient.prefetchQuery(stylesConfigQueryOptions)
 defaultQueryClient.prefetchQuery(globalConfigQueryOptions)
@@ -24,12 +25,14 @@ root &&
   ReactDOM.createRoot(root).render(
     <DefaultQueryClientProvider buttonPosition='bottom-right'>
       <ThemeProvider>
-        <TooltipProvider>
-          <Suspense>
-            <Toaster closeButton />
-            <App />
-          </Suspense>
-        </TooltipProvider>
+        <PopupErrorBoundary>
+          <TooltipProvider>
+            <Suspense fallback={<div className='bg-background text-foreground min-h-[200px] min-w-[500px] p-4'>Cargando…</div>}>
+              <Toaster closeButton />
+              <App />
+            </Suspense>
+          </TooltipProvider>
+        </PopupErrorBoundary>
       </ThemeProvider>
     </DefaultQueryClientProvider>
   )

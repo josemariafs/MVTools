@@ -1,6 +1,7 @@
 import '@/entries/enableDevHmr'
 
 import { listenStylesConfigChanges } from '@/entries/contentScript/utils/config'
+import { markNewsAdminUiIfNeeded, scheduleNewsAdminUiMarking } from '@/entries/contentScript/utils/news-admin-ui'
 import { DEFAULT_STYLES_CONFIG, getStylesConfig, type StylesConfig } from '@/services/config'
 import { CSS_CLASS_NAMES } from '@/types/media-vida'
 import { objectEntries } from '@/utils/asserts'
@@ -12,6 +13,9 @@ const stylesConfig = await getStylesConfig()
 devLog.log('Toggling styles with config:', stylesConfig)
 toggleStyles(stylesConfig)
 listenStylesConfigChanges(toggleStyles)
+
+markNewsAdminUiIfNeeded()
+scheduleNewsAdminUiMarking()
 
 function toggleStyles(stylesConfig?: StylesConfig) {
   objectEntries(stylesConfig ?? DEFAULT_STYLES_CONFIG).forEach(([key, value]) => {

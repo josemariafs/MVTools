@@ -24,6 +24,7 @@
     "lint": "pnpm prettier && pnpm eslint",
     "lint:fix": "pnpm prettier:fix && pnpm eslint:fix",
     "ts:check": "tsc --noEmit",
+    "test": "vitest run",
     "knip": "knip --exclude binaries",
     "knip:deps": "knip --include dependencies --exclude binaries",
     "knip:fix": "knip --exclude binaries --fix"
@@ -54,6 +55,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "semver": "^7.7.1",
+    "simple-icons": "^14.15.0",
     "sonner": "^2.0.3",
     "tailwind-merge": "^3.2.0",
     "tailwindcss-animate": "^1.0.7",
@@ -94,6 +96,7 @@
     "typescript": "^5.8.3",
     "vite": "^5.4.19",
     "vite-plugin-zip-pack": "^1.2.4",
+    "vitest": "^2.1.9",
     "web-ext": "^8.6.0"
   },
   "pnpm": {

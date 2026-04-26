@@ -11,9 +11,16 @@ import { appendSonnerStyles, renderContent } from '@/utils/dom'
 let root: Root | null = null
 let mainAppRoot: HTMLElement | null = null
 
-export const renderApp = (app: ReactNode, cssPaths: string[]) => {
+interface RenderAppOptions {
+  container?: HTMLElement
+  where?: InsertPosition
+}
+
+export const renderApp = (app: ReactNode, cssPaths: string[], options?: RenderAppOptions) => {
   renderContent({
     cssPaths,
+    container: options?.container,
+    where: options?.where,
     render: (appRoot, shadowRoot) => {
       unmount()
       mainAppRoot = appRoot

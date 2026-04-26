@@ -54,10 +54,19 @@ const buildDefaultUpgradeTasks = (fromVersion: string): UpgradeTasks => {
   ]
 }
 
-export const getPerformedUpgradeTasks = async () => {
+export const getPerformedUpgradeTasks = async (): Promise<UpgradeTasks> => {
   const fromVersion = await getMigratedFromVersion()
   const defaultTasks = buildDefaultUpgradeTasks(fromVersion)
-  return await getStoredProperty<UpgradeTasks>(BROWSER_STORAGE_KEYS.PERFORMED_UPGRADE_TASKS, defaultTasks)
+  const raw = await getStoredProperty<unknown>(BROWSER_STORAGE_KEYS.PERFORMED_UPGRADE_TASKS, defaultTasks)
+  const parsed = upgradeTasksSchema.safeParse(raw)
+  if (!parsed.success) {
+    console.warn(
+      '[MV Tools] Lista de tareas de actualización inválida (se esperaba un array), usando valores por defecto',
+      parsed.error.flatten()
+    )
+    return defaultTasks
+  }
+  return parsed.data
 }
 
 export const setPerformedUpgradeTask = async (upgradeTaskId: UpgradeTaskId, finished: boolean) => {

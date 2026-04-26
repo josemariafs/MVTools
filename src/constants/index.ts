@@ -11,7 +11,9 @@ export const URLS = {
   MEDIAVIDA: 'https://www.mediavida.com',
   CHOLLOMETRO: 'https://www.chollometro.com',
   CHOLLOMETRO_BACKEND: 'https://chollometro.digidip.net',
-  GEMINI_CREATE_API_KEY: 'https://aistudio.google.com/app/apikey?hl=es-419'
+  GEMINI_CREATE_API_KEY: 'https://aistudio.google.com/app/apikey?hl=es-419',
+  /** Documentación y registro de clave [RAWG](https://rawg.io/apidocs) (calendario de lanzamientos) */
+  RAWG_APIDOCS: 'https://rawg.io/apidocs'
 } as const
 
 export const ALLOWED_URLS = {
@@ -21,6 +23,21 @@ export const ALLOWED_URLS = {
 } as const
 
 export const ALL_ALLOWED_URLS = Object.values(ALLOWED_URLS)
+
+/** Origen API de videojuegos (Épica 1) */
+export const RAWG_API_ORIGIN = 'https://api.rawg.io/*' as const
+
+/** Origen Steam Storefront (capturas, descripciones ES, enlaces de tienda — Épica 2). */
+export const STEAM_STORE_ORIGIN = 'https://store.steampowered.com/*' as const
+
+/**
+ * Página principal de Mediavida (sin hash). Excluir subrutas de foro, embed, etc.
+ * @see `src/entries/contentScript/sections/home-releases.tsx`
+ */
+export const isMediavidaHomePathname = (pathname: string): boolean => {
+  if (pathname === '' || pathname === '/') return true
+  return false
+}
 
 export const HTML_ATTRIBUTES = {
   DATA_AUTOR: 'data-autor'

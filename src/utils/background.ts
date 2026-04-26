@@ -1,5 +1,7 @@
 import browser from 'webextension-polyfill'
 
+import { getUnnotifiedGamesReleasingToday } from '@/services/rawg-release-watcher'
+import { getPerformedUpgradeTasks } from '@/services/upgrades'
 import type { ScriptArgObjects, ScriptFileObject, ScriptKey } from '@/types/content-script-assets'
 
 export const initScriptFile = async <T extends ScriptKey>({
@@ -28,18 +30,26 @@ export const initScriptFile = async <T extends ScriptKey>({
     })
 }
 
-export const updatePopupBadge = ({ pendingUpgrade }: { pendingUpgrade: boolean }) => {
-  if ('setBadgeText' in browser.action) {
-    browser.action.setBadgeText({ text: pendingUpgrade ? '1' : '' })
+/** Prioridad: lanzamientos hoy (naranja) > migración pendiente (rojo) > sin badge. Épica 3. */
+export const applyActionBadge = async (opts: { manualUpgradePending: boolean; releaseCountToday: number }) => {
+  if (!('setBadgeText' in browser.action) || !('setBadgeBackgroundColor' in browser.action)) {
+    return
   }
-
-  if ('setBadgeBackgroundColor' in browser.action) {
-    browser.action.setBadgeBackgroundColor({ color: pendingUpgrade ? '#FF0000' : '#00FF00' })
+  if (opts.releaseCountToday > 0) {
+    const text = String(Math.min(opts.releaseCountToday, 99))
+    await browser.action.setBadgeText({ text })
+    await browser.action.setBadgeBackgroundColor({ color: '#E66000' })
+  } else if (opts.manualUpgradePending) {
+    await browser.action.setBadgeText({ text: '1' })
+    await browser.action.setBadgeBackgroundColor({ color: '#FF0000' })
+  } else {
+    await browser.action.setBadgeText({ text: '' })
   }
 }
 
-export const getActiveTab = async () => {
-  const [activeTab] = await browser.tabs.query({ active: true, lastFocusedWindow: true })
-  if (!activeTab) throw new Error('No active tab found')
-  return activeTab
+export const applyActionBadgeState = async () => {
+  const { allToday } = await getUnnotifiedGamesReleasingToday()
+  const tasks = await getPerformedUpgradeTasks()
+  const manual = tasks.filter(t => !t.migrated && t.type === 'manual')
+  await applyActionBadge({ manualUpgradePending: manual.length > 0, releaseCountToday: allToday.length })
 }

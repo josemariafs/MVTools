@@ -1,6 +1,6 @@
 import pkg from '../package.json'
 import type { Browser } from '../vite.config'
-import { ALL_ALLOWED_URLS, ALLOWED_URLS, FIREFOX_ADDON_ID, URLS } from './constants'
+import { ALL_ALLOWED_URLS, ALLOWED_URLS, FIREFOX_ADDON_ID, RAWG_API_ORIGIN, STEAM_STORE_ORIGIN, URLS } from './constants'
 
 interface SharedManifest {
   content_scripts: chrome.runtime.ManifestBase['content_scripts']
@@ -70,6 +70,28 @@ const sharedManifest: SharedManifest = {
       js: ['src/entries/contentScript/sections/markers.tsx'],
       matches: [`${URLS.MEDIAVIDA}/id/*/marcadores*`],
       all_frames: true
+    },
+    {
+      js: ['src/entries/contentScript/sections/home-releases.tsx'],
+      matches: [ALLOWED_URLS.MEDIAVIDA],
+      exclude_matches: [`${URLS.MEDIAVIDA}/embed/*`],
+      all_frames: true
+    },
+    {
+      js: ['src/entries/contentScript/sections/fill-juegos-nuevo-hilo.ts'],
+      matches: [`${URLS.MEDIAVIDA}/foro/juegos/nuevo-hilo*`],
+      all_frames: true
+    },
+    {
+      js: ['src/entries/contentScript/sections/ops-last.ts'],
+      matches: [`${URLS.MEDIAVIDA}/ops/last*`],
+      all_frames: true
+    },
+    {
+      js: ['src/entries/contentScript/sections/profile-ban-panel.ts'],
+      matches: [`${URLS.MEDIAVIDA}/id/*`],
+      exclude_matches: [`${URLS.MEDIAVIDA}/embed/*`],
+      all_frames: true
     }
   ],
   icons: {
@@ -81,8 +103,9 @@ const sharedManifest: SharedManifest = {
     default_icon: 'shared/icons/mvlogo.png',
     default_popup: 'src/entries/popup/index.html'
   },
-  host_permissions: ALL_ALLOWED_URLS,
-  permissions: ['storage', 'scripting', 'activeTab', 'webRequest'],
+  host_permissions: [...ALL_ALLOWED_URLS, RAWG_API_ORIGIN, STEAM_STORE_ORIGIN],
+  /* storage: config / migraciones; scripting: inyección al migrar desde localStorage */
+  permissions: ['storage', 'scripting'],
   web_accessible_resources: [
     {
       resources: ['shared/*'],

@@ -39,7 +39,8 @@
     "eslint.config.ts",
     "knip.config.ts",
     "prettier.config.cjs",
-    "postcss.config.cjs"
+    "postcss.config.cjs",
+    "vitest.config.ts"
   ],
   "exclude": ["node_modules", "enableDevHmr.ts", "old-code"]
 }

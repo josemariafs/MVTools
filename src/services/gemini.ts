@@ -22,21 +22,21 @@ type ErrorMessageKey = keyof typeof ERROR_MESSAGES
 const isDocumentedErrorCode = (status: number): status is ErrorMessageKey => Object.keys(ERROR_MESSAGES).includes(status.toString())
 
 interface CustomError extends Error {
-  code?: number;
+  code?: number
 }
 
 const getCustomError = (error: unknown, defaultMessage: string): CustomError => {
-  const customError = new Error(defaultMessage) as CustomError;
-  
+  const customError = new Error(defaultMessage) as CustomError
+
   if (error instanceof Error) {
-    const status = (error as any).status || (error as any).code;
+    const status = (error as any).status || (error as any).code
     if (status && isDocumentedErrorCode(status)) {
-      customError.message = ERROR_MESSAGES[status];
-      customError.code = status;
+      customError.message = ERROR_MESSAGES[status]
+      customError.code = status
     }
   }
-  
-  return customError;
+
+  return customError
 }
 
 const getCommentPrompt = (action: Action, comment?: string) => {

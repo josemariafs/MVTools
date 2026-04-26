@@ -4,6 +4,7 @@ import { Form as GeminiForm } from '@/entries/popup/components/sections/global-c
 import { Form as HighlightedUsersForm } from '@/entries/popup/components/sections/global-config/highlighted-users/form'
 import { Form as IgnoredUsersForm } from '@/entries/popup/components/sections/global-config/ignored-users/form'
 import { ShowIgnoredUsersSwitch } from '@/entries/popup/components/sections/global-config/ignored-users/show-ignored-users-switch'
+import { Form as RawgForm } from '@/entries/popup/components/sections/global-config/rawg/form'
 
 export const GlobalConfigSection = () => {
   return (
@@ -13,6 +14,8 @@ export const GlobalConfigSection = () => {
       </header>
       <main className='items-center justify-between space-y-3 rounded-lg border p-3 shadow-sm'>
         <GeminiForm />
+        <Separator />
+        <RawgForm />
         <Separator />
         <IgnoredUsersForm />
         <ShowIgnoredUsersSwitch />

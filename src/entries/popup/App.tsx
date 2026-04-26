@@ -15,7 +15,7 @@ const App = () => {
   return (
     <main
       className={cn(
-        'min-h-maxPopupHeight relative h-screen min-w-[500px] overflow-auto border-x-4 border-x-orange-500 p-6',
+        'min-h-maxPopupHeight relative w-full min-w-[500px] max-h-none overflow-auto border-x-4 border-x-orange-500 p-6',
         !isPopup && 'max-w-[500px]'
       )}
     >
