@@ -1,6 +1,7 @@
 import browser from 'webextension-polyfill'
 
 import { runRawgReleaseDayCheck, wireRawgReleaseListeners } from '@/entries/background/rawg-release-alarms'
+import { wireSteamImgbbHandlers } from '@/entries/background/steam-imgbb-handlers'
 import { wireSteamHandlers } from '@/entries/background/steam-handlers'
 import { DEFAULT_GLOBAL_CONFIG, getGlobalConfig, setGlobalConfig } from '@/services/config'
 import { getPerformedUpgradeTasks, setMigratedFromVersion, setPerformedUpgradeTask, UPGRADE_TASK_IDS } from '@/services/upgrades'
@@ -8,6 +9,7 @@ import { MigratedFromLocalStoragePayloadSchema } from '@/types/event-messages'
 import { devLog } from '@/utils/logging'
 
 wireRawgReleaseListeners()
+wireSteamImgbbHandlers()
 wireSteamHandlers()
 
 browser.runtime.onInstalled.addListener(async ({ reason, previousVersion }) => {

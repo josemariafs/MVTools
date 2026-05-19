@@ -5,9 +5,11 @@ import { getLocalStoredProperty, setLocalStoredProperty } from '@/services/stora
 import {
   type RawgGameDetail,
   rawgGameDetailSchema,
+  rawgGameMoviesPageSchema,
   type RawgGameListItem,
   rawgGamesPageSchema,
   rawgGameStoresPageSchema,
+  type RawgMovieItem,
   type RawgUpcomingCache,
   rawgUpcomingCacheSchema
 } from '@/types/rawg'
@@ -183,5 +185,61 @@ export async function fetchRawgGameStoresUrls(apiKey: string, gameId: number): P
   } catch (e) {
     console.warn('[MV Tools] No se pudieron resolver las URLs de tienda RAWG', e)
     return {}
+  }
+}
+
+function extractRawgYoutubeVideoResults(json: unknown): unknown[] {
+  if (!json || typeof json !== 'object') return []
+  const rec = json as Record<string, unknown>
+  if (Array.isArray(rec.results)) return rec.results
+  if (Array.isArray(json)) return json
+  return []
+}
+
+/**
+ * Primer vídeo YouTube del juego (`GET /api/games/{id}/youtube`).
+ */
+export async function fetchRawgGameYoutubeWatchUrl(apiKey: string, gameId: number): Promise<string | null> {
+  const key = apiKey.trim()
+  if (!key) return null
+  try {
+    const url = new URL(`${RAWG_BASE}/games/${gameId}/youtube`)
+    url.searchParams.set('key', key)
+    url.searchParams.set('page_size', '10')
+    const res = await fetch(url.toString(), { method: 'GET' })
+    if (!res.ok) return null
+    const json: unknown = await res.json()
+    for (const item of extractRawgYoutubeVideoResults(json)) {
+      if (!item || typeof item !== 'object') continue
+      const extId = (item as { external_id?: unknown }).external_id
+      if (typeof extId !== 'string') continue
+      const ext = extId.trim()
+      if (ext.length >= 6) return `https://www.youtube.com/watch?v=${ext}`
+    }
+    return null
+  } catch (e) {
+    console.warn('[MV Tools] RAWG youtube no disponible', e)
+    return null
+  }
+}
+
+/**
+ * Lista de clips (`GET /api/games/{id}/movies`) cuando la ficha principal no trae `movies`.
+ */
+export async function fetchRawgGameMovies(apiKey: string, gameId: number): Promise<RawgMovieItem[]> {
+  const key = apiKey.trim()
+  if (!key) return []
+  try {
+    const url = new URL(`${RAWG_BASE}/games/${gameId}/movies`)
+    url.searchParams.set('key', key)
+    url.searchParams.set('page_size', '20')
+    const res = await fetch(url.toString(), { method: 'GET' })
+    if (!res.ok) return []
+    const json: unknown = await res.json()
+    const parsed = rawgGameMoviesPageSchema.safeParse(json)
+    return parsed.success ? (parsed.data.results ?? []) : []
+  } catch (e) {
+    console.warn('[MV Tools] RAWG movies no disponible', e)
+    return []
   }
 }

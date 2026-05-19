@@ -174,16 +174,16 @@ function getRows(table: HTMLTableElement): HTMLTableRowElement[] {
 }
 
 function rowMatchesState(cells: HTMLCollection, cols: ColumnIndices, state: FilterState): boolean {
-  if (state.busted && !cellHasMeaningfulContent(cells[cols.busted])) return false
+  if (state.busted && !cellHasMeaningfulContent(cells[cols.busted] as HTMLTableCellElement | undefined)) return false
   if (state.ipClones) {
     if (cols.ipClones === -1) {
       // Sin columna: no filtramos por esto
-    } else if (!cellHasMeaningfulContent(cells[cols.ipClones])) {
+    } else if (!cellHasMeaningfulContent(cells[cols.ipClones] as HTMLTableCellElement | undefined)) {
       return false
     }
   }
   if (state.otherLang) {
-    const cell = cells[cols.perfil]
+    const cell = cells[cols.perfil] as HTMLTableCellElement | undefined
     const perfilText = getPerfilCellText(cell)
     if (!hasOtherLanguageText(perfilText)) return false
   }

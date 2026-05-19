@@ -13,7 +13,9 @@ export const URLS = {
   CHOLLOMETRO_BACKEND: 'https://chollometro.digidip.net',
   GEMINI_CREATE_API_KEY: 'https://aistudio.google.com/app/apikey?hl=es-419',
   /** Documentación y registro de clave [RAWG](https://rawg.io/apidocs) (calendario de lanzamientos) */
-  RAWG_APIDOCS: 'https://rawg.io/apidocs'
+  RAWG_APIDOCS: 'https://rawg.io/apidocs',
+  /** Registro gratuito de clave API para subir imágenes de hilos (Steam → hosting corto). */
+  IMGBB_API: 'https://api.imgbb.com/'
 } as const
 
 export const ALLOWED_URLS = {
@@ -29,6 +31,15 @@ export const RAWG_API_ORIGIN = 'https://api.rawg.io/*' as const
 
 /** Origen Steam Storefront (capturas, descripciones ES, enlaces de tienda — Épica 2). */
 export const STEAM_STORE_ORIGIN = 'https://store.steampowered.com/*' as const
+
+/** CDN imágenes Steam (cabecera / capturas) — fetch desde el service worker. */
+export const STEAM_STATIC_CDN_PERMISSION = 'https://*.steamstatic.com/*' as const
+
+/** Otros CDN Steam (`steamcdn-a.akamaihd.net`, etc.). */
+export const STEAM_AKAMAIHD_PERMISSION = 'https://*.akamaihd.net/*' as const
+
+/** API ImgBB — subida de PNG/GIF para `[img]` en foro sin data URLs. */
+export const IMGBB_API_ORIGIN = 'https://api.imgbb.com/*' as const
 
 /**
  * Página principal de Mediavida (sin hash). Excluir subrutas de foro, embed, etc.

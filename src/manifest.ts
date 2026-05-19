@@ -1,6 +1,16 @@
 import pkg from '../package.json'
 import type { Browser } from '../vite.config'
-import { ALL_ALLOWED_URLS, ALLOWED_URLS, FIREFOX_ADDON_ID, RAWG_API_ORIGIN, STEAM_STORE_ORIGIN, URLS } from './constants'
+import {
+  ALL_ALLOWED_URLS,
+  ALLOWED_URLS,
+  FIREFOX_ADDON_ID,
+  IMGBB_API_ORIGIN,
+  RAWG_API_ORIGIN,
+  STEAM_AKAMAIHD_PERMISSION,
+  STEAM_STATIC_CDN_PERMISSION,
+  STEAM_STORE_ORIGIN,
+  URLS
+} from './constants'
 
 interface SharedManifest {
   content_scripts: chrome.runtime.ManifestBase['content_scripts']
@@ -103,7 +113,14 @@ const sharedManifest: SharedManifest = {
     default_icon: 'shared/icons/mvlogo.png',
     default_popup: 'src/entries/popup/index.html'
   },
-  host_permissions: [...ALL_ALLOWED_URLS, RAWG_API_ORIGIN, STEAM_STORE_ORIGIN],
+  host_permissions: [
+    ...ALL_ALLOWED_URLS,
+    RAWG_API_ORIGIN,
+    STEAM_STORE_ORIGIN,
+    STEAM_STATIC_CDN_PERMISSION,
+    STEAM_AKAMAIHD_PERMISSION,
+    IMGBB_API_ORIGIN
+  ],
   /* storage: config / migraciones; scripting: inyección al migrar desde localStorage */
   permissions: ['storage', 'scripting'],
   web_accessible_resources: [

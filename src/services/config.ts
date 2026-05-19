@@ -10,6 +10,8 @@ export const globalConfigSchema = z.object({
   geminiModel: z.string(),
   /** API key de [RAWG](https://rawg.io/apidocs) — calendario de lanzamientos (Épica 1) */
   rawgApiKey: z.string(),
+  /** API key [ImgBB](https://api.imgbb.com/) — convierte imágenes Steam a PNG/GIF y las sube (hilos juegos). */
+  imgbbApiKey: z.string(),
   ignoredUsers: z.array(z.string()),
   showIgnoredUsers: z.boolean(),
   userNotes: z.array(z.object({ username: z.string(), note: z.string() })),
@@ -23,6 +25,7 @@ export const DEFAULT_GLOBAL_CONFIG: GlobalConfig = {
   geminiApiKey: '',
   geminiModel: DEFAULT_MODEL,
   rawgApiKey: '',
+  imgbbApiKey: '',
   ignoredUsers: [],
   showIgnoredUsers: false,
   userNotes: [],

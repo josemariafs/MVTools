@@ -1,5 +1,5 @@
 import { inferMediavidaJuegosCategory } from '@/services/mediavida-juegos-category'
-import type { SteamGameInfo } from '@/services/steam-store'
+import { STEAM_SCREENSHOT_LIMIT, type SteamGameInfo } from '@/services/steam-store'
 import type { RawgGameDetail } from '@/types/rawg'
 
 /** Mediavida embed de imágenes en foro */
@@ -15,6 +15,97 @@ export const mvUrl = (href: string, text: string): string => {
   const t = text.trim()
   if (!h || !t) return ''
   return `[url=${h}]${t}[/url]`
+}
+
+/** Miniatura clicable (`[url][img][/img][/url]`). */
+export const mvLinkedImg = (href: string, imgUrl: string): string => {
+  const h = href.trim()
+  const i = imgUrl.trim()
+  if (!h || !i) return ''
+  return `[url=${h}][img]${i}[/img][/url]`
+}
+
+/** Reproductor Mediavida (`[media]URL[/media]`). */
+export const mvMedia = (url: string): string => {
+  const u = url.trim()
+  if (!u) return ''
+  return `[media]${u}[/media]`
+}
+
+function normalizeYoutubeToWatchUrl(url: string): string {
+  const u = url.trim()
+  const embed = /youtube\.com\/embed\/([a-zA-Z0-9_-]{6,})/i.exec(u)
+  if (embed) return `https://www.youtube.com/watch?v=${embed[1]}`
+  const short = /youtu\.be\/([a-zA-Z0-9_-]{6,})/i.exec(u)
+  if (short) return `https://www.youtube.com/watch?v=${short[1]}`
+  return u
+}
+
+function isSteamPlaybackUrlOkForEmbed(url: string): boolean {
+  return !/\.m3u8(\?|$)/i.test(url.trim())
+}
+
+/** Primera URL apta para `[media]` en el array `movies` de RAWG. */
+export function pickRawgMovieMediaUrl(detail: RawgGameDetail): string | null {
+  const movies = detail.movies
+  if (!movies?.length) return null
+
+  const normalizeCandidate = (raw: unknown): string | null => {
+    if (typeof raw !== 'string' || !raw.trim()) return null
+    const s = raw.trim()
+    if (/youtube\.com\/embed\//i.test(s) || /youtu\.be\//i.test(s) || /youtube\.com\/watch\?/i.test(s)) {
+      return normalizeYoutubeToWatchUrl(s)
+    }
+    if (/\.(mp4|webm)(\?|$)/i.test(s)) return s
+    return null
+  }
+
+  for (const movie of movies) {
+    const data = movie.data
+    if (!data || typeof data !== 'object') continue
+    for (const key of ['max', '480']) {
+      const hit = normalizeCandidate(data[key])
+      if (hit) return hit
+    }
+    for (const v of Object.values(data)) {
+      const hit = normalizeCandidate(v)
+      if (hit) return hit
+    }
+  }
+  return null
+}
+
+function normalizeYoutubeWatchCandidate(url: string | null | undefined): string | null {
+  const u = url?.trim()
+  if (!u) return null
+  if (/youtube\.com\/watch\?v=/i.test(u) || /youtu\.be\//i.test(u)) return normalizeYoutubeToWatchUrl(u)
+  return null
+}
+
+/**
+ * Orden: clips en la ficha RAWG → vídeo YouTube (endpoint RAWG, opciones del caller) → tráiler Steam (no HLS).
+ */
+function resolveMediavidaMediaEmbedUrl(
+  detail: RawgGameDetail,
+  steam: SteamGameInfo | null | undefined,
+  rawgYoutubeWatchUrl?: string | null
+): string | null {
+  const fromMovies = pickRawgMovieMediaUrl(detail)
+  if (fromMovies) return fromMovies
+
+  const fromYtApi = normalizeYoutubeWatchCandidate(rawgYoutubeWatchUrl)
+  if (fromYtApi) return fromYtApi
+
+  const steamUrl = steam?.trailer?.playbackUrl?.trim()
+  if (steamUrl && isSteamPlaybackUrlOkForEmbed(steamUrl)) return steamUrl
+
+  return null
+}
+
+function mediavidaVideoBbCode(embedUrl: string | null): string {
+  const u = embedUrl?.trim()
+  if (!u) return ''
+  return `\n## Vídeo\n\n${mvMedia(u)}\n`
 }
 
 /**
@@ -100,6 +191,15 @@ export function buildStoreLinks(detail: RawgGameDetail, overrideUrls: Record<num
     const label = STORE_LABELS[storeId] ?? entry.store?.name ?? 'Tienda'
     out.push({ id: storeId, line: mvUrl(url, label) })
   }
+  // Tiendas en allowlist sólo presentes en override (p. ej. Steam resuelto por búsqueda sin fila RAWG).
+  for (const storeId of [1, 11, 5] as const) {
+    if (seen.has(storeId)) continue
+    const url = normalizeStoreUrl(overrideUrls[storeId])
+    if (!url) continue
+    seen.add(storeId)
+    const label = STORE_LABELS[storeId] ?? 'Tienda'
+    out.push({ id: storeId, line: mvUrl(url, label) })
+  }
   // Orden estable: Steam (1) → Epic (11) → GOG (5).
   const orderRank: Record<number, number> = { 1: 0, 11: 1, 5: 2 }
   out.sort((a, b) => (orderRank[a.id] ?? 99) - (orderRank[b.id] ?? 99))
@@ -117,6 +217,8 @@ export interface BuildThreadOptions {
   storeUrls?: Record<number, string>
   /** Datos de Steam (capturas, descripción ES, header). Se usa si está disponible. */
   steam?: SteamGameInfo | null
+  /** Primer vídeo YouTube desde GET /api/games/{id}/youtube (`watch?v=`). */
+  rawgYoutubeWatchUrl?: string | null
 }
 
 /**
@@ -124,10 +226,11 @@ export interface BuildThreadOptions {
  *  - Cabecera visual.
  *  - Ficha (lanzamiento, plataformas, géneros, desarrolladora, distribuidora, web, tiendas).
  *  - Descripción **en español** (Steam si disponible, RAWG en otro caso).
- *  - Capturas (Steam si disponible, RAWG en otro caso).
+ *  - Tráiler `[media]`: clips RAWG (`movies` / YouTube API), luego Steam DASH si no hay YouTube (no `.m3u8`). Sin enlace duplicado a Steam en esta sección.
+ *  - Capturas (Steam si disponible, RAWG en otro caso), máx. 3 además de la cabecera.
  */
 export function buildJuegosThreadDraft(detail: RawgGameDetail, options: BuildThreadOptions = {}): ThreadDraft {
-  const { storeUrls = {}, steam } = options
+  const { storeUrls = {}, steam, rawgYoutubeWatchUrl } = options
 
   const nameOnly = detail.name.trim() || 'Videojuego'
   const dayMonth = formatReleaseDayMonthForTitle(detail.released)
@@ -164,15 +267,21 @@ export function buildJuegosThreadDraft(detail: RawgGameDetail, options: BuildThr
   const desc = steamDesc || rawgDesc || 'Sin descripción disponible.'
   const descNote = !steamDesc && rawgDesc ? '\n\n_Descripción original en inglés (no hay versión en español disponible en RAWG)._' : ''
 
-  // --- Capturas: Steam tiene prioridad por calidad. ---
+  const embedUrl = resolveMediavidaMediaEmbedUrl(detail, steam ?? null, rawgYoutubeWatchUrl)
+  const videoBlock = mediavidaVideoBbCode(embedUrl)
+
+  // --- Capturas: Steam tiene prioridad; máx. 3 que no dupliquen la cabecera. ---
+  const headerNorm = headerUrl.trim()
   const steamShots = steam?.screenshots ?? []
   const rawgShots = (detail.short_screenshots ?? [])
     .map(s => s.image)
     .filter((url): url is string => typeof url === 'string' && url.trim() !== '')
-  const shots = (steamShots.length > 0 ? steamShots : rawgShots).slice(0, 6)
-  const shotsBlock = shots.length > 0 ? `\n## Capturas\n\n${shots.map(mvImg).join('\n\n')}\n` : ''
+  const gallery = (steamShots.length > 0 ? steamShots : rawgShots)
+    .filter(u => !headerNorm || u.trim() !== headerNorm)
+    .slice(0, STEAM_SCREENSHOT_LIMIT)
+  const shotsBlock = gallery.length > 0 ? `\n## Capturas\n\n${gallery.map(mvImg).join('\n\n')}\n` : ''
 
-  const body = `${headerBlock}## Ficha\n\n${meta}\n\n## Descripción\n\n${desc}${descNote}${shotsBlock}`
+  const body = `${headerBlock}## Ficha\n\n${meta}\n\n## Descripción\n\n${desc}${descNote}${videoBlock}${shotsBlock}`
 
   return { title, body, category: inferMediavidaJuegosCategory(detail) }
 }

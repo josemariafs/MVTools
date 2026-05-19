@@ -86,6 +86,21 @@ const rawgGameStoreSchema = z
   })
   .partial()
 
+/** Vínculos de vídeo en RAWG (`data.max`, `data.480`, a menudo YouTube embed). */
+export const rawgMovieSchema = z
+  .object({
+    data: z.record(z.string(), z.unknown()).optional()
+  })
+  .passthrough()
+
+export type RawgMovieItem = z.infer<typeof rawgMovieSchema>
+
+/** GET /api/games/{id}/movies */
+export const rawgGameMoviesPageSchema = z.object({
+  count: z.number().optional(),
+  results: z.array(rawgMovieSchema).optional()
+})
+
 export const rawgGameDetailSchema = z
   .object({
     id: z.number(),
@@ -108,7 +123,8 @@ export const rawgGameDetailSchema = z
     developers: z.array(rawgNamedEntitySchema).nullable().optional(),
     publishers: z.array(rawgNamedEntitySchema).nullable().optional(),
     genres: z.array(rawgNamedEntitySchema).nullable().optional(),
-    stores: z.array(rawgGameStoreSchema).nullable().optional()
+    stores: z.array(rawgGameStoreSchema).nullable().optional(),
+    movies: z.array(rawgMovieSchema).nullable().optional()
   })
   .passthrough()
 
