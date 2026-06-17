@@ -369,6 +369,99 @@ img:after {
     margin-top: var(--mv-margin-xxlarge);
 }
 
+.mv-clones-title-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.mvAdminTools h1.mv-clones-heading {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0;
+    margin: 0;
+}
+
+.mvAdminTools h1.mv-clones-heading .mv-clones-heading-user {
+    font-weight: inherit;
+}
+
+.mvAdminTools h1.mv-clones-heading .mv-clones-track-btn,
+.mvAdminTools button.mv-clones-track-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0 0 18px !important;
+    box-sizing: border-box;
+    padding: 8px 16px !important;
+    min-height: 36px;
+    line-height: 1.25;
+    white-space: nowrap;
+    background: linear-gradient(180deg, rgba(45, 50, 56, 0.98) 0%, rgba(30, 34, 38, 0.98) 100%) !important;
+    color: #eceff1 !important;
+    text-decoration: none;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.01em;
+    border: 1px solid #5a6570 !important;
+    border-radius: 8px !important;
+    user-select: none;
+    text-shadow: none;
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    transition:
+        background-color 140ms ease,
+        border-color 140ms ease,
+        color 140ms ease,
+        box-shadow 140ms ease,
+        transform 80ms ease;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.mvAdminTools h1.mv-clones-heading .mv-clones-track-btn:hover,
+.mvAdminTools button.mv-clones-track-btn:hover,
+.mvAdminTools h1.mv-clones-heading .mv-clones-track-btn:focus-visible,
+.mvAdminTools button.mv-clones-track-btn:focus-visible {
+    background: rgba(251, 133, 0, 0.14) !important;
+    color: #fff !important;
+    border-color: #fb8500 !important;
+    box-shadow:
+        0 2px 8px rgba(251, 133, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    transform: translateY(-1px);
+}
+
+.mvAdminTools h1.mv-clones-heading .mv-clones-track-btn:active,
+.mvAdminTools button.mv-clones-track-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.mvAdminTools h1.mv-clones-heading .mv-clones-track-btn:focus-visible,
+.mvAdminTools button.mv-clones-track-btn:focus-visible {
+    outline: 2px solid rgba(251, 133, 0, 0.45) !important;
+    outline-offset: 2px;
+}
+
+.mvAdminTools h1.mv-clones-heading .mv-clones-track-btn:disabled,
+.mvAdminTools button.mv-clones-track-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.mvAdminTools h1.mv-clones-heading .mv-clones-track-btn[data-tracked='true'],
+.mvAdminTools button.mv-clones-track-btn[data-tracked='true'] {
+    border-color: rgba(251, 133, 0, 0.55) !important;
+    color: #ffd8a8 !important;
+}
+
 .checked {
     border-left: 5px var(--mv-admin-checked) solid !important;
 }

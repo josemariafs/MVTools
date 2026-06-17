@@ -15,7 +15,14 @@ export const globalConfigSchema = z.object({
   ignoredUsers: z.array(z.string()),
   showIgnoredUsers: z.boolean(),
   userNotes: z.array(z.object({ username: z.string(), note: z.string() })),
-  highlightedUsers: z.array(z.string())
+  highlightedUsers: z.array(z.string()),
+  /** Cuentas en seguimiento desde clones.php — alertas en home si hay busted no baneados */
+  trackedCloneAccounts: z.array(
+    z.object({
+      userId: z.string(),
+      username: z.string()
+    })
+  )
 })
 
 export type GlobalConfig = z.infer<typeof globalConfigSchema>
@@ -29,7 +36,8 @@ export const DEFAULT_GLOBAL_CONFIG: GlobalConfig = {
   ignoredUsers: [],
   showIgnoredUsers: false,
   userNotes: [],
-  highlightedUsers: []
+  highlightedUsers: [],
+  trackedCloneAccounts: []
 }
 
 export const getGlobalConfig = async (): Promise<GlobalConfig> => {

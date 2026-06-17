@@ -3,10 +3,14 @@ import '@/entries/contentScript/content-script.css'
 
 import { isMediavidaHomePathname } from '@/constants'
 import { renderApp } from '@/entries/contentScript/utils/render'
+import { CloneTrackingAlerts } from '@/features/clone-tracking-alerts'
 import { GameReleasesCalendar } from '@/features/game-releases-calendar'
+import { Portal } from '@/features/shared/components/portal'
 import { devLog } from '@/utils/logging'
+import { useEffect, useState } from 'react'
 
-const MOUNT_FLAG = 'data-mvtools-rawg-calendar-mounted'
+const CALENDAR_MOUNT_FLAG = 'data-mvtools-rawg-calendar-mounted'
+const HOME_FEATURES_FLAG = 'data-mvtools-home-features'
 
 function normalize(s: string): string {
   return s
@@ -24,39 +28,74 @@ function findUpcomingEventsBlock(): HTMLElement | null {
   return heading.closest('section, aside, .widget, .box, div') ?? heading.parentElement
 }
 
-function mountCalendar(target: HTMLElement, where: 'afterend' | 'beforeend' | 'afterbegin') {
-  if (target.getAttribute(MOUNT_FLAG) === '1') return
-  target.setAttribute(MOUNT_FLAG, '1')
-  devLog.log('MVTools: calendario RAWG — montaje', { where, target: target.tagName + (target.id ? `#${target.id}` : '') })
-  renderApp(<GameReleasesCalendar />, import.meta.PLUGIN_WEB_EXT_CHUNK_CSS_PATHS, { container: target, where })
-}
+function GameReleasesCalendarMount() {
+  const [target, setTarget] = useState<HTMLElement | null>(null)
 
-function tryMount(): boolean {
-  const events = findUpcomingEventsBlock()
-  if (events) {
-    mountCalendar(events, 'afterend')
-    return true
-  }
-  return false
-}
+  useEffect(() => {
+    const tryFind = (): boolean => {
+      const events = findUpcomingEventsBlock()
+      if (!events || events.getAttribute(CALENDAR_MOUNT_FLAG) === '1') return Boolean(events)
+      events.setAttribute(CALENDAR_MOUNT_FLAG, '1')
+      setTarget(events)
+      devLog.log('MVTools: calendario RAWG — anclaje sidebar', events.tagName)
+      return true
+    }
 
-if (isMediavidaHomePathname(window.location.pathname)) {
-  if (!tryMount()) {
+    if (tryFind()) return
+
     let attempts = 0
     const observer = new MutationObserver(() => {
-      attempts++
-      if (tryMount() || attempts > 40) {
+      attempts += 1
+      if (tryFind() || attempts > 40) {
         observer.disconnect()
-        if (attempts > 40) {
+        if (attempts > 40 && !findUpcomingEventsBlock()) {
           const fallback =
-            document.querySelector<HTMLElement>('#cuerpo') ?? document.querySelector<HTMLElement>('#contenedor') ?? document.body
-          devLog.log('MVTools: calendario RAWG — no se encontró "Próximos eventos", fallback', fallback.tagName)
-          mountCalendar(fallback, 'afterbegin')
+            document.querySelector<HTMLElement>('#cuerpo') ?? document.querySelector<HTMLElement>('#contenedor')
+          if (fallback && fallback.getAttribute(CALENDAR_MOUNT_FLAG) !== '1') {
+            fallback.setAttribute(CALENDAR_MOUNT_FLAG, '1')
+            setTarget(fallback)
+            devLog.log('MVTools: calendario RAWG — fallback', fallback.tagName)
+          }
         }
       }
     })
     observer.observe(document.body, { childList: true, subtree: true })
-  }
+    return () => observer.disconnect()
+  }, [])
+
+  if (!target) return null
+
+  return (
+    <Portal
+      root={target}
+      where='afterend'
+      className='block w-full'
+    >
+      <GameReleasesCalendar />
+    </Portal>
+  )
+}
+
+function bootstrapHomeFeatures() {
+  if (document.documentElement.getAttribute(HOME_FEATURES_FLAG) === '1') return
+  document.documentElement.setAttribute(HOME_FEATURES_FLAG, '1')
+
+  const host = document.createElement('div')
+  host.hidden = true
+  document.body.appendChild(host)
+
+  renderApp(
+    <>
+      <GameReleasesCalendarMount />
+      <CloneTrackingAlerts />
+    </>,
+    import.meta.PLUGIN_WEB_EXT_CHUNK_CSS_PATHS,
+    { container: host }
+  )
+}
+
+if (isMediavidaHomePathname(window.location.pathname)) {
+  bootstrapHomeFeatures()
 } else {
   devLog.log('MVTools: home-releases omitido (no es home)', window.location.pathname)
 }

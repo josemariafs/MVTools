@@ -3,6 +3,7 @@ import { Suspense } from '@suspensive/react'
 import { useStorageListeners } from '@/entries/popup/App.hooks'
 import { NewPopupButton } from '@/entries/popup/components/new-popup-button'
 import { MigrateFromLocalStoragePanel } from '@/entries/popup/components/panels/migrate-from-local-storage'
+import { BackupSection } from '@/entries/popup/components/sections/backup'
 import { GlobalConfigSection } from '@/entries/popup/components/sections/global-config'
 import { StylesSection } from '@/entries/popup/components/sections/styles'
 import { useCurrentBrowserWindow } from '@/entries/popup/hooks/use-current-browser-window'
@@ -26,6 +27,7 @@ const App = () => {
       <div className='space-y-5'>
         <StylesSection />
         <GlobalConfigSection />
+        <BackupSection />
       </div>
     </main>
   )
