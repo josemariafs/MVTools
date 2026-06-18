@@ -2,6 +2,7 @@ import { type PropsWithChildren, useEffect, useLayoutEffect, useState } from 're
 import { createPortal } from 'react-dom'
 
 import { useShadowRoot } from '@/features/shared/hooks/use-shadow-root'
+import { ShadowRootProvider } from '@/features/shared/providers/shadow-root-provider'
 import { useTheme } from '@/hooks/use-theme'
 import { renderContent } from '@/utils/dom'
 import { cn } from '@/utils/tailwind'
@@ -30,5 +31,13 @@ export const Portal = ({ children, root, where, styles, className }: Props) => {
 
   if (!appRoot) return null
 
-  return createPortal(children, appRoot)
+  return createPortal(
+    <ShadowRootProvider
+      appRoot={appRoot}
+      cssPaths={cssPaths}
+    >
+      {children}
+    </ShadowRootProvider>,
+    appRoot
+  )
 }
